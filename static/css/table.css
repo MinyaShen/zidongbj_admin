@@ -1,0 +1,97 @@
+@charset "utf-8";
+/* 工具条样式 */
+.alarm-table-toolbar {
+	display: -webkit-flex;
+	display: flex;
+	flex-wrap: nowrap;
+}
+
+/* 顶部筛选表单样式 */
+.alarm-filter-form {
+	width: 82%;
+	flex: auto;
+	display: -webkit-flex;
+	display: flex;
+	flex-wrap: wrap;
+	margin: 15px 0 5px;
+}
+
+.alarm-filter-form .layui-form-item {
+	margin-bottom: 0;
+	margin-right: 15px;
+}
+
+.alarm-filter-form .layui-form-label {
+	font-size: 16px;
+	color: #666;
+	width: 80px;
+}
+.alarm-filter-form .layui-input-block {
+	width: 220px;
+	height: 40px;
+	line-height: 40px;
+}
+
+.alarm-filter-form .layui-input {
+	height: 40px;
+	line-height: 40px;
+}
+
+.alarm-form-btns .layui-input-block  {
+	margin-left: 15px;
+	width: auto;
+}
+
+.alarm-btn-search {
+	margin-top: -4px;
+}
+
+.t-head-toolbar-btn {
+	width: 25%;
+	flex: auto;
+	margin: 15px 0 5px;
+	display: -webkit-flex;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+}
+
+.t-head-toolbar-btn .layui-btn {
+	margin-left: 20px;
+	margin-top: 1px;
+}
+
+
+/* 表格样式 */
+.alarm-content {
+	box-sizing: border-box;
+	padding-right: 40px;
+}
+
+.layui-table-view {
+	border-radius: 10px;
+	overflow: hidden;
+}
+.layui-table thead tr {
+	background-color: #36BBB5;
+	color: #fff;
+}
+
+.layui-table-sort .layui-table-sort-asc {
+	border-bottom-color: #fff;
+}
+.layui-table-sort .layui-table-sort-asc:hover,
+.layui-table-sort[lay-sort=asc] .layui-table-sort-asc {
+	border-bottom-color: #ccc;
+}
+.layui-table-sort .layui-table-sort-desc {
+	border-top-color: #fff;
+}
+.layui-table-sort .layui-table-sort-desc:hover,
+.layui-table-sort[lay-sort=desc] .layui-table-sort-desc {
+	border-top-color: #ccc;
+}
+
+.layui-table-view .layui-table td, .layui-table-view .layui-table th {
+	padding: 9px 15px;
+}

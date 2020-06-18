@@ -1,0 +1,206 @@
+@charset "utf-8";
+/* initialize css */
+*html{padding:0px}
+html {
+	background-color: #f4f8fb;
+}
+html, body {height: 100%;}
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,button,textarea,select,p,blockquote,th,td,span,a{margin:0;padding:0;}
+body{font-size:12px;font-family: "微软雅黑","Microsoft YaHei","Microsoft YaHei UI", "Segoe UI", Arial, Verdana, Sans-Serif, sans-serif;}
+em{font-style:normal}
+address, caption, cite, code, dfn, em, strong, th, var { font-style:normal; font-weight:normal;}
+article,aside,details,figcaption,figure,footer,header,hgroup,nav,section,summary {display: block;}
+audio,canvas,video {display: inline-block;}
+audio:not([controls]) {display: none;height: 0;}
+[hidden] {display: none;}
+abbr[title] {border-bottom: 1px dotted;}
+b,strong {font-weight: bold;}
+pre {white-space: pre;white-space: pre-wrap;word-wrap: break-word;}
+a{text-decoration: none;color: #333333;font-family: "Microsoft YaHei";}
+a:hover{text-decoration: none;}
+fieldset,img{border:0;}
+ol,ul,li { list-style:none;}
+del,ins{text-decoration:none;}
+sub,sup {font-size: 75%;line-height: 0;position: relative;vertical-align: baseline;}
+sup {top: -0.5em;}
+sub {bottom: -0.25em;}
+address,button,caption,cite,code,dfn,em,input,optgroup,option,select,strong,textarea,th,var{font:inherit;}
+input[type="checkbox"],input[type="radio"] {box-sizing: border-box; /* 1 */padding: 0; /* 2 */}
+input[type="search"]::-webkit-search-cancel-button,input[type="search"]::-webkit-search-decoration {-webkit-appearance: none;}
+input,select{height:20px;font-size:12px;line-height:20px;}
+button::-moz-focus-inner,input::-moz-focus-inner {border: 0;padding: 0;}
+textarea {overflow: auto; /* 1 */vertical-align: top; /* 2 */}
+table{border-collapse: collapse;border-spacing: 0;}
+caption,th{text-align:left;}
+button,html input[type="button"],
+input[type="reset"],input[type="submit"] {-webkit-appearance: button;
+cursor: pointer;
+}
+a:active {outline: none;star:expression(this.onFocus=this.blur());}
+a,a:hover,a:focus{text-decoration:none;outline:none;-webkit-transition:all 0.3s;transition:all 0.3s;-moz-transition:all 0.3s;-o-transition:all 0.3s;}
+::selection{background:#FF6C60;color:#fff;}
+::-moz-selection{background:#FF6C60;color:#fff;}
+h1,h2,h3,h4,h5,h6,a,p,span{font-family: "微软雅黑","Microsoft YaHei","Microsoft YaHei UI","Hiragino Sans GB W3","Segoe UI", Arial, Verdana, Sans-Serif, sans-serif;}
+
+/* 设置input占位符样式 */
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder { /* WebKit browsers */ 
+	color: #999;
+	font-size: 14px;
+} 
+input:-moz-placeholder,
+textarea::-webkit-input-placeholder { /* Mozilla Firefox 4 to 18 */ 
+	color: #999;
+	font-size: 14px;
+} 
+input::-moz-placeholder,
+textarea::-webkit-input-placeholder { /* Mozilla Firefox 19+ */ 
+	color: #999;
+	font-size: 14px;
+} 
+input:-ms-input-placeholder,
+textarea::-webkit-input-placeholder { /* Internet Explorer 10+ */ 
+	color: #999;
+	font-size: 14px;
+}
+
+/* 清除浮动样式 */
+.clearfix:after {content: "."; display: block; height:0; clear:both; visibility: hidden;}
+.clearfix { *zoom:1; }
+/* 清除定位属性 */
+.larry-position-clear{
+	position: static;
+}
+
+/* 引入iconfont */
+@font-face {
+  font-family: 'iconfont';  /* project id 1810762 */
+  src: url('https://at.alicdn.com/t/font_1810762_e28otoaw5h.eot');
+  src: url('https://at.alicdn.com/t/font_1810762_e28otoaw5h.eot?#iefix') format('embedded-opentype'),
+  url('https://at.alicdn.com/t/font_1810762_e28otoaw5h.woff2') format('woff2'),
+  url('https://at.alicdn.com/t/font_1810762_e28otoaw5h.woff') format('woff'),
+  url('https://at.alicdn.com/t/font_1810762_e28otoaw5h.ttf') format('truetype'),
+  url('https://at.alicdn.com/t/font_1810762_e28otoaw5h.svg#iconfont') format('svg');
+}
+.iconfont{
+	font-family:"iconfont" !important;
+	font-size:16px;font-style:normal;
+	-webkit-font-smoothing: antialiased;
+	-webkit-text-stroke-width: 0.2px;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* 页面公用样式 */
+.alarm-wrapper {
+	width: 100%;
+}
+
+.alarm-content {
+	width: 100%;
+}
+
+/* 页面主标题 */
+h3.alarm-page-title {
+	width: 100%;
+	height: 60px;
+	line-height: 60px;
+	box-sizing: border-box;
+	border-bottom: 1px solid #11333A;
+	font-size: 24px;
+	color: #36bbb5;
+}
+
+/* 模块标题 */
+.alarm-content h5.module-title {
+	width: 100%;
+	padding: 20px 0 20px 0;
+	display: -webkit-flex;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	box-sizing: border-box;
+}
+
+span.alarm-module-title-left {
+	color: #36BBB5;
+	position: relative;
+	font-size: 18px;
+	line-height: 1;
+	padding-left: 20px;
+	width: 50%;
+}
+span.alarm-module-title-left::before {
+	content: '';
+	display: block;
+	width: 6px;
+	height: 20px;
+	background-color: #36BBB5;
+	position: absolute;
+	left: 0;
+	top: 0 ;
+}
+
+/* 模块公用样式 */
+.alarm-module-wrapper {
+	
+}
+
+.alarm-module-theme {
+	padding: 22px 0 26px;
+	position: relative;
+	border-radius: 10px;
+	background-color: #fff;
+	overflow: hidden;
+}
+
+.alarm-module-theme::after {
+	content: '';
+	display: block;
+	width: 100%;
+	height: 9px;
+	background-color: #36BBB5;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+}
+
+/* 按钮样式 */
+.alarm-btn-size {
+	height: 38px;
+	line-height: 38px;
+	border-radius: 5px;
+	padding: 0 30px;
+	font-size: 16px;
+}
+.alarm-btn-primary {
+	background-color: #367BBB;
+}
+.alarm-btn-danger {
+	background-color: #FE787A;
+}
+.alarm-btn-waring {
+	background-color: #ED9935;
+}
+.alarm-btn-success {
+	background-color: #36BBB5;
+}
+.alarm-btn-ban {
+	background-color: #BB3636;
+}
+
+/* 文字颜色样式 */
+.alarm-text-primary {
+	color: #367BBB;
+}
+.alarm-text-danger {
+	color: #FE787A;
+}
+.alarm-text-waring {
+	color: #ED9935;
+}
+.alarm-text-success {
+	color: #36BBB5;
+}
+.alarm-text-ban {
+	color: #BB3636;
+}

@@ -1,0 +1,74 @@
+@charset "utf-8";
+/* 详情列表样式 */
+.alarm-content {
+	width: 100%;
+	box-sizing: border-box;
+	padding: 10px 20px 20px;
+	border-radius: 10px;
+	background-color: #fff;
+	margin-top: 10px;
+	overflow: hidden;
+}
+.alarm-table-toolbar {
+	padding: 10px 0 18px;
+}
+
+.alarm-table {
+	width: 60%;
+	border: 1px solid #ADADAD;
+}
+
+.alarm-table .alarm-row {
+	color: #333;
+	font-size: 14px;
+	line-height: 1.5;
+	border-bottom: 1px solid #ADADAD;
+}
+
+.alarm-table .alarm-row:nth-last-child(1) {
+	border-bottom: none;
+}
+
+.alarm-table .alarm-col {
+	padding: 13px 15px;
+	border-right: 1px solid #ADADAD;
+}
+
+.alarm-table .alarm-col:nth-last-child(1) {
+	border-right: none;
+}
+
+.alarm-table .col-title {
+	text-align: center;
+	background-color: #DCDCDC;
+	padding: 13px 5px;
+}
+
+.col-title-img {
+	height: 170px;
+	box-sizing: border-box;
+}
+
+.col-title-over {
+	height: auto;
+	min-height: 48px;
+}
+
+.show-img-list {
+	width: 100%;
+	display: -webkit-flex;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.show-img-list .img-box {
+	width: 155px;
+	height: 136px;
+	margin: 0 8px 8px 0;
+}
+
+.show-img-list .img-box img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
