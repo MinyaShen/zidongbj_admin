@@ -1,0 +1,105 @@
+// 路由配置
+var menuArray = [
+	{
+		name: '统计分析',
+		id: 0,
+		pid: -1,
+		url: '/home.html',
+		icon: '&#xe670;'
+	},{
+		name: '通知通报',
+		id: 1,
+		pid: -1,
+		url: '/noticeTable.html',
+		icon: '&#xe662;',
+		children: [
+			{
+				name: '通知通报',
+				subName: '',
+				id: 1001,
+				pid: 1,
+				url: '',
+				icon: ''
+			}
+		]
+	},{
+		name: '用户单位信息',
+		id: 2,
+		pid: -1,
+		url: '/storesTable.html',
+		icon: '&#xe604;'
+	},{
+		name: '故障维护',
+		id: 3,
+		pid: -1,
+		url: '/faultTable.html',
+		icon: '&#xe617;'
+	},{
+		name: '警情详情',
+		id: 4,
+		pid: -1,
+		url: '/noticeTable.html',
+		icon: '&#xe6a1;'
+	},{
+		name: '设备管理',
+		id: 5,
+		pid: -1,
+		url: '/noticeTable.html',
+		icon: '&#xe66c;'
+	},{
+		name: '用户管理',
+		id: 6,
+		pid: -1,
+		url: '/userManagement.html',
+		icon: '&#xe615;'
+	},
+]
+
+// 路由设置
+// function initRouter () {
+// 	var url = window.location.href;
+// 	console.log(url)
+// 	var router;
+// 	if (url.indexOf('#/') > -1) {
+// 		router = url.substring(url.indexOf('#/') + 2);
+// 		console.log(router)
+// 		if (router === '') {
+// 			// router = 'index.html';
+// 			$('#iframeParent').attr('src', 'pages/home.html');
+// 		} else {
+// 			$('#iframeParent').attr('src', 'pages/' + router);
+// 		}
+// 	} else {
+// 		$('#iframeParent').attr('src', 'pages/home.html');
+// 		history.replaceState(null, null, '#/');
+// 	}
+// 	//地址栏修改不刷新的解决方案
+// 	$('a').click(function () {
+// 		if ($(this).attr('href')) {
+// 			window.location.href = $(this).attr('href');
+// 			window.location.reload();
+// 		}
+// 	});
+// };
+
+function initRouter () {
+	$('#iframeParent').attr('src', 'pages/home.html');
+	menuArray.forEach(function(item, index) {
+		$('#layui-nav-item' + item.id).find('a').click(function() {
+			var dataId = $(this).data("id")
+			if (dataId == item.id) {
+				$('#iframeParent').attr('src', 'pages' + item.url);
+			}
+		})
+	})
+};
+
+// 加载左侧菜单
+function showMenus (id) {
+	menuArray.forEach(function (item) {
+		console.log(item)
+		if (item.pid == id) {
+			$('.leftMenu ul.layui-nav').append('<li id="layui-nav-item' + item.id + '" class="layui-nav-item"><a href="javascript:;" data-id="' + item.id +'" data-url="'+ item.url +'"><i class="iconfont">' + item.icon + '</i><span>' + item.name +'</span></a></li>')
+		}
+	})
+};

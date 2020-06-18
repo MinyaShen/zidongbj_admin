@@ -18,7 +18,7 @@
 			<h3 class="alarm-page-title">通知通告</h3>
 			<div class="alarm-content">
 				<div class="alarm-table-toolbar" id="tableToolbar">
-					<form class="layui-form alarm-filter-form" action="">
+					<div class="layui-form alarm-filter-form" action="">
 						<div class="layui-form-item">
 							<label class="layui-form-label">关键字：</label>
 							<div class="layui-input-block">
@@ -39,53 +39,118 @@
 								<button class="layui-btn alarm-btn-primary alarm-btn-size alarm-btn-search" lay-submit lay-filter="*">查询</button>
 							</div>
 						</div>
-					</form>
+					</div>
 					<div class="t-head-toolbar-btn">
-						<button type="button" class="layui-btn alarm-btn-size alarm-btn-success">发布</button>
-						<button type="button" class="layui-btn alarm-btn-size alarm-btn-waring">下架</button>
-						<button type="button" class="layui-btn alarm-btn-size alarm-btn-danger">删除</button>
+						<button id="publicNoticeBtn" type="button" class="layui-btn alarm-btn-size alarm-btn-success">发布</button>
+						<!-- <button type="button" class="layui-btn alarm-btn-size alarm-btn-waring">下架</button>
+						<button type="button" class="layui-btn alarm-btn-size alarm-btn-danger">删除</button> -->
 					</div>
 				</div>
-				<table id="noticeData" lay-filter="test"></table>
+				<table id="noticeData" lay-filter="noticeData"></table>
 				<script type="text/html" id="tableBar">
 					<a href="javascript:;" class="alarm-text-success" lay-event="edit">编辑</a>
+					<a href="javascript:;" class="alarm-text-waring" lay-event="remove">下架公告</a>
+					<a href="javascript:;" class="alarm-text-danger" lay-event="del">删除</a>
 				</script>
 			</div>
 		</div>
 		
+		<script src="../static/js/jquery.min.js"></script>
 		<script src="../static/layui/layui.js"></script>
+		<script src="../static/js/common.js"></script>
 		<script>
-			layui.use(['laypage', 'table', 'form'], function(){
-			  var table = layui.table;
-				var form = layui.form
+			
+			$('#publicNoticeBtn').on('click',function(){
+				// console.log(window.location.href);
+				window.location.href = './noticeDetailForm.html'
+			})
+			
+			layui.use(['layer', 'table', 'form'], function(){
+			  var layer = layui.layer,
+				table = layui.table,
+				form = layui.form
 			  
-			  //表格
+			  // 加载表格数据
 			  table.render({
 			    elem: '#noticeData'
 					//,toolbar: '#tableToolbar'
-			    ,height: 312
-			    ,url: 'https://www.layui.com/demo/table/user/' //数据接口
+			    ,height: 560
+			    ,url: baseUrl + '/announcement/list' //数据接口
+					,parseData: function (res) {
+						return {
+							"code": 0,
+							"msg": res.message,
+							"count": res.total,
+							"data": res.data.list
+						}
+					}
 			    ,page: true //开启分页
 					,skin: 'line' //行边框风格
 			    ,cols: [[ //表头
 						{type: 'checkbox', fixed: 'left'},
-			      {field: 'id', title: 'ID', width:80, sort: true}
-			      ,{field: 'title', title: '通知标题'}
-			      ,{field: 'content', title: '内容描述', width:'24%'}
-			      ,{field: 'notice_type', title: '公告类型', width:'10%'} 
-			      ,{field: 'created_time', title: '发布时间', width: '12%'}
-			      ,{field: 'status', title: '签收状态', width: '8%'}
+			      {field: 'id', title: 'ID', width: '8%', sort: true}
+			      ,{field: 'title', title: '通知标题', width:'18%'}
+			      ,{field: 'body', title: '内容描述', width:'15%'}
+			      ,{field: 'typeDicName', title: '公告类型', width:'8%'} 
+			      ,{field: 'createTime', title: '发布时间', width: '12%'
+							,templet: function (row) {
+								return formatTime(row.createTime + '')
+							}
+						}
+			      ,{field: 'readedCount', title: '签收状态', width: '8%',
+							templet: function (row) {
+								return row.readedCount + ' / ' + row.totalCount
+							}
+						}
 			      ,{fixed: 'right', title: '操作', width: '15%', toolbar: '#tableBar'}
 			    ]]
 			  });
 				
-				// 表单
-				form.on('submit(formDemo)', function(data){
-					layer.msg(JSON.stringify(data.field));
-					return false;
+				//监听表格复选框选择
+				table.on('checkbox(noticeData)', function(obj){
+					console.log(obj)
 				});
-			  
+				
+				//监听工具条
+				table.on('tool(noticeData)', function(obj){
+					var data = obj.data;
+					if(obj.event === 'edit'){
+						handleEdit(obj.data.id)
+					} else if(obj.event === 'remove'){
+						layer.confirm('确定下架该通知公告吗？', function(index){
+							// console.log(obj.data.id)
+							handleRemove(obj.data.id, 2, '下架成功')
+							window.parent.location.reload();
+						});
+					} else if(obj.event === 'del'){
+						layer.confirm('确定删除该通知公告吗？', function(index){
+							handleRemove(obj.data.id, 1, '删除成功')
+							window.parent.location.reload();
+							// obj.del();
+						});
+					}
+				});
+				
 			});
+			
+			// 添加
+			function handleAdd () {
+				
+			}
+			// 编辑
+			function handleEdit (id) {
+				window.location.href = './noticeDetailForm.html?id=' + id
+			}
+			// 下架（2）/删除（1）
+			function handleRemove (id, param, msg) {
+				ajaxfuntion($, baseUrl + '/announcement/delAnnouncement/' + id + '/' + param, {}, 'get', function (res) {
+					if (res.code === 200) {
+						layer.msg(msg)
+					} else {
+						layer.msg(res.message)
+					}
+				})
+			}
 		</script>
 	</body>
 </html>

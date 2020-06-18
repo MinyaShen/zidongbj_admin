@@ -41,54 +41,12 @@
 					<div class="layui-logo">
 						<h2 class="admin-title">淮安市公安局洪泽分局</h2>
 						<div class="admin-info">
-							<div class="avatar-img-box"><img src="" /></div>
+							<div class="avatar-img-box"><img id="avatar" src="" /></div>
 							<p class="nickname">管理员昵称</p>
 						</div>
 					</div>
 		      <!-- 左侧导航区域 -->
 		      <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
-		        <!-- <li class="layui-nav-item layui-nav-itemed">
-		          <a href="javascript:;">
-		          	<i class="iconfont">&#xe670;</i>
-		          	<span>统计分析</span>
-		          </a>
-		        </li>
-		        <li class="layui-nav-item">
-		          <a href="javascript:;">
-		          	<i class="iconfont">&#xe662;</i>
-		          	<span>通知通报</span>
-		          </a>
-		        </li>
-		        <li class="layui-nav-item">
-							<a href="javascript:;">
-								<i class="iconfont">&#xe604;</i>
-								<span>用户单位信息</span>
-							</a>
-						</li>
-		        <li class="layui-nav-item">
-							<a href="javascript:;">
-								<i class="iconfont">&#xe617;</i>
-								<span>故障维护</span>
-							</a>
-						</li>
-						<li class="layui-nav-item">
-							<a href="javascript:;">
-								<i class="iconfont">&#xe6a1;</i>
-								<span>警情详情</span>
-							</a>
-						</li>
-						<li class="layui-nav-item">
-							<a href="javascript:;">
-								<i class="iconfont">&#xe66c;</i>
-								<span>设备管理</span>
-							</a>
-						</li>
-						<li class="layui-nav-item">
-							<a href="javascript:;">
-								<i class="iconfont">&#xe615;</i>
-								<span>用户管理</span>
-							</a>
-						</li> -->
 		      </ul>
 		    </div>
 		  </div>
@@ -103,56 +61,15 @@
 		
 		<script src="static/js/jquery.min.js"></script>
 		<script src="static/layui/layui.js"></script>
+		<script src="static/js/router.js"></script>
 		<script>
+			// 获取用户信息进行数据绑定
 			var adminInfo = JSON.parse(localStorage.getItem('admin'))
 			// document.cookie="SSIDA="+adminInfo.SSIDA;
-			console.log(document.cookie)
+			$('.nickname').text(adminInfo.name);
+			$("#avatar").attr("src", adminInfo.imgUrl);
 			
-			var menuArray = [
-				{
-					name: '统计分析',
-					id: 0,
-					pid: -1,
-					url: '#/home.html',
-					icon: '&#xe670;'
-				},{
-					name: '通知通报',
-					id: 1,
-					pid: -1,
-					url: '#/noticeTable.html',
-					icon: '&#xe662;'
-				},{
-					name: '用户单位信息',
-					id: 2,
-					pid: -1,
-					url: '#/storesTable.html',
-					icon: '&#xe604;'
-				},{
-					name: '故障维护',
-					id: 3,
-					pid: -1,
-					url: '#/faultTable.html',
-					icon: '&#xe617;'
-				},{
-					name: '警情详情',
-					id: 4,
-					pid: -1,
-					url: '#/noticeTable.html',
-					icon: '&#xe6a1;'
-				},{
-					name: '设备管理',
-					id: 5,
-					pid: -1,
-					url: '#/noticeTable.html',
-					icon: '&#xe66c;'
-				},{
-					name: '用户管理',
-					id: 6,
-					pid: -1,
-					url: '#/noticeTable.html',
-					icon: '&#xe615;'
-				},
-			]
+			
 			
 			$(function () {
 				layui.use(['form', 'layer', 'element'], function(){
@@ -166,42 +83,6 @@
 				})
 			})
 			
-			// 路由设置
-			function initRouter () {
-				var url = window.location.href;
-				console.log(url)
-				var router;
-				if (url.indexOf('#/') > -1) {
-					router = url.substring(url.indexOf('#/') + 2);
-					console.log(router)
-					if (router === '') {
-						// router = 'index.html';
-						$('#iframeParent').attr('src', 'pages/home.html');
-					} else {
-						$('#iframeParent').attr('src', 'pages/' + router);
-					}
-				} else {
-					$('#iframeParent').attr('src', 'pages/home.html');
-					history.replaceState(null, null, '#/');
-				}
-				//地址栏修改不刷新的解决方案
-				$('a').click(function () {
-					if ($(this).attr('href')) {
-						window.location.href = $(this).attr('href');
-						window.location.reload();
-					}
-				});
-			};
-			
-			// 加载左侧菜单
-			function showMenus (id) {
-				menuArray.forEach(function (item) {
-					console.log(item)
-					if (item.pid == id) {
-						$('.leftMenu ul.layui-nav').append('<li menu-id="' + item.id + '" class="layui-nav-item"><a href="' + item.url + '"><i class="iconfont">' + item.icon + '</i><span>' + item.name +'</span></a></li>')
-					}
-				})
-			};
 			
 		</script>
   </body>
