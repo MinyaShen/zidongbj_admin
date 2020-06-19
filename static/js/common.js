@@ -2,6 +2,7 @@
 
 // 域名地址配置
 var baseUrl = 'http://192.168.0.27/alarm'
+var imgBaseUrl = 'http://192.168.0.27'
 
 // 时间按戳转换成具体时间格式
 function formatTime (Timestamp) {

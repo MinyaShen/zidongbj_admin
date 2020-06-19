@@ -122,12 +122,13 @@
 					,before: function(obj){
 						//预读本地文件示例，不支持ie8
 						obj.preview(function(index, file, result){
-							$('#show-img-list').append('<div class="show-img-box"><img src="'+ result +'" alt="' + file.name + '"></div>')
+							
 						});
 					}
 					,done: function(res){
 						console.log(res)
 						if (res.code == 200) {
+							$('#show-img-list').append('<div class="show-img-box"><img src="'+ imgBaseUrl + res.data +'"></div>')
 							imgUrls.push(res.data)
 							layer.msg('上传完毕')
 						}
@@ -204,7 +205,7 @@
 						imgsList.push($(this).find('img').attr('src'))
 					})
 					var formData = {
-						imgUrl: imgsList,
+						imgUrl: imgUrls,
 						announcementId: noticeId,
 						title: $('input[name="title"]').val(),
 						body: $('textarea[name="body"]').val(),
@@ -218,6 +219,7 @@
 					$.ajax({
 						url: baseUrl + '/announcement/addAnnouncementNew',
 						type: 'post',
+						contentType: 'application/json; charset=utf-8',
 						dataType: 'json',
 						data: JSON.stringify(formData),
 						success: function(res){
@@ -227,6 +229,7 @@
 								} else {
 									layer.msg('通告修改成功', {icon:1})
 								}
+								return false
 								window.history.back(-1)
 							}
 						},
