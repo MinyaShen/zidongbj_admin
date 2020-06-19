@@ -63,13 +63,13 @@ function initRouter () {
 		$('#iframeParent').attr('src', 'pages/home.html');
 		history.replaceState(null, null, '#/');
 	}
-	//地址栏修改不刷新的解决方案
-	// $('a').click(function () {
-	// 	if ($(this).attr('href')) {
-	// 		window.location.href = $(this).attr('href');
-	// 		window.location.reload();
-	// 	}
-	// });
+	// 地址栏修改不刷新的解决方案
+	$('a').click(function () {
+		if ($(this).attr('href')) {
+			window.location.href = $(this).attr('href');
+			window.location.reload();
+		}
+	});
 };
 
 // function initRouter () {
@@ -92,7 +92,7 @@ function showMenus (id) {
 			// $('.leftMenu ul.layui-nav').append('<li id="layui-nav-item' + item.id + '" class="layui-nav-item"><a href="javascript:;" data-id="' + item.id +'" data-url="'+ item.url +'"><i class="iconfont">' + item.icon + '</i><span>' + item.name +'</span></a></li>')
 			
 			$('.leftMenu ul.layui-nav').append('<li id="layui-nav-item' + item.id + '" class="layui-nav-item"><a href="' + item.url + '" data-id="' + item.id +'" data-url="'+ item.url +'"><i class="iconfont">' + item.icon + '</i><span>' + item.name +'</span></a></li>')
-			$('.leftMenu ul.layui-nav').find('li').eq(0).addClass('layui-this')
+			// $('.leftMenu ul.layui-nav').find('li').eq(0).addClass('layui-this')
 		}
 	})
 };

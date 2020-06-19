@@ -10,6 +10,7 @@
 		<title>通知通告</title>
 		<!-- 引入css -->
 		<link rel="stylesheet" type="text/css" href="../static/layui/css/layui.css" />
+		<link rel="stylesheet" type="text/css" href="../static/layui/css/modules/formSelects-v4/formSelects-v4.css" />
 		<link rel="stylesheet" type="text/css" href="../static/css/public.css" />
 		<link rel="stylesheet" type="text/css" href="../static/css/form.css" />
 	</head>
@@ -17,11 +18,11 @@
 		<div class="alarm-wrapper">
 			<h3 class="alarm-page-title">通知公告</h3>
 			<div class="alarm-content">
-				<h5 class="module-title">
+				<h5 class="module-title" id="isShowTitle">
 					<span class="alarm-module-title-left">发布新通知</span>
 				</h5>
 				<div class="form-wrapper">
-					<div class="alarm-form-toolbar">
+					<div class="alarm-form-toolbar" id="isShowTool">
 						<div class="btns-list">
 							<button type="button" class="layui-btn alarm-btn-size alarm-btn-success">返回</button>
 							<button type="button" class="layui-btn alarm-btn-size alarm-btn-success">修改</button>
@@ -37,43 +38,38 @@
 						<div class="layui-form-item">
 							<label class="layui-form-label">内容描述</label>
 							<div class="layui-input-block">
-								<textarea name="desc" placeholder="请输入内容描述" class="layui-textarea"></textarea>
+								<textarea name="body" lay-verify="body" placeholder="请输入内容描述" class="layui-textarea"></textarea>
 							</div>
 						</div>
 						<div class="layui-form-item">
 							<label class="layui-form-label">通知类型</label>
 							<div class="layui-input-block">
-								<select name="type">
+								<select name="noticeType" lay-verify="noticeType" layui-filter="noticeType" id="noticeType">
 									<option value="">请选择通知的的类型</option>
-									<option value="0">催缴通知</option>
-									<option value="1">温馨提示</option>
-									<option value="2">常见问题</option>
 								</select>
 							</div>
 						</div>
 						<div class="layui-form-item">
 							<label class="layui-form-label">通告单位</label>
 							<div class="layui-input-block">
-								<select name="city">
-									<option value="">请选择通告的单位</option>
-									<option value="0">全部</option>
-									<option value="1">银行</option>
-									<option value="2">珠宝店</option>
+								<select name="storeType" layui-filter="storeType" id="storeType" xm-select="storeTypeSelect">
+									<option value="">请选择点位</option>
 								</select>
 							</div>
 						</div>
 						<div class="layui-form-item">
 							<label class="layui-form-label">通知有效期</label>
-							<div class="layui-input-inline">
-								<input type="text" class="layui-input" id="dateSelete" placeholder="请选择 -">
+							<div class="layui-input-block">
+								<input type="text" class="layui-input" id="dateSelect" placeholder="请选择 -">
 							</div>
 						</div>
 						<div class="layui-form-item">
 							<label class="layui-form-label">照片附件</label>
 							<div class="layui-input-block alarm-upload-block">
-								<div class="show-img-box">
-									<img src="">
-								</div>
+								<div class="show-img-list" id="show-img-list"></div>
+								<!-- <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+									<div class="layui-upload-list show-img-list" id="show-img-list"></div>
+								</blockquote> -->
 								<button type="button" class="layui-btn alarm-upload-btn" id="upload-file">
 								  <i class="layui-icon">&#xe624;</i>
 								</button>
@@ -82,13 +78,13 @@
 						<div class="layui-form-item">
 							<label class="layui-form-label">是否紧急</label>
 							<div class="layui-input-block">
-								<input type="checkbox" checked name="on" lay-skin="switch" lay-filter="isUrgent">
+								<input type="checkbox" checked name="isCritical" lay-skin="switch" lay-filter="isUrgent">
 							</div>
 						</div>
 						<div class="layui-form-item">
 							<label class="layui-form-label">是否置顶</label>
 							<div class="layui-input-block">
-								<input type="checkbox" checked name="close" lay-skin="switch" lay-filter="isTop">
+								<input type="checkbox" checked name="isTop" lay-skin="switch" lay-filter="isTop">
 							</div>
 						</div>
 						<div class="layui-form-item alarm-form-btns">
@@ -101,40 +97,51 @@
 			</div>
 		</div>
 		
+		<script src="../static/js/jquery.min.js"></script>
 		<script src="../static/layui/layui.js"></script>
+		<script src="../static/layui/lay/modules/formSelects-v4.js"></script>
+		<script src="../static/js/common.js"></script>
 		<script>
-			layui.use(['form', 'upload', 'laydate'], function(){
-				var form = layui.form
-				var upload = layui.upload
-				var laydate = layui.laydate
+			// $(function(){
+			// 	console.log(window.location.href);
+			// 	console.log(window.location.search);
+			// 	console.log(getQueryString('id'));
+			// })
+			layui.use(['form', 'upload', 'laydate', 'formSelects'], function(){
+				var form = layui.form,
+				upload = layui.upload,
+				laydate = layui.laydate,
+				formSelects = layui.formSelects
 			  
-				// 上传
-				var uploadInst = upload.render({
-					elem: '#upload-file' //绑定元素
-					,url: '/upload/' //上传接口
-					,done: function(res){
-						//上传完毕回调
+				// 上传图片
+				var imgUrls = []
+				upload.render({
+					elem: '#upload-file'
+					,url: baseUrl + '/file/upload'
+					,multiple: true
+					,before: function(obj){
+						//预读本地文件示例，不支持ie8
+						obj.preview(function(index, file, result){
+							$('#show-img-list').append('<div class="show-img-box"><img src="'+ result +'" alt="' + file.name + '"></div>')
+						});
 					}
-					,error: function(){
-						//请求异常回调
+					,done: function(res){
+						console.log(res)
+						if (res.code == 200) {
+							imgUrls.push(res.data)
+							layer.msg('上传完毕')
+						}
+						// console.log(imgUrls)
 					}
 				});
 				
 				// 日期选择
 				laydate.render({
-					elem: '#dateSelete'
+					elem: '#dateSelect'
 					,type: 'datetime'
 					,range: true
 				});
 				
-				// 验证规则
-				form.verify({
-					title: function(value){
-						if(value.length < 5){
-							return '标题至少得5个字符啊';
-						}
-					}
-				});
 				
 				//监听指定开关
 				form.on('switch(isUrgent)', function(data){
@@ -144,13 +151,128 @@
 					
 				});
 				
-				// 表单
-				form.on('submit(formDemo)', function(data){
-					layer.msg(JSON.stringify(data.field));
-					return false;
+				// 加载通知类型select
+				getNoticeTypeList(form)
+				
+				// 加载接收通知的单位列表
+				getStoresList(formSelects)
+				var selectedStoresList = []
+				formSelects.on('storeTypeSelect', function(id, vals, val, isAdd, isDisabled){
+					// console.log(val)
+					var valueList = []
+					for (var i = 0; i < vals.length; i++) {
+						valueList.push(vals[i].value)
+					}
+					// console.log(valueList)
+					var s = []
+					for (var m = 0; m < valueList.length; m++) {
+						var item = {'clientId': valueList[m].split('-')[0], 'userType': valueList[m].split('-')[1]}
+						s.push(item)
+					}
+					selectedStoresList = s
+				}, true);
+				// console.log(selectedStoresList)
+				
+				// 验证规则
+				form.verify({
+					title: function(value){
+						if(value.length <= 0){
+							return '标题不能为空';
+						}
+					},
+					body: function(value){
+						if(value.length <= 0){
+							return '内容不能为空';
+						}
+					},
+					noticeType: function(value){
+						if(value == ''){
+							return '请选择通知类型';
+						}
+					}
+				});
+				
+				// 提交表单
+				form.on('submit(formSubmit)', function(data){
+					// 需要提交的数据
+					var imgsList = [],
+					noticeId = (getQueryString('id') !== null) ? getQueryString('id') : '',
+					isCritical = ($('input[name="isCritical"]').val() == 'on') ? '0' : '1',
+					isTop = ($('input[name="isTop"]').val() == 'on') ? '0' : '1';
+
+					$('#show-img-list').find('.show-img-box').each(function(){
+						imgsList.push($(this).find('img').attr('src'))
+					})
+					var formData = {
+						imgUrl: imgsList,
+						announcementId: noticeId,
+						title: $('input[name="title"]').val(),
+						body: $('textarea[name="body"]').val(),
+						startTime: $('#dateSelect').val().split(' - ')[0],
+						endTime:  $('#dateSelect').val().split(' - ')[1],
+						typeDic: $('select[name="noticeType"]').val(),
+						clients: selectedStoresList,
+						isCritical: isCritical,
+						isTop: isTop
+					}
+					$.ajax({
+						url: baseUrl + '/announcement/addAnnouncementNew',
+						type: 'post',
+						dataType: 'json',
+						data: JSON.stringify(formData),
+						success: function(res){
+							if (res.code == 200) {
+								if (getQueryString('id') === null) {
+									layer.msg('新通告发布成功', {icon:1})
+								} else {
+									layer.msg('通告修改成功', {icon:1})
+								}
+								window.history.back(-1)
+							}
+						},
+						error: function(){
+							layer.msg("网络繁忙，访问失败")
+						},
+						complete: function(){
+							layer.closeAll("loading")
+						}
+					})
 				});
 			  
 			});
+			
+			// 获取通知类型列表
+			function getNoticeTypeList(form) {
+				var list = []
+				ajaxfuntion($, baseUrl + '/announcement/annTypeList', {}, 'get', function(res){
+					console.log(res.data)
+					var option = ''
+					 list = res.data;
+					for(var n in list){
+						var its='<option value="' + list[n].key + '">'+ list[n].value + '</option>';
+						 option +=its;
+					}
+					$("#noticeType").append(option);
+					form.render();//菜单渲染 把内容加载进去
+				})
+			}
+			
+			// 获取接收通知的单位列表
+			function getStoresList(formSelects) {
+				var arr = new Array();
+				ajaxfuntion($, baseUrl + '/user/bindedList', {}, 'get', function(res){
+					console.log(res.data)
+					if (res.data.length > 0) {
+						for (var i = 0; i < res.data.length; i++) {
+							var item = res.data[i];
+							arr.push({name: item.name, value: item.id + '-' + item.userType});
+						}
+						formSelects.data('storeTypeSelect', 'local', {
+							arr: arr 
+						});
+					}
+				})
+			}
 		</script>
 	</body>
 </html>

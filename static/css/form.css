@@ -47,9 +47,11 @@ textarea::-webkit-input-placeholder { /* Internet Explorer 10+ */
 	width: 30%;
 }
 
-.alarm-upload-block {
+.alarm-upload-block,
+.show-img-list {
 	display: -webkit-flex;
 	display: flex;
+	flex-wrap: wrap;
 }
 
 .alarm-upload-btn {
@@ -72,16 +74,17 @@ textarea::-webkit-input-placeholder { /* Internet Explorer 10+ */
 
 /* 详情展示图片 */
 .show-img-box {
-	width: 140px;
-	min-height: 78px;
-	height: auto;
+	min-width: 140px;
+	height: 92px;
+	width: auto;
 	background-color: #eee;
 	overflow: hidden;
 	margin-right: 10px;
+	margin-bottom: 10px;
 }
 
 .show-img-box img {
-	width: 100%;
-	height: auto;
+	width: auto;
+	height: 100%;
 	object-fit: cover;
 }
