@@ -32,6 +32,10 @@
 	line-height: 40px;
 }
 
+.alarm-filter-form .alarm-date-select {
+	width: 300px;
+}
+
 .alarm-filter-form .layui-input {
 	height: 40px;
 	line-height: 40px;
@@ -98,4 +102,41 @@
 
 .layui-table-col-special a {
 	margin-right: 10px;
+}
+
+/* 弹框样式 */
+.layui-layer-page {
+	border-radius: 10px !important;
+}
+
+.layui-layer-title {
+	background-color: #36BBB5 !important;
+	height: 44px;
+	line-height: 44px;
+	text-align: center;
+	color: #fff !important;
+	border-radius: 10px 10px 0 0 !important;
+}
+
+.layui-layer-content {
+	padding: 20px 30px;
+	font-size: 16px;
+	color: #666;
+	line-height: 30px;
+}
+
+.layui-layer-page .layui-layer-btn {
+	padding-bottom: 40px;
+}
+
+.layui-layer-page .layui-layer-btn a {
+	width: 120px;
+	height: 38px;
+	line-height: 38px;
+	text-align: center;
+	border-radius: 5px;
+	font-size: 14px;
+	color: #fff;
+	background-color: #36BBB5;
+	border: none;
 }

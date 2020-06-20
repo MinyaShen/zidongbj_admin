@@ -7,7 +7,7 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<meta name="apple-mobile-web-app-capable" content="yes">	
 		<meta name="format-detection" content="telephone=no">	
-		<title>故障维护</title>
+		<title>设备管理</title>
 		<!-- 引入css -->
 		<link rel="stylesheet" type="text/css" href="../static/layui/css/layui.css" />
 		<link rel="stylesheet" type="text/css" href="../static/css/public.css" />
@@ -15,7 +15,7 @@
 	</head>
 	<body>
 		<div class="alarm-wrapper">
-			<h3 class="alarm-page-title">故障维护</h3>
+			<h3 class="alarm-page-title">设备管理</h3>
 			<div class="alarm-content">
 				<div class="alarm-table-toolbar" id="tableToolbar">
 					<form class="layui-form alarm-filter-form" onsubmit="false" action="">
@@ -26,24 +26,15 @@
 							</div>
 						</div>
 						<div class="layui-form-item">
-							<label class="layui-form-label">上报时间：</label>
+							<label class="layui-form-label">安装时间：</label>
 							<div class="layui-input-block alarm-date-select">
-								<input type="text" class="layui-input" id="dateSelect" placeholder="请选择时间范围">
+								<input type="text" class="layui-input" id="installDateSelect" placeholder="请选择时间范围">
 							</div>
 						</div>
 						<div class="layui-form-item">
-							<label class="layui-form-label">维护进度：</label>
-							<div class="layui-input-block">
-								<select name="progressType" id="progressType" placeholder="请选择维护进度类型">
-									<option value=""></option>
-									<option value="0">已完成</option>
-									<option value="1">上报</option>
-									<option value="2">接单</option>
-									<option value="3">签到</option>
-									<option value="4">维修</option>
-									<option value="5">提交</option>
-									<option value="6">待评价</option>
-								</select>
+							<label class="layui-form-label">质保期止：</label>
+							<div class="layui-input-block alarm-date-select">
+								<input type="text" class="layui-input" id="dateSelect" placeholder="请选择时间范围">
 							</div>
 						</div>
 						<div class="layui-form-item alarm-form-btns">
@@ -77,13 +68,19 @@
 					,type: 'datetime'
 					,range: true
 				});
+				laydate.render({
+					elem: '#installDateSelect'
+					,trigger: 'click'
+					,type: 'datetime'
+					,range: true
+				});
 			  
 			  // 加载表格
 			  table.render({
 			    elem: '#faultData'
 					//,toolbar: '#tableToolbar'
 					,height: 560
-					,url: baseUrl + '/maintain/maintainPcList' //数据接口
+					,url: baseUrl + '/zone/list' //数据接口
 					,method: 'get'
 					,limit: 15
 					,limits: [15, 20, 50]
@@ -91,9 +88,10 @@
 					,skin: 'line' //行边框风格
 			    ,where: {
 			    	keyword: $('#keyword').val(),
-			    	makeProgress: $('#progressType').val(),
-			    	startTime: $('#dateSelect').val().split(' - ')[0],
-			    	endTime:  $('#dateSelect').val().split(' - ')[1]
+			    	expStartTime: $('#dateSelect').val().split(' - ')[0],
+			    	expEndTime:  $('#dateSelect').val().split(' - ')[1],
+						setupStartTime: $('#installDateSelect').val().split(' - ')[0],
+			    	setupEndTime:  $('#installDateSelect').val().split(' - ')[1]
 			    }
 			    ,request: {
 			    	pageName: 'pageNum', //页码的参数名称，默认：page
@@ -108,14 +106,21 @@
 			    	}
 			    }
 					,cols: [[ //表头
-						{type: 'checkbox', fixed: 'left'}
-			      ,{field: 'clientId', title: '点位ID', width:'10%', sort: true}
-			      ,{field: 'fullName', title: '故障点位', width:'15%'}
-			      ,{field: 'dutyName', title: '负责人姓名', width:'8%'} 
-			      ,{field: 'dutyTel', title: '负责人电话', width: '10%'}
-			      ,{field: 'createTime', title: '上报时间', width: '10%'}
-			      ,{field: 'name', title: '维保人员', width: '8%'}
-			      ,{field: 'rocordStatus', title: '维护进度', width: '10%'}
+						{fixed: 'left', type: 'checkbox', width: '5%'}
+			      ,{field: 'zoneName', title: '设备名称', width:'10%'}
+			      ,{field: 'zoneType', title: '设备型号', width:'10%'} 
+			      ,{field: 'clientName', title: '所属点位', width: '17%'}
+						,{field: 'zonePosition', title: '设备安装部位', width: '10%'}
+			      ,{field: 'setupTime', title: '安装时间', width: '12%',
+							templet: function (row) {
+								return (row.setupTime !== null) ? formatTime(row.setupTime + '') : ''
+							}
+						}
+			      ,{field: 'warrantyEndTime', title: '质保期止', width: '12%',
+							templet: function (row) {
+								return (row.warrantyEndTime !== null) ? formatTime(row.warrantyEndTime + '') : ''
+							},
+						}
 			      ,{fixed: 'right', title: '操作', width: '10%', toolbar: '#tableBar'}
 			    ]]
 					,done: function (res) {}
@@ -125,9 +130,10 @@
 				$('#search-btn').click(function () {
 					var data = {
 						keyword: $('#keyword').val(),
-						makeProgress: $('#progressType').val(),
-						startTime: $('#dateSelect').val().split(' - ')[0],
-						endTime: $('#dateSelect').val().split(' - ')[1]
+						expStartTime: $('#dateSelect').val().split(' - ')[0],
+						expEndTime:  $('#dateSelect').val().split(' - ')[1],
+						setupStartTime: $('#installDateSelect').val().split(' - ')[0],
+						setupEndTime:  $('#installDateSelect').val().split(' - ')[1]
 					};
 					// 重载数据表格
 					table.reload('faultData', {
@@ -135,7 +141,7 @@
 						page: {
 							curr: 1
 						},
-						url: baseUrl + '/maintain/maintainPcList'
+						url: baseUrl + '/zone/list'
 					})
 				});
 			  

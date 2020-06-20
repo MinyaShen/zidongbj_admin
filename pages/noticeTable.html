@@ -18,32 +18,27 @@
 			<h3 class="alarm-page-title">通知通告</h3>
 			<div class="alarm-content">
 				<div class="alarm-table-toolbar" id="tableToolbar">
-					<div class="layui-form alarm-filter-form" action="">
+					<div class="layui-form alarm-filter-form">
 						<div class="layui-form-item">
 							<label class="layui-form-label">关键字：</label>
 							<div class="layui-input-block">
-								<input type="text" name="title" required  lay-verify="required" placeholder="请输入关键字" autocomplete="off" class="layui-input">
+								<input id="keyword" type="text" name="title" required  lay-verify="required" placeholder="请输入通知标题" autocomplete="off" class="layui-input">
 							</div>
 						</div>
 						<div class="layui-form-item">
 							<label class="layui-form-label">发布时间：</label>
-							<div class="layui-input-block">
-								<select name="created_time" lay-verify="required">
-									<option value="0">2019</option>
-									<option value="1">2020</option>
-								</select>
+							<div class="layui-input-block alarm-date-select">
+								<input type="text" class="layui-input" id="dateSelect" placeholder="请选择 -">
 							</div>
 						</div>
 						<div class="layui-form-item alarm-form-btns">
 							<div class="layui-input-block">
-								<button class="layui-btn alarm-btn-primary alarm-btn-size alarm-btn-search" lay-submit lay-filter="*">查询</button>
+								<button class="layui-btn alarm-btn-primary alarm-btn-size alarm-btn-search" id="search-btn" data-type="search">查询</button>
 							</div>
 						</div>
 					</div>
 					<div class="t-head-toolbar-btn">
-						<button id="publicNoticeBtn" type="button" class="layui-btn alarm-btn-size alarm-btn-success">发布</button>
-						<!-- <button type="button" class="layui-btn alarm-btn-size alarm-btn-waring">下架</button>
-						<button type="button" class="layui-btn alarm-btn-size alarm-btn-danger">删除</button> -->
+						<button id="publicNoticeBtn" onclick="handleAdd()" type="button" class="layui-btn alarm-btn-size alarm-btn-success">发布</button>
 					</div>
 				</div>
 				<table id="noticeData" lay-filter="noticeData"></table>
@@ -59,17 +54,20 @@
 		<script src="../static/layui/layui.js"></script>
 		<script src="../static/js/common.js"></script>
 		<script>
-			
-			$('#publicNoticeBtn').on('click',function(){
-				// console.log(window.location.href);
-				window.location.href = './noticeDetailForm.html'
-			})
-			
-			layui.use(['layer', 'table', 'form'], function(){
+			layui.use(['layer', 'table', 'form', 'laydate'], function(){
 			  var layer = layui.layer,
 				table = layui.table,
-				form = layui.form
-			  
+				form = layui.form,
+				laydate = layui.laydate
+				
+			  // 日期选择
+			  laydate.render({
+			  	elem: '#dateSelect'
+			  	,trigger: 'click'
+			  	,type: 'datetime'
+			  	,range: true
+			  });
+				
 			  // 加载表格数据
 			  table.render({
 			    elem: '#noticeData'
@@ -80,12 +78,23 @@
 						return {
 							"code": 0,
 							"msg": res.message,
-							"count": res.total,
+							"count": res.data.total,
 							"data": res.data.list
 						}
 					}
 			    ,page: true //开启分页
 					,skin: 'line' //行边框风格
+					,limit: 15
+					,limits: [15, 20, 50]
+					,where: {
+						keyword: $('#keyword').val(),
+						startTime: $('#dateSelect').val().split(' - ')[0],
+						endTime:  $('#dateSelect').val().split(' - ')[1]
+					}
+					,request: {
+						pageName: 'pageNum',
+						limitName: 'pageSize'
+					}
 			    ,cols: [[ //表头
 						{type: 'checkbox', fixed: 'left'},
 			      {field: 'id', title: 'ID', width: '8%', sort: true}
@@ -106,10 +115,26 @@
 			    ]]
 			  });
 				
-				//监听表格复选框选择
-				table.on('checkbox(noticeData)', function(obj){
-					console.log(obj)
-				});
+				// 搜索按钮监听
+				$('#search-btn').click(function () {
+					var keyword = $('#keyword').val(),
+					startTime = $('#dateSelect').val().split(' - ')[0],
+					endTime = $('#dateSelect').val().split(' - ')[1];
+					
+					var data = {
+						keyword: keyword,
+						startTime: startTime,
+						endTime: endTime
+					}
+					// 重载数据
+					table.reload('noticeData', {
+						where: data,
+						page: {
+							curr: 1
+						},
+						url: baseUrl + '/announcement/list'
+					})
+				})
 				
 				//监听工具条
 				table.on('tool(noticeData)', function(obj){
@@ -135,7 +160,7 @@
 			
 			// 添加
 			function handleAdd () {
-				
+				window.location.href = './noticeDetailForm.html'
 			}
 			// 编辑
 			function handleEdit (id) {

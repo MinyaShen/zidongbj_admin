@@ -13,7 +13,7 @@ var menuArray = [
 		url: '#/noticeTable.html',
 		icon: '&#xe662;'
 	},{
-		name: '用户单位信息',
+		name: '点位信息',
 		id: 2,
 		pid: -1,
 		url: '#/storesTable.html',
@@ -25,16 +25,16 @@ var menuArray = [
 		url: '#/faultTable.html',
 		icon: '&#xe617;'
 	},{
-		name: '警情详情',
+		name: '警情信息',
 		id: 4,
 		pid: -1,
-		url: '#/noticeTable.html',
+		url: '#/alarmInfoTable.html',
 		icon: '&#xe6a1;'
 	},{
 		name: '设备管理',
 		id: 5,
 		pid: -1,
-		url: '#/noticeTable.html',
+		url: '#/deviceManageTable.html',
 		icon: '&#xe66c;'
 	},{
 		name: '用户管理',

@@ -7,7 +7,7 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<meta name="apple-mobile-web-app-capable" content="yes">	
 		<meta name="format-detection" content="telephone=no">	
-		<title>故障维护</title>
+		<title>警情信息</title>
 		<!-- 引入css -->
 		<link rel="stylesheet" type="text/css" href="../static/layui/css/layui.css" />
 		<link rel="stylesheet" type="text/css" href="../static/css/public.css" />
@@ -15,7 +15,7 @@
 	</head>
 	<body>
 		<div class="alarm-wrapper">
-			<h3 class="alarm-page-title">故障维护</h3>
+			<h3 class="alarm-page-title">警情信息</h3>
 			<div class="alarm-content">
 				<div class="alarm-table-toolbar" id="tableToolbar">
 					<form class="layui-form alarm-filter-form" onsubmit="false" action="">
@@ -26,24 +26,9 @@
 							</div>
 						</div>
 						<div class="layui-form-item">
-							<label class="layui-form-label">上报时间：</label>
+							<label class="layui-form-label">报警时间：</label>
 							<div class="layui-input-block alarm-date-select">
 								<input type="text" class="layui-input" id="dateSelect" placeholder="请选择时间范围">
-							</div>
-						</div>
-						<div class="layui-form-item">
-							<label class="layui-form-label">维护进度：</label>
-							<div class="layui-input-block">
-								<select name="progressType" id="progressType" placeholder="请选择维护进度类型">
-									<option value=""></option>
-									<option value="0">已完成</option>
-									<option value="1">上报</option>
-									<option value="2">接单</option>
-									<option value="3">签到</option>
-									<option value="4">维修</option>
-									<option value="5">提交</option>
-									<option value="6">待评价</option>
-								</select>
 							</div>
 						</div>
 						<div class="layui-form-item alarm-form-btns">
@@ -53,7 +38,7 @@
 						</div>
 					</form>
 				</div>
-				<table id="faultData" lay-filter="faultData"></table>
+				<table id="alarmInfoData" lay-filter="alarmInfoData"></table>
 				<script type="text/html" id="tableBar">
 					<a href="javascript:;" class="alarm-text-success" lay-event="view">详情</a>
 				</script>
@@ -80,10 +65,10 @@
 			  
 			  // 加载表格
 			  table.render({
-			    elem: '#faultData'
+			    elem: '#alarmInfoData'
 					//,toolbar: '#tableToolbar'
 					,height: 560
-					,url: baseUrl + '/maintain/maintainPcList' //数据接口
+					,url: baseUrl + '/alarmInfo/list' //数据接口
 					,method: 'get'
 					,limit: 15
 					,limits: [15, 20, 50]
@@ -91,7 +76,6 @@
 					,skin: 'line' //行边框风格
 			    ,where: {
 			    	keyword: $('#keyword').val(),
-			    	makeProgress: $('#progressType').val(),
 			    	startTime: $('#dateSelect').val().split(' - ')[0],
 			    	endTime:  $('#dateSelect').val().split(' - ')[1]
 			    }
@@ -108,15 +92,28 @@
 			    	}
 			    }
 					,cols: [[ //表头
-						{type: 'checkbox', fixed: 'left'}
-			      ,{field: 'clientId', title: '点位ID', width:'10%', sort: true}
-			      ,{field: 'fullName', title: '故障点位', width:'15%'}
-			      ,{field: 'dutyName', title: '负责人姓名', width:'8%'} 
-			      ,{field: 'dutyTel', title: '负责人电话', width: '10%'}
-			      ,{field: 'createTime', title: '上报时间', width: '10%'}
-			      ,{field: 'name', title: '维保人员', width: '8%'}
-			      ,{field: 'rocordStatus', title: '维护进度', width: '10%'}
-			      ,{fixed: 'right', title: '操作', width: '10%', toolbar: '#tableBar'}
+						{type: 'checkbox', fixed: 'left', width:'5%'}
+			      ,{field: 'cName', title: '报警点位', width:'13%'}
+			      ,{field: 'maintenance', title: '负责人姓名', width:'8%'} 
+			      ,{field: 'maintenanceTel', title: '负责人电话', width: '10%'}
+			      ,{field: 'cTel', title: '座机电话', width: '10%'}
+			      ,{field: 'createTime', title: '报警时间', width: '12%',
+							templet: function (row) {
+								return formatTime(row.createTime + '')
+							}
+						}
+			      ,{field: 'address', title: '报警地址', width: '12%'}
+			      ,{field: 'isTreated', title: '是否处理', width: '8%',
+							templet: function (row) {
+								// return row.isTreated == 0 ? '未处理' : '已处理'
+								if (row.isTreated == 0) {
+									return '<span class="alarm-text-ban">未处理</span>'
+								} else {
+									return '<span>已处理</span>'
+								}
+							}
+						}
+			      ,{fixed: 'right', title: '操作', width: '8%', toolbar: '#tableBar'}
 			    ]]
 					,done: function (res) {}
 			  });
@@ -125,22 +122,21 @@
 				$('#search-btn').click(function () {
 					var data = {
 						keyword: $('#keyword').val(),
-						makeProgress: $('#progressType').val(),
 						startTime: $('#dateSelect').val().split(' - ')[0],
 						endTime: $('#dateSelect').val().split(' - ')[1]
 					};
 					// 重载数据表格
-					table.reload('faultData', {
+					table.reload('alarmInfoData', {
 						where: data,
 						page: {
 							curr: 1
 						},
-						url: baseUrl + '/maintain/maintainPcList'
+						url: baseUrl + '/alarmInfo/list'
 					})
 				});
 			  
 				// 监听工具条
-				table.on('tool(faultData)', function(obj) {
+				table.on('tool(alarmInfoData)', function(obj) {
 					var data = obj.data;
 					if (obj.event === 'view') {
 						console.log('查看详情')

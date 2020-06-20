@@ -7,100 +7,204 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<meta name="apple-mobile-web-app-capable" content="yes">	
 		<meta name="format-detection" content="telephone=no">	
-		<title>用户单位信息</title>
+		<title>点位信息</title>
 		<!-- 引入css -->
 		<link rel="stylesheet" type="text/css" href="../static/layui/css/layui.css" />
 		<link rel="stylesheet" type="text/css" href="../static/css/public.css" />
 		<link rel="stylesheet" type="text/css" href="../static/css/table.css" />
 	</head>
+	
 	<body>
 		<div class="alarm-wrapper">
-			<h3 class="alarm-page-title">用户单位信息</h3>
+			<h3 class="alarm-page-title">点位信息</h3>
 			<div class="alarm-content">
 				<div class="alarm-table-toolbar" id="tableToolbar">
-					<form class="layui-form alarm-filter-form" action="">
+					<form class="layui-form alarm-filter-form" onsubmit="false" action="">
 						<div class="layui-form-item">
 							<label class="layui-form-label">关键字：</label>
 							<div class="layui-input-block">
-								<input type="text" name="title" required  lay-verify="required" placeholder="点位名称、责任人姓名、电话" autocomplete="off" class="layui-input">
+								<input id="keyword" type="text" name="title" required  lay-verify="required" placeholder="点位名称、责任人姓名、电话" autocomplete="off" class="layui-input">
 							</div>
 						</div>
 						<div class="layui-form-item">
 							<label class="layui-form-label">点位类型：</label>
 							<div class="layui-input-block">
-								<select name="storeType" lay-verify="required">
-									<option value="0">金店</option>
-									<option value="1">银行</option>
-									<option value="2">手机卖场</option>
-									<option value="3">书店</option>
-									<option value="4">珠宝店</option>
-									<option value="5">乐器行</option>
+								<select name="storeType" layui-filter="storeType" id="storeTypeSelect">
+									<option value="">请选择点位类型</option>
 								</select>
 							</div>
 						</div>
 						<div class="layui-form-item">
-							<label class="layui-form-label">有效期止：</label>
-							<div class="layui-input-block">
-								<select name="created_time" lay-verify="required">
-									<option value="0">2019</option>
-									<option value="1">2020</option>
-								</select>
+							<label class="layui-form-label">有效期至：</label>
+							<div class="layui-input-block alarm-date-select">
+								<input type="text" class="layui-input" id="dateSelect" placeholder="请选择时间范围">
 							</div>
 						</div>
 						<div class="layui-form-item alarm-form-btns">
 							<div class="layui-input-block">
-								<button class="layui-btn alarm-btn-primary alarm-btn-size alarm-btn-search" lay-submit lay-filter="*">查询</button>
+								<button id="search-btn" type="button" class="layui-btn alarm-btn-primary alarm-btn-size alarm-btn-search">查询</button>
 							</div>
 						</div>
 					</form>
-					<div class="t-head-toolbar-btn">
+					<!-- <div class="t-head-toolbar-btn">
 						<button type="button" class="layui-btn alarm-btn-size alarm-btn-success">添加</button>
 						<button type="button" class="layui-btn alarm-btn-size alarm-btn-danger">删除</button>
-					</div>
+					</div> -->
 				</div>
-				<table id="storesData" lay-filter="test"></table>
+				<table id="storesData" lay-filter="storesData"></table>
 				<script type="text/html" id="tableBar">
-					<a href="javascript:;" class="alarm-text-success" lay-event="edit">编辑</a>
-					<a href="javascript:;" class="alarm-text-success" lay-event="remind">提醒缴费</a>
+					<a href="javascript:;" class="alarm-text-success view-btn" lay-event="view">详情</a>
+					<a href="javascript:;" class="alarm-text-success remind-btn" lay-event="remind">提醒缴费</a>
 				</script>
 			</div>
 		</div>
 		
+		
 		<script src="../static/layui/layui.js"></script>
+		<script src="../static/js/common.js"></script>
 		<script>
-			layui.use(['table', 'form'], function(){
-			  var table = layui.table;
-				var form = layui.form
+			layui.use(['jquery', 'table', 'form', 'laydate', 'layer'], function(){
+			  var $ = layui.jquery,
+				table = layui.table,
+				form = layui.form,
+				laydate = layui.laydate,
+				layer = layui.layer
+				
+				// 加载点位类型选项列表
+				getStoreTypeList($, form)
+				
+				// 日期选择
+				laydate.render({
+					elem: '#dateSelect'
+					,trigger: 'click'
+					,type: 'datetime'
+					,range: true
+				});
 			  
 			  //表格
 			  table.render({
 			    elem: '#storesData'
 					//,toolbar: '#tableToolbar'
-					,height: 312
-					// ,url: '../static/json/userUnits' //数据接口
-					,page: true //开启分页
-					,skin: 'line' //行边框风格
+					,height: 560
+					,url: baseUrl + '/client/queryClients' //数据接口
+					,method: 'get'
+					,page: true
+					,skin: 'line'
+					,limit: 15
+					,limits: [15, 20, 50]
+					,where: {
+						keyword: $('#keyword').val(),
+						type: $('#storeTypeSelect').val(),
+						startTime: $('#dateSelect').val().split(' - ')[0],
+						endTime:  $('#dateSelect').val().split(' - ')[1]
+					}
+					,request: {
+						pageName: 'pageNum', //页码的参数名称，默认：page
+						limitName: 'pageSize' //每页数据量的参数名，默认：limit
+					}
+					,parseData: function (res) {
+						return {
+							"code": 0,
+							"msg": '',
+							"count": res.data.total,
+							"data": res.data.list
+						}
+					}
 			    ,cols: [[ //表头
 						{type: 'checkbox', fixed: 'left'}
-			      ,{field: 'id', title: 'ID', width:80, sort: true}
-			      ,{field: 'storeName', title: '点位名称', width:'20%'}
-			      ,{field: 'storeTypeText', title: '点位类型', width:'8%'}
-			      ,{field: 'mainPerson', title: '负责人姓名', width:'8%'} 
-			      ,{field: 'phone', title: '负责人电话', width: '10%'}
-			      ,{field: 'landline', title: '座机号码', width: '10%'}
-			      ,{field: 'statusText', title: '未缴纳', width: '8%', sort: true}
-			      ,{field: 'star', title: '评价星级', width: '10%', sort: true}
-			      ,{fixed: 'right', title: '操作', width: '10%', toolbar: '#tableBar'}
+			      // ,{field: 'id', title: 'ID', width:80, sort: true}
+			      ,{field: 'clientId', title: '点位ID', width:'10%', sort: true}
+			      ,{field: 'fullName', title: '点位名称', width:'12%'}
+			      ,{field: 'type', title: '点位类型', width:'8%'}
+			      ,{field: 'dutyName', title: '负责人姓名', width:'8%'} 
+			      ,{field: 'dutyTel', title: '负责人电话', width: '10%'}
+			      ,{field: 'tel', title: '座机号码', width: '10%'}
+			      ,{field: 'status', title: '缴费状态', width: '8%', sort: true,
+							templet: function (row) {
+								if (row.status == 0) {
+									return '<span>已缴费</span>'
+								} else if (row.status == 1) {
+									return '<span class="alarm-text-ban">未缴费</span>'
+								} else {
+									return '<span class="alarm-text-waring">停用</span>'
+								}
+							}
+						}
+			      ,{field: 'eval', title: '评价星级', width: '10%', sort: true}
+			      ,{fixed: 'right', title: '操作', width: '12%', toolbar: '#tableBar'}
 			    ]]
+					,done: function (res) {
+						res.data.forEach(function(item, index) {
+							if (item.status == 1) {
+								$(".layui-table-fixed-r .layui-table-body tbody tr[data-index='"+index+"'] .remind-btn").css({'color': "#BB3636" });
+							} else if (item.status == 2) {
+								$(".layui-table-fixed-r .layui-table-body tbody tr[data-index='"+index+"'] .remind-btn").text('')
+							}
+						})
+					}
 			  });
 				
-				// 表单
-				form.on('submit(formDemo)', function(data){
-					layer.msg(JSON.stringify(data.field));
-					return false;
+				// 监听搜索
+				$('#search-btn').click(function () {
+					var data = {
+						keyword: $('#keyword').val(),
+						type: $('#storeTypeSelect').val(),
+						startTime: $('#dateSelect').val().split(' - ')[0],
+						endTime: $('#dateSelect').val().split(' - ')[1]
+					};
+					// 重载数据表格
+					table.reload('storesData', {
+						where: data,
+						page: {
+							curr: 1
+						},
+						url: baseUrl + '/client/queryClients'
+					})
 				});
+				
+				// 监听工具条
+				table.on('tool(storesData)', function(obj) {
+					var data = obj.data;
+					if (obj.event === 'view') {
+						console.log('查看详情')
+					} else if (obj.event === 'remind') {
+						openReminderDialog($, layer)
+					}
+				})
 			  
 			});
+			
+			// 获取点位类型列表
+			function getStoreTypeList($, form) {
+				var list = []
+				ajaxfuntion($, baseUrl + '/client/queryIndustryType', {}, 'get', function(res){
+					// console.log(res.data)
+					var option = ''
+					 list = res.data;
+					for(var n in list){
+						var its='<option value="' + list[n] + '">'+ list[n] + '</option>';
+						 option +=its;
+					}
+					$("#storeTypeSelect").append(option);
+					form.render();//菜单渲染 把内容加载进去
+				})
+			};
+			
+			// 打开催缴弹框
+			function openReminderDialog($, layer) {
+				layer.open({
+					type: 1,
+					title: '缴费提醒',
+					area: '700px',
+					content: '尊敬的Apple授权经销商(东威通讯淮安洪泽店)用户，截止到2019年6月21日12点30分，您的设备（一键式报警器）因欠费已暂停使用，为了不影响您的正常使用，方便时请到xxxx网点交费或在APP上自助缴费！谢谢您的合作！',
+					btn: '知道了'
+					,btnAlign: 'c' //按钮居中
+					,shade: 0.75 //显示遮罩
+					,yes: function(){
+						layer.closeAll();
+					}
+				})
+			}
 		</script>
 	</body>
 </html>
