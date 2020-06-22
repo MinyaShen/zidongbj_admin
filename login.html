@@ -33,7 +33,9 @@
 			</div>
 		</div>
 		
+		<script src="../static/js/jquery.min.js"></script>
 		<script src="static/layui/layui.js"></script>
+		<script src="static/js/common.js"></script>
 		<script>
 			layui.use(['jquery', 'form', 'layer'], function(){
 				var $ = layui.jquery,
@@ -58,7 +60,7 @@
 				form.on('submit(login)', function(data){
 					//用ajax时需要注意你的url接口、采用哪一种方式type获取，它的使用的哪种数据类型datatype
 					$.ajax({
-						url:'http://192.168.0.27/alarm/user/login',
+						url: baseUrl + '/user/login',
 						type:'post',
 						dataType:'json',
 						data:{

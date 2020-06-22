@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../static/layui/css/layui.css" />
+
+    <title>用户管理-新增用户</title>
+
+    <style>
+        #layerAddUser .btn-group {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="layerAddUser" class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">身份</label>
+            <div class="layui-input-block">
+                <select id="roleType">
+                    <option value=""></option>
+                    <option value="-1">管理员</option>
+                    <option value="1">总网点</option>
+                    <option value="2">支网点</option>
+                    <option value="3">维修人员</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">账号</label>
+            <div class="layui-input-block">
+                <input id="username" type="text" placeholder="请输入账号" class="layui-input">
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">密码</label>
+            <div class="layui-input-block">
+                <input id="password" type="password" placeholder="请输入密码" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">姓名</label>
+            <div class="layui-input-block">
+                <input id="name" type="text" placeholder="请输入姓名" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">电话</label>
+            <div class="layui-input-block">
+                <input id="tel" type="text" maxlength="11" placeholder="请输入电话" class="layui-input">
+            </div>
+        </div>
+
+
+
+        <div class="btn-group">
+            <button class="layui-btn" id="addUser">确定</button>
+        </div>
+
+    </div>
+
+    <script src="../static/layui/layui.js"></script>
+    <script src="../static/js/jquery.min.js"></script>
+
+    <script>
+        function checkPhone(phone) {
+            if (!(/^1[3456789]\d{9}$/.test(phone))) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        layui.use(['laypage', 'jquery', 'layer', 'form'], function () {
+
+            layui.$("#addUser").on('click', function () {
+                if ($("#roleType").val() == '') {
+                    layer.msg('请选择身份', {
+                        icon: 2
+                    })
+                } else if ($("#username").val() == '') {
+                    layer.msg('填写账号', {
+                        icon: 2
+                    })
+                } else if ($("#password").val() == '') {
+                    layer.msg('填写密码', {
+                        icon: 2
+                    })
+                } else if ($("#name").val() == '') {
+                    layer.msg('填写姓名', {
+                        icon: 2
+                    })
+                } else if (!checkPhone($("#tel").val())) {
+                    layer.msg('请输入正确合法的号码', {
+                        icon: 2
+                    })
+                } else if ($("#roleType").val() != '' && $("#username").val() != '' && $("#password")
+                    .val() != '' && $("#name").val() != '' && checkPhone($("#tel").val())) {
+                    var data = {
+                        username: $("#username").val(),
+                        password: $("#password").val(),
+                        tel: $("#tel").val(),
+                        name: $("#name").val(),
+                        roleType: $("#roleType").val()
+                    }
+
+                    $.ajax({
+                        url: "http://192.168.0.27/alarm/user/addUser",
+                        data: JSON.stringify(data),
+                        method: 'POST',
+                        contentType: 'application/json',
+                        success: function (result) {
+                            parent.layer.close();
+                            window.parent.location.reload();
+                            layer.msg("添加成功", {
+                                icon: 1
+                            })
+                        }
+                    });
+                }
+
+            })
+
+        });
+    </script>
+</body>
+
+</html>

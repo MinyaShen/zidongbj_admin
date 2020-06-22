@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../static/layui/css/layui.css" />
+
+    <title>用户管理-绑定点位</title>
+
+    <style>
+        #layereditUser .layui-form-label {
+            width: 110px;
+        }
+
+        #layereditUser .btn-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="layereditUser">
+        <form class="layui-form">
+            <div class="layui-inline">
+                <label class="layui-form-label">搜索绑定点位</label>
+                <div class="layui-input-inline">
+                    <select lay-verify="required" lay-search="" id="point">
+                    </select>
+                </div>
+            </div>
+        </form>
+
+        <div class="btn-group">
+            <button class="layui-btn" id="bindpoint">确定</button>
+        </div>
+
+    </div>
+
+    <script src="../static/layui/layui.js"></script>
+    <script src="../static/js/jquery.min.js"></script>
+    <script>
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split("&");
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split("=");
+                if (pair[0] == variable) {
+                    return pair[1];
+                }
+            }
+            return (false);
+        }
+
+        layui.use(['laypage', 'jquery', 'layer', 'form'], function () {
+            //获取未绑定点位信息
+            var id = getQueryVariable("userId")
+            $.ajax({
+                url: "http://192.168.0.27/alarm/client/queryClientList",
+                data: {
+                    flag: 2
+                },
+                method: 'GET',
+                success: function (res) {
+                    var tempList = res.data.list;
+                    var fragment = '<option value="">直接选择或搜索选择</option>';
+
+                    for (let i = 0; i < tempList.length; i++) {
+                        fragment += "<option value=" + tempList[i].clientid + ">" + tempList[i]
+                            .name + "</option>"
+                    }
+                    $('#point').html(fragment);
+                    var form = layui.form;
+                    form.render('select');
+                }
+            })
+
+
+            layui.$("#bindpoint").on('click', function () {
+
+                var tempData = {
+                    clientId: $("#point").val(),
+                    userId: id
+                }
+                $.ajax({
+                    url: "http://192.168.0.27/alarm/user/userBinding",
+                    data: tempData,
+                    method: 'GET',
+                    success: function (result) {
+                        parent.layer.close();
+                        window.parent.location.reload();
+                        layer.msg("绑定成功", {
+                            icon: 1
+                        })
+                    }
+                });
+
+
+            })
+
+
+
+        });
+    </script>
+</body>
+
+</html>

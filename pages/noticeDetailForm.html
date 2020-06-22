@@ -25,10 +25,10 @@
 					<div class="alarm-form-toolbar" id="isShowTool">
 						<div class="btns-list">
 							<button type="button" class="layui-btn alarm-btn-size alarm-btn-success">返回</button>
-							<button type="button" class="layui-btn alarm-btn-size alarm-btn-success">修改</button>
+							<button type="button" id="m-submit-btn" class="layui-btn alarm-btn-size alarm-btn-success">修改</button>
 						</div>
 					</div>
-					<form class="layui-form" onsubmit="false" action="" method="post">
+					<form class="layui-form" lay-filter="noticeForm" onsubmit="false" action="" method="post">
 						<div class="layui-form-item">
 							<label class="layui-form-label">通知标题</label>
 							<div class="layui-input-block">
@@ -87,7 +87,7 @@
 								<input type="checkbox" checked name="isTop" lay-skin="switch" lay-filter="isTop">
 							</div>
 						</div>
-						<div class="layui-form-item alarm-form-btns">
+						<div class="layui-form-item alarm-form-btns" id="form-bottom-btn">
 							<div class="layui-input-block">
 								<button class="layui-btn alarm-btn-success alarm-btn-size alarm-btn-search" type="button" onclick="" id="submit-btn">发布</button>
 							</div>
@@ -102,36 +102,47 @@
 		<script src="../static/layui/lay/modules/formSelects-v4.js"></script>
 		<script src="../static/js/common.js"></script>
 		<script>
-			// $(function(){
-			// 	console.log(window.location.href);
-			// 	console.log(window.location.search);
-			// 	console.log(getQueryString('id'));
-			// })
+			var pathId = getQueryString('id')
+			var noticeFormData = {} //详情数据
+			var imgUrls = [] //图片数组
+			var selectedStoresList = [] // 已选收件人数组
+			$(function(){
+				// console.log(window.location.href);
+				// console.log(window.location.search);
+				// console.log(getQueryString('id'));
+				isShowElem()
+			});
+			
+			
 			layui.use(['layer', 'form', 'upload', 'laydate', 'formSelects'], function(){
 				var form = layui.form,
 				upload = layui.upload,
 				laydate = layui.laydate,
 				formSelects = layui.formSelects,
 				layer = layui.layer
+				
+				// 预加载表单
+				getNoticeDetail(pathId, layer, form, formSelects)
 			  
 				// 上传图片
-				var imgUrls = []
 				upload.render({
 					elem: '#upload-file'
 					,url: baseUrl + '/file/upload'
 					,multiple: true
-					,before: function(obj){
-						//预读本地文件示例，不支持ie8
-						obj.preview(function(index, file, result){});
-					}
 					,done: function(res){
-						// console.log(res)
 						if (res.code == 200) {
-							$('#show-img-list').append('<div class="show-img-box"><img src="'+ imgBaseUrl + res.data +'"></div>')
-							imgUrls.push(res.data)
-							layer.msg('上传完毕')
+							// imgUrls.forEach(function (item, index) {
+							// 	if(imgUrls.indexOf(item) > -1) {
+							// 		layer.msg('请勿重复上传')
+							// 		return
+							// 	} else {
+									$('#show-img-list').append('<div class="show-img-box"><img src="'+ imgBaseUrl + res.data +'"></div>')
+									imgUrls.push(res.data + '')
+									layer.msg('上传完毕')
+							// 	}
+							// })
+							console.log(imgUrls)
 						}
-						// console.log(imgUrls)
 					}
 				});
 				
@@ -141,7 +152,6 @@
 					,trigger: 'click'
 					,type: 'datetime'
 					,range: true
-					// ,value: formatTime(new Date().getTime())
 					,min: '0'
 				});
 				
@@ -151,14 +161,12 @@
 				
 				// 加载接收通知的单位列表
 				getStoresList(formSelects)
-				var selectedStoresList = []
+				
 				formSelects.on('storeTypeSelect', function(id, vals, val, isAdd, isDisabled){
-					// console.log(val)
 					var valueList = []
 					for (var i = 0; i < vals.length; i++) {
 						valueList.push(vals[i].value)
 					}
-					// console.log(valueList)
 					var s = []
 					for (var m = 0; m < valueList.length; m++) {
 						var item = {'clientId': valueList[m].split('-')[0], 'userType': valueList[m].split('-')[1]}
@@ -166,7 +174,6 @@
 					}
 					selectedStoresList = s
 				}, true);
-				// console.log(selectedStoresList)
 				
 				// 验证规则
 				form.verify({
@@ -185,13 +192,14 @@
 							return '请选择通知类型';
 						}
 					}
-				});
+				});				
 				
 				// 提交表单
-				$('#submit-btn').click(function(){
+				$(document).on('click','#submit-btn, #m-submit-btn', function () {
 					// 需要提交的数据
+					console.log(noticeFormData)
 					var formData = {
-						imgUrl: imgUrls,
+						imgUrl: JSON.stringify(imgUrls),
 						announcementId: (getQueryString('id') !== null) ? getQueryString('id') : '',
 						title: $('input[name="title"]').val(),
 						body: $('textarea[name="body"]').val(),
@@ -202,7 +210,6 @@
 						isCritical: ($('input[name="isCritical"]').val() == 'on') ? '0' : '1',
 						isTop: ($('input[name="isTop"]').val() == 'on') ? '0' : '1'
 					}
-					// console.log(formData)
 					postForm(formData, layer)
 				})
 			  
@@ -212,7 +219,6 @@
 			function getNoticeTypeList(form) {
 				var list = []
 				ajaxfuntion($, baseUrl + '/announcement/annTypeList', {}, 'get', function(res){
-					console.log(res.data)
 					var option = ''
 					 list = res.data;
 					for(var n in list){
@@ -221,48 +227,99 @@
 					}
 					$("#noticeType").append(option);
 					form.render();//菜单渲染 把内容加载进去
+				},
+				function(res) {
+					
+				},
+				function(res) {
+					
 				})
 			};
 			
 			// 获取接收通知的单位列表
 			function getStoresList(formSelects) {
 				var arr = new Array();
-				ajaxfuntion($, baseUrl + '/user/bindedList', {}, 'get', function(res){
-					console.log(res.data)
-					if (res.data.length > 0) {
-						for (var i = 0; i < res.data.length; i++) {
-							var item = res.data[i];
-							arr.push({name: item.name, value: item.id + '-' + item.userType});
+				ajaxfuntion($, baseUrl + '/user/bindedList', {}, 'get',
+					function(res){
+						// console.log(res.data)
+						if (res.data.length > 0) {
+							for (var i = 0; i < res.data.length; i++) {
+								var item = res.data[i];
+								arr.push({name: item.name, value: item.id + '-' + item.userType});
+							}
+							formSelects.data('storeTypeSelect', 'local', {
+								arr: arr 
+							});
 						}
-						formSelects.data('storeTypeSelect', 'local', {
-							arr: arr 
-						});
-					}
-				})
+					},
+					function(res) {},
+					function(res) {}
+				)
+			};
+			
+			// 获取通知详情
+			function getNoticeDetail(id, layer, form, formSelects) {
+				if (id !== null) {
+					ajaxfuntion ($, baseUrl + '/announcement/announcementReshow/' + id, {}, 'get',
+						function (res) {
+							if (res.code == 200) {
+								noticeFormData = res.data
+								console.log(res.data.announcement)
+								var data = res.data.announcement;
+								var storeTypeList = res.data.clients;
+								var list = [];
+								data.imgUrl = JSON.parse(data.imgUrl);
+								imgUrls = data.imgUrl
+								console.log(imgUrls)
+								
+								form.val('noticeForm', {
+									"title": data.title // "name": "value"
+									,"body": data.body
+									,"noticeType": data.typeDic + ''
+									,"isCritical": data.isCritical + ''
+									,"isTop": data.isTop + ''
+								})
+								// 加载时间
+								if (data.startTime !== null && data.endTime !== null) {
+									$('#dateSelect').val(formatTime(data.startTime) + ' - ' + formatTime(data.endTime))
+								} else {
+									$('#dateSelect').val('')
+								}
+								// 加载接收人
+								storeTypeList.forEach(function (item, index) {
+									list.push(item.clientId + '-' + item.toRepair)
+									var item = {'clientId': item.clientId, 'userType': item.toRepair}
+									selectedStoresList.push(item)
+								})
+								formSelects.value('storeTypeSelect', list)
+								console.log(selectedStoresList)
+								// 加载图片
+								if (data.imgUrl.length > 0) {
+									data.imgUrl.forEach(function (item, index) {
+										$('#show-img-list').append('<div class="show-img-box"><img src="'+ imgBaseUrl + item +'"></div>')
+									})
+								}
+							}							
+						},
+						function (res) {},
+						function (res) {}
+					)
+				}	
 			};
 			
 			// 表单提交
 			function postForm (formData, layer) {
 				if (formData.title == '') {
-					layer.open({
-						type: 4,
-						title: '提示',
-						content: '通知标题不能为空'
-					})
+					layer.msg('通知标题不能为空', {icon:5})
+					return
 				}
 				if (formData.body == '') {
-					layer.open({
-						type: 4,
-						title: '提示',
-						content: '通知内容不能为空'
-					})
+					layer.msg('通知内容不能为空', {icon:5})
+					return
 				}
 				if (formData.typeDic == '') {
-					layer.open({
-						type: 4,
-						title: '提示',
-						content: '请选择通知类型'
-					})
+					layer.msg('请选择通知类型', {icon:5})
+					return
 				}
 				$.ajax({
 					url: baseUrl + '/announcement/addAnnouncementNew',
@@ -272,13 +329,15 @@
 					data: JSON.stringify(formData),
 					success: function(res){
 						if (res.code == 200) {
-							if (getQueryString('id') === null) {
-								layer.msg('新通告发布成功', {icon:1})
+							if (pathId === null) {
+								layer.msg('新通告发布成功,3秒后自动返回', {icon:1})
 							} else {
-								layer.msg('通告修改成功', {icon:1})
+								layer.msg('通告修改成功,3秒后自动返回', {icon:1})
 							}
-							window.history.go(-1)
-							// window.parent.location.reload()
+							setTimeout(function(){
+								window.history.go(-1)
+								// window.parent.location.reload()
+							}, 3000)
 						}
 					},
 					error: function(){
@@ -288,7 +347,17 @@
 						layer.closeAll("loading")
 					}
 				})
-			}
+			};
+			
+			// 页面结构判断显示
+			function isShowElem () {
+				if (pathId) {
+					$('#isShowTitle').hide();
+					$('#form-bottom-btn').hide();
+				} else {
+					$('#isShowTool').hide();
+				}
+			};
 		</script>
 	</body>
 </html>

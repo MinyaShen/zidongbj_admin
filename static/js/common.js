@@ -1,6 +1,8 @@
 // 公用方法封装
 
 // 域名地址配置
+// var baseUrl = 'http://jszzkj.cn/alarm'
+// var imgBaseUrl = 'http://jszzkj.cn'
 var baseUrl = 'http://192.168.0.27/alarm'
 var imgBaseUrl = 'http://192.168.0.27'
 
@@ -32,29 +34,61 @@ function getQueryString(name) {
 	return null; 
 }
 
+// 检查cookie
+function check() {
+ pre_url = window.frames['fjob'].document.location;
+ setCookie('pre_url', pre_url, 1);
+}
+// 获取cookie
+function getCookie(c_name) {
+ if (document.cookie.length>0) {
+   c_start=document.cookie.indexOf(c_name + "=")
+   if (c_start!=-1) { 
+		c_start=c_start + c_name.length+1 
+		c_end=document.cookie.indexOf(";",c_start)
+		if (c_end==-1) c_end=document.cookie.length
+		return unescape(document.cookie.substring(c_start,c_end))
+		} 
+	}
+	return ""
+}
+// 设置cookie
+function setCookie(c_name,value,expiredays) {
+	var exdate=new Date()
+	exdate.setDate(exdate.getDate()+expiredays)
+	document.cookie=c_name+ "=" +escape(value)+
+	((expiredays==null) ? "" : ";expires="+exdate.toGMTString())
+}
+
 // ajax请求
-function ajaxfuntion($,url,todata,type,fun) {
+function ajaxfuntion($, url, todata, type, s_fun, e_fun, c_fun) {
 	$.ajax({
 	url: url,
 	data:todata,
 	type: type,
+	contentType: 'application/json; charset=utf-8',
 	dataType: 'json',
-	success: fun
+	success: s_fun,
+	error: e_fun,
+	complete: c_fun
 	});
 }
 
 // 带token的ajax请求
-function ajaxsessionfuntion($,url,todata,type,fun) {
+function ajaxsessionfuntion($, url, todata, type, s_fun, e_fun, c_fun) {
 	$.ajax({
 	url: url,
 	data:todata,
 	type: type,
+	contentType: 'application/json; charset=utf-8',
 	dataType: 'json',
 	beforeSend:function(xhr)
 	{
 		xhr.setRequestHeader("token",localStorage.getItem("drugtoken"));
 	},
-	success: fun
+	success: s_fun,
+	error: e_fun,
+	complete: c_fun
 	});
 }
 

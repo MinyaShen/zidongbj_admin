@@ -16,73 +16,6 @@
 	<link rel="stylesheet" type="text/css" href="../static/css/table.css" />
 </head>
 
-<style>
-	#layerAddUser {
-		display: none;
-		padding: 20px;
-	}
-
-	#layerAddUser .layui-form-label {
-		width: 40px;
-	}
-
-	#layerAddUser .layui-input-block {
-		margin-left: 80px;
-	}
-</style>
-
-<div id="layerAddUser" class="layui-form">
-	<div class="layui-form-item">
-		<label class="layui-form-label">账号</label>
-		<div class="layui-input-block">
-			<input id="username" type="text" required lay-verify="required" placeholder="请输入账号" autocomplete="off"
-				class="layui-input">
-		</div>
-	</div>
-
-	<div class="layui-form-item">
-		<label class="layui-form-label">密码</label>
-		<div class="layui-input-block">
-			<input id="password" type="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off"
-				class="layui-input">
-		</div>
-	</div>
-
-	<div class="layui-form-item">
-		<label class="layui-form-label">姓名</label>
-		<div class="layui-input-block">
-			<input id="name" type="text" required lay-verify="required" placeholder="请输入姓名" autocomplete="off"
-				class="layui-input">
-		</div>
-	</div>
-
-	<div class="layui-form-item">
-		<label class="layui-form-label">电话</label>
-		<div class="layui-input-block">
-			<input id="tel" type="text" required lay-verify="required" placeholder="请输入电话" autocomplete="off"
-				class="layui-input">
-		</div>
-	</div>
-
-	<div class="layui-form-item">
-		<label class="layui-form-label">身份</label>
-		<div class="layui-input-block">
-			<select id="roleType" lay-verify="required">
-				<option value=""></option>
-				<option value="-1">管理员</option>
-				<option value="1">总网点</option>
-				<option value="2">支网点</option>
-				<option value="3">维修人员</option>
-			</select>
-		</div>
-	</div>
-
-	<div class="layui-input-block">
-		<button class="layui-btn" id="addUser">确定</button>
-	</div>
-
-</div>
-
 <body>
 	<div class="alarm-wrapper">
 		<h3 class="alarm-page-title">用户管理</h3>
@@ -113,7 +46,9 @@
 			</div>
 			<table id="noticeData" lay-filter="noticeData"></table>
 			<script type="text/html" id="tableBar">
-				<a href="javascript:;" class="alarm-text-success" lay-event="edit">编辑</a>
+				<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+				<a class="layui-btn layui-btn-xs" lay-event="bindpoint">点位操作</a>
+				<a class="layui-btn layui-btn-xs" lay-event="bindsub">设置子用户</a>
 			</script>
 		</div>
 	</div>
@@ -128,32 +63,43 @@
 			//添加用户
 			layui.$("#openAddUser").on('click', function () {
 				layer.open({
-					type: 1,
+					type: 2,
 					title: "信息编辑",
 					area: ['600px', '400px'],
-					content: $('#layerAddUser')
+					content: "../alerts/addUser.html"
 				});
 			})
 
-			layui.$("#addUser").on('click', function () {
-				var data = {
-					username: $("#username").val(),
-					password: $("#password").val(),
-					tel: $("#tel").val(),
-					name: $("#name").val(),
-					roleType: $("#roleType").val()
+
+			//监听单条数据工具条 
+			table.on('tool(noticeData)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+				var data = obj.data; //获得当前行数据
+				var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+
+				if (layEvent === 'edit') { //编辑
+					layer.open({
+						type: 2,
+						title: "信息编辑",
+						area: ['600px', '300px'],
+						content: "../alerts/editUser.html?userId=" + data.userId
+					});
+				} else if (layEvent === 'bindpoint') { //绑定点位
+					layer.open({
+						type: 2,
+						title: "绑定点位",
+						area: ['600px', '300px'],
+						content: "../alerts/bindpoint.html?userId=" + data.userId
+					});
+				} else if (layEvent === 'bindsub') { //绑定子网点
+					layer.open({
+						type: 2,
+						title: "设置子网点",
+						area: ['600px', '300px'],
+						content: "../alerts/bindsub.html?userId=" + data.userId
+					});
 				}
+			});
 
-				$.ajax({
-					url: "http://192.168.0.27/alarm/user/addUser",
-					data: JSON.stringify(data),
-					method: 'POST',
-					contentType: 'application/json',
-					success: function (result) {
-						layer.close(layer.index);
-					}
-				});
-			})
 
 
 			//表格渲染
@@ -205,6 +151,7 @@
 						}, {
 							fixed: 'right',
 							title: '操作',
+							width: 260,
 							toolbar: '#tableBar'
 						}
 					]
