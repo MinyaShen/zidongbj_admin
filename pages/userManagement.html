@@ -55,6 +55,7 @@
 
 	<script src="../static/layui/layui.js"></script>
 	<script src="../static/js/jquery.min.js"></script>
+	<script src="../static/js/common.js"></script>
 	<script>
 		layui.use(['laypage', 'jquery', 'table', 'form', 'layer'], function () {
 			var table = layui.table;
@@ -105,7 +106,7 @@
 			//表格渲染
 			table.render({
 				elem: '#noticeData',
-				url: 'http://192.168.0.27/alarm/user/queryUsers',
+				url: baseUrl + '/user/queryUsers',
 				page: true,
 				skin: 'line',
 				limit: 10,
@@ -169,7 +170,7 @@
 					page: {
 						curr: 1 //从第一页开始
 					},
-					url: 'http://192.168.0.27/alarm/user/queryUsers'
+					url: baseUrl + '/user/queryUsers'
 				});
 			})
 

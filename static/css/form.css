@@ -72,6 +72,15 @@ textarea::-webkit-input-placeholder { /* Internet Explorer 10+ */
 	margin-top: 30px;
 }
 
+.alarm-disabled input {
+	background-color: #eee;
+}
+
+.layui-input {
+	color: #666;
+	font-size: 14px;
+}
+
 /* 详情展示图片 */
 .show-img-box {
 	min-width: 140px;

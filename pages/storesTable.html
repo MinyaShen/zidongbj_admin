@@ -46,14 +46,10 @@
 							</div>
 						</div>
 					</form>
-					<!-- <div class="t-head-toolbar-btn">
-						<button type="button" class="layui-btn alarm-btn-size alarm-btn-success">添加</button>
-						<button type="button" class="layui-btn alarm-btn-size alarm-btn-danger">删除</button>
-					</div> -->
 				</div>
 				<table id="storesData" lay-filter="storesData"></table>
 				<script type="text/html" id="tableBar">
-					<a href="javascript:;" class="alarm-text-success view-btn" lay-event="view">详情</a>
+					<a href="javascript:;" class="alarm-text-success view-btn" lay-event="edit">编辑</a>
 					<a href="javascript:;" class="alarm-text-success remind-btn" lay-event="remind">提醒缴费</a>
 				</script>
 			</div>
@@ -165,8 +161,8 @@
 				// 监听工具条
 				table.on('tool(storesData)', function(obj) {
 					var data = obj.data;
-					if (obj.event === 'view') {
-						console.log('查看详情')
+					if (obj.event === 'edit') {
+						handleEdit(obj.data.clientId)
 					} else if (obj.event === 'remind') {
 						openReminderDialog($, layer)
 					}
@@ -177,24 +173,27 @@
 			// 获取点位类型列表
 			function getStoreTypeList($, form) {
 				var list = []
-				ajaxfuntion($, baseUrl + '/client/queryIndustryType', {}, 'get', function(res){
-					// console.log(res.data)
-					var option = ''
-					 list = res.data;
-					for(var n in list){
-						var its='<option value="' + list[n] + '">'+ list[n] + '</option>';
-						 option +=its;
-					}
-					$("#storeTypeSelect").append(option);
-					form.render();//菜单渲染 把内容加载进去
-				},
-				function(res) {
-					
-				},
-				function(res) {
-					
-				})
+				ajaxfuntion($, baseUrl + '/client/queryIndustryType', {}, 'get',
+					function(res){
+						// console.log(res.data)
+						var option = ''
+						 list = res.data;
+						for(var n in list){
+							var its='<option value="' + list[n] + '">'+ list[n] + '</option>';
+							 option +=its;
+						}
+						$("#storeTypeSelect").append(option);
+						form.render();//菜单渲染 把内容加载进去
+					},
+					function(res) {},
+					function(res) {}
+				)
 			};
+			
+			// 编辑跳转
+			function handleEdit (id) {
+				window.location.href = './StoreDetailForm.html?clientId=' + id
+			}
 			
 			// 打开催缴弹框
 			function openReminderDialog($, layer) {

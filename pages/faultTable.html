@@ -143,10 +143,15 @@
 				table.on('tool(faultData)', function(obj) {
 					var data = obj.data;
 					if (obj.event === 'view') {
-						console.log('查看详情')
+						handleView(obj.data.id)
 					}
 				})
 			});
+			
+			// 查看跳转
+			function handleView (id) {
+				window.location.href = './faultDetailTable.html?id=' + id
+			}
 		</script>
 	</body>
 </html>

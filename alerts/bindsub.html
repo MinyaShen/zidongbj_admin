@@ -63,6 +63,7 @@
     <script src="../static/layui/layui.js"></script>
     <script src="../static/layui/lay/modules/formSelects-v4.js" type="text/javascript" charset="utf-8"></script>
     <script src="../static/js/jquery.min.js"></script>
+		<script src="../static/js/common.js"></script>
     </script>
     <script>
         function getQueryVariable(variable) {
@@ -85,7 +86,7 @@
             var tempArr = [];
 
             $.ajax({
-                url: "http://192.168.0.27/alarm/user/unBindSubUser",
+                url: baseUrl + "/user/unBindSubUser",
                 method: 'GET',
                 success: function (res) {
                     var temp = res.data.userList;
@@ -108,7 +109,7 @@
                 var subUserId = layui.formSelects.value('bindsub', 'valStr');
 
                 $.ajax({
-                    url: "http://192.168.0.27/alarm/user/subUserBinding",
+                    url: baseUrl + "/user/subUserBinding",
                     data: {
                         superUserId: id,
                         subUserId: subUserId

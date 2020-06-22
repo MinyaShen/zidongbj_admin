@@ -60,6 +60,13 @@ function setCookie(c_name,value,expiredays) {
 	((expiredays==null) ? "" : ";expires="+exdate.toGMTString())
 }
 
+// 返回上级页面
+function goBack ($, elem) {
+	$(elem).click(function () {
+		window.history.go(-1)
+	})
+}
+
 // ajax请求
 function ajaxfuntion($, url, todata, type, s_fun, e_fun, c_fun) {
 	$.ajax({

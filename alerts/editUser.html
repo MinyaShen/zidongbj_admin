@@ -49,6 +49,7 @@
 
     <script src="../static/layui/layui.js"></script>
     <script src="../static/js/jquery.min.js"></script>
+		<script src="../static/js/common.js"></script>
     <script>
         function getQueryVariable(variable) {
             var query = window.location.search.substring(1);
@@ -74,7 +75,7 @@
             //获取用户信息
             var id = getQueryVariable("userId")
             $.ajax({
-                url: "http://192.168.0.27/alarm/user/selectById/" + id,
+                url: baseUrl + "/user/selectById/" + id,
                 method: 'GET',
                 success: function (res) {
                     console.log(res)
@@ -93,7 +94,7 @@
                         name: $("#name").val()
                     }
                     $.ajax({
-                        url: "http://192.168.0.27/alarm/user/adminEditUserInfo",
+                        url: baseUrl + "/user/adminEditUserInfo",
                         data: JSON.stringify(tempData),
                         method: 'POST',
                         contentType: 'application/json',

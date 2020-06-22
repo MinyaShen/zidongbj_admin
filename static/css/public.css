@@ -178,7 +178,7 @@ span.alarm-module-title-left::before {
 .alarm-btn-danger {
 	background-color: #FE787A;
 }
-.alarm-btn-waring {
+.alarm-btn-warning {
 	background-color: #ED9935;
 }
 .alarm-btn-success {
@@ -195,7 +195,7 @@ span.alarm-module-title-left::before {
 .alarm-text-danger {
 	color: #FE787A;
 }
-.alarm-text-waring {
+.alarm-text-warning {
 	color: #ED9935;
 }
 .alarm-text-success {

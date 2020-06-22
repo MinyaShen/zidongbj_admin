@@ -14,7 +14,7 @@
 }
 
 .alarm-table {
-	width: 60%;
+	width: 70%;
 	border: 1px solid #ADADAD;
 }
 
@@ -42,16 +42,37 @@
 	text-align: center;
 	background-color: #DCDCDC;
 	padding: 13px 5px;
-}
-
-.col-title-img {
-	height: 170px;
+	min-height: 48px;
 	box-sizing: border-box;
 }
 
-.col-title-over {
-	height: auto;
-	min-height: 48px;
+.alarm-table .col-title-img {
+	height: 170px;
+	line-height: 170px;
+	padding: 0 15px;
+	box-sizing: border-box;
+}
+
+.alarm-table .col-title-over {
+	height: 80px;
+	line-height: 80px;
+	padding: 0 15px;
+	box-sizing: border-box;
+}
+
+.alarm-table .col-title-over2 {
+	border-left: 1px solid #ADADAD;
+}
+
+.alarm-table .alarm-col-line {
+	border-bottom: 1px solid #ADADAD;
+}
+
+.alarm-table .sign-title-img {
+	height: 160px;
+	line-height: 160px;
+	padding: 0 15px;
+	box-sizing: border-box;
 }
 
 .show-img-list {
@@ -67,8 +88,23 @@
 	margin: 0 8px 8px 0;
 }
 
-.show-img-list .img-box img {
+.sign-img-box {
+	height: auto;
+	width: 80px;
+}
+
+.show-img-list .img-box img,
+.sign-img-box img {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
+}
+
+.alarm-table .col-content {
+	min-height: 48px;
+}
+
+.alarm-table .col-content-over {
+	line-height: 80px;
+	padding: 0 15px;
 }

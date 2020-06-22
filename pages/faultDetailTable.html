@@ -18,66 +18,46 @@
 			<h3 class="alarm-page-title">故障维护详情信息</h3>
 			<div class="alarm-content">
 				<div class="alarm-table-toolbar">
-					<button type="button" class="layui-btn alarm-btn-size alarm-btn-danger">返回</button>
+					<button type="button" id="back-btn" class="layui-btn alarm-btn-size alarm-btn-danger">返回</button>
 				</div>
 				<div class="alarm-table">
 					<div class="layui-row alarm-row">
 						<div class="layui-col-md2 alarm-col col-title">点位名称</div>
-						<div class="layui-col-md4 alarm-col col-content">老庙金店</div>
+						<div class="layui-col-md4 alarm-col col-content" id="clientName"></div>
 						<div class="layui-col-md2 alarm-col col-title">地址</div>
-						<div class="layui-col-md4 alarm-col col-content">洪泽区东风路106号</div>
+						<div class="layui-col-md4 alarm-col col-content" id="clientAddress"></div>
 					</div>
 					<div class="layui-row alarm-row">
-						<div class="layui-col-md2 alarm-col col-title">设备名称</div>
-						<div class="layui-col-md4 alarm-col col-content">一键式报警装置</div>
-						<div class="layui-col-md2 alarm-col col-title">设备型号</div>
-						<div class="layui-col-md4 alarm-col col-content">FFFSS-55SD4D-6555</div>
-					</div>
-					<div class="layui-row alarm-row">
-						<div class="layui-col-md2 alarm-col col-title">安装时间</div>
-						<div class="layui-col-md4 alarm-col col-content">2018-12-30</div>
 						<div class="layui-col-md2 alarm-col col-title">质保时间</div>
-						<div class="layui-col-md4 alarm-col col-content">2020-12-30</div>
+						<div class="layui-col-md4 alarm-col col-content" id="expirationDate"></div>
+						<div class="layui-col-md2 alarm-col col-title">故障类型</div>
+						<div class="layui-col-md4 alarm-col col-content" id="damageType"></div>
+					</div>
+					<div class="layui-row alarm-row">
+						<div class="layui-col-md2 alarm-col col-title col-title-over">故障描述</div>
+						<div class="layui-col-md10 alarm-col col-content" id="damageDesc"></div>
 					</div>
 					<div class="layui-row alarm-row">
 						<div class="layui-col-md2 alarm-col col-title col-title-img">故障照片</div>
 						<div class="layui-col-md10 alarm-col col-content">
-							<ul class="show-img-list">
-								<li class="img-box"><img src="../static/images/login_bg02.png"></li>
-								<li class="img-box"><img src="../static/images/login_bg02.png"></li>
-							</ul>
+							<ul class="show-img-list" id="damageImgList"></ul>
 						</div>
 					</div>
 					<div class="layui-row alarm-row">
 						<div class="layui-col-md2 alarm-col col-title col-title-over">维修描述</div>
-						<div class="layui-col-md10 alarm-col col-content">疑似人为的拔掉了报警器的电源线，导致无法报警，维修后已经接通电源线，并且能正常运作。</div>
+						<div class="layui-col-md10 alarm-col col-content" id="repairDesc"></div>
 					</div>
 					<div class="layui-row alarm-row">
-						<div class="layui-col-md2 alarm-col col-title">维修照片</div>
+						<div class="layui-col-md2 alarm-col col-title col-title-img">维修照片</div>
 						<div class="layui-col-md10 alarm-col col-content">
-							<ul class="show-img-list">
-								<li class="img-box"><img src="../static/images/login_bg02.png"></li>
-								<li class="img-box"><img src="../static/images/login_bg02.png"></li>
-							</ul>
+							<ul class="show-img-list" id="repairImgList"></ul>
 						</div>
 					</div>
 					<div class="layui-row alarm-row">
-						<div class="layui-col-md6">
-							<div class="layui-row">
-								<div class="layui-col-md4 alarm-col col-title">责任人签字</div>
-								<div class="layui-col-md8 alarm-col col-content"></div>
-							</div>
-						</div>
-						<div class="layui-col-md6">
-							<div class="layui-row">
-								<div class="layui-col-md4 alarm-col col-title">评价星级</div>
-								<div class="layui-col-md8 alarm-col col-content"></div>
-							</div>
-							<div class="layui-row">
-								<div class="layui-col-md4 alarm-col col-title">故障类型</div>
-								<div class="layui-col-md8 alarm-col col-content">人为故障</div>
-							</div>
-						</div>
+						<div class="layui-col-md2 alarm-col col-title col-title-over">责任人签字</div>
+						<div class="layui-col-md4 alarm-col col-content" id="signImgBox"></div>
+						<div class="layui-col-md2 alarm-col col-title col-title-over col-title-over2">评价星级</div>
+						<div class="layui-col-md4 alarm-col col-content col-content-over" id="assess">人为故障</div>
 					</div>
 					<div class="layui-row alarm-row">
 						<div class="layui-col-md2 alarm-col col-title">上报时间</div>
@@ -88,17 +68,86 @@
 						<div class="layui-col-md2 alarm-col col-title">评价时间</div>
 					</div>
 					<div class="layui-row alarm-row">
-						<div class="layui-col-md2 alarm-col col-content">2019-07-30 15:30</div>
-						<div class="layui-col-md2 alarm-col col-content">2019-07-30 15:32</div>
-						<div class="layui-col-md2 alarm-col col-content">2019-07-31 08:30</div>
-						<div class="layui-col-md2 alarm-col col-content">2019-07-31 08:35</div>
-						<div class="layui-col-md2 alarm-col col-content">2019-07-31 08:45</div>
-						<div class="layui-col-md2 alarm-col col-content">2019-07-31 09:30</div>
+						<div class="layui-col-md2 alarm-col col-content" id="upTime"></div>
+						<div class="layui-col-md2 alarm-col col-content" id="orderTime"></div>
+						<div class="layui-col-md2 alarm-col col-content" id="signTime"></div>
+						<div class="layui-col-md2 alarm-col col-content" id="repairTime"></div>
+						<div class="layui-col-md2 alarm-col col-content" id="postTime"></div>
+						<div class="layui-col-md2 alarm-col col-content" id="assessTime"></div>
 					</div>
 				</div>
 			</div>
 		</div>
 		
 		<script src="../static/layui/layui.js"></script>
+		<script src="../static/js/common.js"></script>
+		<script>
+			// 定义全局变量参数
+			var pathId = getQueryString('id');
+			var faultData = {};
+			
+			// 加载layui模块
+			layui.use(['jquery', 'layer'], function(){
+				var $ = layui.jquery,
+				layer = layui.layer
+				
+				// 加载数据
+				getfaultDataDetail($, pathId)
+				
+				// 返回
+				goBack($, '#back-btn')
+				
+			});
+			
+			// 获取故障维护详情
+			function getfaultDataDetail($, id) {
+				console.log(pathId)
+				ajaxfuntion($, baseUrl + '/maintain/maintainInfo',
+					{
+						maintainId: id
+					},
+					'get',
+					function (res) {
+						if (res.code == 200) {
+							console.log(res)
+							faultData = res.data
+							var device= res.data.maintainRocord
+							$('#clientName').text(faultData.fullName)
+							$('#clientAddress').text(faultData.address)
+							$('#expirationDate').text(formatTime(faultData.warrantyEndTime))
+							$('#damageType').text(device.damageType)
+							$('#damageDesc').text(device.damageInfo)
+							JSON.parse(device.damageImg).forEach(function(item, index) {
+								console.log(item)
+								$('#damageImgList').append('<li class="img-box"><img src="' + imgBaseUrl + item +'"></li>')
+							})
+							$('#repairDesc').text(device.repairInfo)
+							if(device.repairImg != null) {
+								device.repairImg.forEach(function(item, index) {
+									console.log(item)
+									$('#repairImgList').append('<li class="img-box"><img src="' + imgBaseUrl + item +'"></li>')
+								})
+							}
+							if(device.signature != null) {
+								$('#signImgBox').append('<li class="sign-img-box"><img src="' + imgBaseUrl + device.signature +'"></li>')
+							}
+							$('#assess').text(device.evalLevel1)
+							$('#upTime').text(formatTime(device.reportTime))
+							$('#orderTime').text(formatTime(device.orderTakeTime))
+							$('#signTime').text(formatTime(device.signTime))
+							$('#repairTime').text(formatTime(device.maintainTime))
+							if(device.submitTime) {
+								$('#postTime').text(formatTime(device.submitTime))
+							}
+							if(device.evalTime) {
+								$('#assessTime').text(formatTime(device.evalTime))
+							}
+						}
+					},
+					function (res) {},
+					function (res) {}
+				)
+			};
+		</script>
 	</body>
 </html>

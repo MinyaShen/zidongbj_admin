@@ -17,63 +17,49 @@
 		<div class="alarm-wrapper">
 			<h3 class="alarm-page-title">用户单位信息</h3>
 			<div class="alarm-content">
-				<h5 class="module-title">
-					<span class="alarm-module-title-left">用户单位信息-详情</span>
+				<h5 class="module-title" id="isShowTitle">
+					<span class="alarm-module-title-left">用户单位信息详情</span>
 				</h5>
 				<div class="form-wrapper">
-					<!-- <div class="alarm-form-toolbar">
-						<div class="btns-list">
-							<button type="button" class="layui-btn alarm-btn-size alarm-btn-success">返回</button>
-							<button type="button" class="layui-btn alarm-btn-size alarm-btn-success">修改</button>
-						</div>
-					</div> -->
-					<form class="layui-form" action="">
+					<form class="layui-form" lay-filter="clientForm" onsubmit="false" action="" method="post">
 						<div class="layui-form-item">
 							<label class="layui-form-label">用户名</label>
 							<div class="layui-input-block">
-								<select name="user">
+								<select name="name" lay-filter="userName" id="userName">
 									<option value="">请选择用户</option>
-									<option value="0">老庙集团（洪泽分公司）</option>
-									<option value="1">新华书店（洪泽分公司）</option>
-									<option value="2">珠宝行（洪泽分公司）</option>
 								</select>
 							</div>
 						</div>
 						<div class="layui-form-item">
 							<label class="layui-form-label">登录密码</label>
-							<div class="layui-input-block">
-								<input type="password" name="password" autocomplete="off" placeholder="请输入登录密码" class="layui-input">
+							<div class="layui-input-block alarm-disabled">
+								<input type="password" name="password" value="********" disabled lay-filter="password" autocomplete="off" placeholder="请输入登录密码" class="layui-input">
 							</div>
 						</div>
 						<div class="layui-form-item">
 							<label class="layui-form-label">点位名称</label>
 							<div class="layui-input-block">
-								<input type="text" name="storeName" lay-verify="storeName" autocomplete="off" placeholder="请输入点位名称" class="layui-input">
+								<input type="text" name="storeName" lay-filter="storeName" lay-verify="storeName" autocomplete="off" placeholder="请输入点位名称" class="layui-input">
 							</div>
 						</div>
 						<div class="layui-form-item">
 							<label class="layui-form-label">单位类型</label>
 							<div class="layui-input-block">
-								<select name="storeType">
-									<option value="0">金店</option>
-									<option value="1">银行</option>
-									<option value="2">手机卖场</option>
-									<option value="3">书店</option>
-									<option value="4">珠宝店</option>
-									<option value="5">乐器行</option>
+								<select name="storeType" lay-filter="storeType" id="storeTypeSelect">
+									<option value="">请选择单位类型</option>
 								</select>
 							</div>
 						</div>
 						<div class="layui-form-item">
 							<label class="layui-form-label">负责人姓名</label>
 							<div class="layui-input-block">
-								<input type="text" name="mainPerson" lay-verify="mainPerson" autocomplete="off" placeholder="请输入负责人姓名" class="layui-input">
+								<input type="text" name="dutyName" lay-verify="dutyName" autocomplete="off" placeholder="请输入负责人姓名" class="layui-input">
 							</div>
 						</div>
 						<div class="layui-form-item">
 							<label class="layui-form-label">负责人电话</label>
 							<div class="layui-input-block">
-								<input type="text" name="phone" lay-verify="phone" autocomplete="off" placeholder="请输入负责人电话" class="layui-input">
+								<input type="text" name="dutyTel" autocomplete="off" placeholder="请输入负责人电话" class="layui-input">
 							</div>
 						</div>
 						<div class="layui-form-item">
@@ -84,29 +70,31 @@
 						</div>
 						<div class="layui-form-item alarm-form-item-margin">
 							<label class="layui-form-label">缴费日期</label>
-							<div class="layui-input-inline">
-								<input type="text" class="layui-input" id="dateSelete" placeholder="请选择日期">
+							<div class="layui-input-block">
+								<input type="text" name="payTime" class="layui-input" id="dateSelete" placeholder="请选择日期">
 							</div>
 						</div>
 						<div class="layui-form-item">
 							<label class="layui-form-label">缴费状态</label>
-							<div class="layui-input-block">
-								<select name="status">
-									<option value="0">未缴纳</option>
-									<option value="1">已缴纳</option>
+							<div class="layui-input-block alarm-disabled">
+								<select name="payStatus" id="payStatus">
+									<option value="0">已缴费</option>
+									<option value="1">未缴费</option>
+									<option value="2">停用</option>
 								</select>
 							</div>
 						</div>
 						<div class="layui-form-item">
 							<label class="layui-form-label">维修状态</label>
 							<div class="layui-input-block">
-								<input type="text" name="repairStatusText" class="layui-input">
+								<input type="text" name="repairStatus" class="layui-input">
 							</div>
 						</div>
 						<div class="layui-form-item alarm-form-btns">
 							<div class="layui-input-block">
-								<button class="layui-btn alarm-btn-success alarm-btn-size" lay-submit lay-filter="comfirm">确认</button>
-								<button class="layui-btn alarm-btn-ban alarm-btn-size" lay-submit lay-filter="default">禁用</button>
+								<button id="submit-btn" type="button" class="layui-btn alarm-btn-success alarm-btn-size">确认</button>
+								<button id="disable-btn" type="button" class="layui-btn alarm-btn-ban alarm-btn-size">禁用</button>
+								<button type="button" id="back-btn" class="layui-btn alarm-btn-size alarm-btn-warning">返回</button>
 							</div>
 						</div>
 					</form>
@@ -114,35 +102,157 @@
 			</div>
 		</div>
 		
+		<!-- <script src="../static/js/jquery.min.js"></script> -->
 		<script src="../static/layui/layui.js"></script>
+		<script src="../static/js/common.js"></script>
 		<script>
-			layui.use(['form', 'laydate'], function(){
-				var form = layui.form
-				var laydate = layui.laydate
+			//全局变量
+			var pathId = getQueryString('clientId') //路径id参数
+			var clientFormData = {} //详情数据
+			
+			// 加载layui模块
+			layui.use(['jquery', 'layer', 'form', 'laydate'], function(){
+				var $ = layui.jquery,
+				form = layui.form,
+				laydate = layui.laydate,
+				layer = layui.layer;
+				
+				// 预加载表单详情
+				console.log(pathId)
+				console.log(window.location)
+				getStoreFormDetail($, pathId, layer, form)
+				
+				// 加载点位类型选项列表
+				getStoreTypeList($, form)
 				
 				// 日期选择
 				laydate.render({
 					elem: '#dateSelete',
 					trigger: 'click',
-					format: 'yyyy/MM/dd'
+					type: 'datetime',
+					min: '0'
 				});
 				
-				// 验证规则
-				form.verify({
-					title: function(value){
-						if(value.length < 5){
-							return '标题至少得5个字符啊';
-						}
-					}
+				// 表单提交
+				$('#submit-btn').click(function() {
+					var formData = {
+						clientId: pathId,
+						clientName: $('input[name="storeName"]').val(),
+						dutyName: $('input[name="dutyName"]').val(),
+						type: $('input[name="storeType"]').val(),
+						dutyTel: $('input[name="dutyTel"]').val(),
+						tel: $('input[name="landline"]').val(),
+						expireTime: $('input[name="payTime"]').val(),
+						status: $('input[name="payStatus"]').val(),
+						repairStatus: $('input[name="repairStatus"]').val()
+					};
+					postForm($, formData, layer)
 				});
 				
-				// 表单
-				form.on('submit(formDemo)', function(data){
-					layer.msg(JSON.stringify(data.field));
-					return false;
+				// 禁用
+				$('#disable-btn').click(function() {
+					handleUsingStatus($, pathId, 2, layer)
 				});
-			  
+				
+				// 返回
+				goBack($, '#back-btn')
+				
 			});
+			
+			
+			
+			// 获取详情
+			function getStoreFormDetail ($, id, layer, form) {
+				ajaxfuntion($, baseUrl + '/client/queryUserClientInfo', {clientId: id}, 'get',
+					function (res) {
+						if (res.code == 200) {
+							console.log(res.data.name)
+							var option = ''
+							clientFormData = res.data							
+							for(var n in res.data.name){
+								var its='<option value="' + res.data.name[n] + '">'+ res.data.name[n] + '</option>';
+								 option +=its;
+							}
+							$("#userName").append(option);
+							form.render();//菜单渲染 把内容加载进去
+							form.val('clientForm', {
+								"name": res.data.name[0],
+								"storeName": res.data.clientName,
+								"dutyName": res.data.dutyName,
+								"storeType": res.data.type,
+								"dutyTel": res.data.dutyTel,
+								"landline": res.data.tel,
+								"payTime": formatTime(res.data.expireTime),
+								"payStatus": res.data.status + '',
+								"repairStatus": res.data.repairStatus
+							})
+							$('#userName').val(res.data.name[0]);
+							$('#storeTypeSelect').val(res.data.type);
+						}
+					},
+					function (res) {},
+					function (res) {}
+				)
+			};
+			
+			// 获取点位类型列表
+			function getStoreTypeList($, form) {
+				var list = []
+				ajaxfuntion($, baseUrl + '/client/queryIndustryType', {}, 'get',
+					function(res){
+						// console.log(res.data)
+						var option = ''
+						 list = res.data;
+						for(var n in list){
+							var its='<option value="' + list[n] + '">'+ list[n] + '</option>';
+							 option +=its;
+						}
+						$("#storeTypeSelect").append(option);
+						form.render();//菜单渲染 把内容加载进去
+					},
+					function(res) {},
+					function(res) {}
+				)
+			};
+			
+			// 编辑提交表单
+			function postForm ($, formData, layer) {
+				ajaxfuntion($, baseUrl + '/client/editUserClientInfo', JSON.stringify(formData), 'post',
+					function (s_res) {
+						if (s_res.code == 200) {
+							layer.msg('用户单位信息修改成功,3秒后自动返回', {icon:1})
+						}
+						setTimeout(function(){
+							window.history.go(-1)
+							// window.parent.location.reload()
+						}, 3000)
+					},
+					function (e_res) {},
+					function (c_res) {}
+				)
+			};
+			
+			// 停用
+			function handleUsingStatus ($, clientId, status, layer) {
+				ajaxfuntion($, baseUrl + '/client/stopUsing',
+					{
+						clientId: clientId,
+						status: status
+					},
+					'get',
+					function (s_res) {
+						if (s_res.code == 200) {
+							layer.msg('停用成功,3秒后自动返回', {icon:1})
+						}
+						setTimeout(function(){
+							window.history.go(-1)
+							// window.parent.location.reload()
+						}, 3000)
+					},
+					function (e_res) {},
+					function (c_res) {}
+				)
+			}
 		</script>
 	</body>
 </html>

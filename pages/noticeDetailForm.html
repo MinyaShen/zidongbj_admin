@@ -24,7 +24,7 @@
 				<div class="form-wrapper">
 					<div class="alarm-form-toolbar" id="isShowTool">
 						<div class="btns-list">
-							<button type="button" class="layui-btn alarm-btn-size alarm-btn-success">返回</button>
+							<button type="button" id="back-btn" class="layui-btn alarm-btn-size alarm-btn-success">返回</button>
 							<button type="button" id="m-submit-btn" class="layui-btn alarm-btn-size alarm-btn-success">修改</button>
 						</div>
 					</div>
@@ -175,25 +175,6 @@
 					selectedStoresList = s
 				}, true);
 				
-				// 验证规则
-				form.verify({
-					title: function(value){
-						if(value.length <= 0){
-							return '标题不能为空';
-						}
-					},
-					body: function(value){
-						if(value.length <= 0){
-							return '内容不能为空';
-						}
-					},
-					noticeType: function(value){
-						if(value == ''){
-							return '请选择通知类型';
-						}
-					}
-				});				
-				
 				// 提交表单
 				$(document).on('click','#submit-btn, #m-submit-btn', function () {
 					// 需要提交的数据
@@ -212,6 +193,9 @@
 					}
 					postForm(formData, layer)
 				})
+				
+				// 返回
+				goBack($, '#back-btn')
 			  
 			});
 			

@@ -41,6 +41,7 @@
 
     <script src="../static/layui/layui.js"></script>
     <script src="../static/js/jquery.min.js"></script>
+		<script src="../static/js/common.js"></script>
     <script>
         function getQueryVariable(variable) {
             var query = window.location.search.substring(1);
@@ -58,7 +59,7 @@
             //获取未绑定点位信息
             var id = getQueryVariable("userId")
             $.ajax({
-                url: "http://192.168.0.27/alarm/client/queryClientList",
+                url: baseUrl + "/client/queryClientList",
                 data: {
                     flag: 2
                 },
@@ -85,7 +86,7 @@
                     userId: id
                 }
                 $.ajax({
-                    url: "http://192.168.0.27/alarm/user/userBinding",
+                    url: baseUrl + "/user/userBinding",
                     data: tempData,
                     method: 'GET',
                     success: function (result) {
