@@ -114,58 +114,112 @@
 							console.log(res)
 							faultData = res.data
 							var device= res.data.maintainRocord
-							$('#clientName').text(faultData.fullName)
-							$('#clientAddress').text(faultData.address)
+							
+							if (faultData.fullName) {
+								$('#clientName').text(faultData.fullName)
+							} else {
+								$('#clientName').text('无')
+							}
+							if (faultData.address) {
+								$('#clientAddress').text(faultData.address)
+							} else {
+								$('#clientAddress').text('无')
+							}
 							if(faultData.warrantyEndTime) {
 								$('#expirationDate').text(formatTime(faultData.warrantyEndTime))
+							} else {
+								$('#expirationDate').text('无')
 							}
-							$('#damageTypeName').text(device.damageTypeName)
-							$('#damageDesc').text(device.damageInfo)
-							if (JSON.parse(device.damageImg).length > 0) {
-								JSON.parse(device.damageImg).forEach(function(item, index) {
-									console.log(item)
-									$('#damageImgList').append('<li class="img-box"><img src="' + imgBaseUrl + item +'"></li>')
-								})
+							
+							if (device.damageTypeName) {
+								$('#damageTypeName').text(device.damageTypeName)
+							} else {
+								$('#damageTypeName').text('无')
 							}
-							$('#repairDesc').text(device.repairInfo)
-							if(JSON.parse(device.repairImg).length > 0) {
-								JSON.parse(device.repairImg).forEach(function(item, index) {
-									console.log(item)
-									$('#repairImgList').append('<li class="img-box"><img src="' + imgBaseUrl + item +'"></li>')
-								})
+							if (device.damageInfo) {
+								$('#damageDesc').text(device.damageInfo)
+							} else {
+								$('#damageDesc').text('无')
 							}
+							if (device.damageImg) {
+								if (JSON.parse(device.damageImg).length > 0) {
+									JSON.parse(device.damageImg).forEach(function(item, index) {
+										console.log(item)
+										$('#damageImgList').append('<li class="img-box"><img src="' + imgBaseUrl + item +'"></li>')
+									})
+								} else {
+									$('#damageImgList').text('无')
+								}
+							} else {
+								$('#damageImgList').text('无')
+							}
+							if (device.repairInfo) {
+								$('#repairDesc').text(device.repairInfo)
+							} else {
+								$('#repairDesc').text('无')
+							}
+							if (device.repairImg) {
+								if(JSON.parse(device.repairImg).length > 0) {
+									JSON.parse(device.repairImg).forEach(function(item, index) {
+										console.log(item)
+										$('#repairImgList').append('<li class="img-box"><img src="' + imgBaseUrl + item +'"></li>')
+									})
+								} else {
+									$('#repairImgList').text('无')
+								}
+							} else {
+								$('#repairImgList').text('无')
+							}
+							
 							if(device.signature != null) {
 								$('#signImgBox').append('<li class="sign-img-box"><img src="' + imgBaseUrl + device.signature +'"></li>')
 							}
-							$('#assess').append('<div id="star'+ id +'" style="font-size: 13px; margin-top: -10px;"></div>')
-							// 加载评分
-							var average = avg(device.evalLevel1, device.evalLevel2)
-							rate.render({
-								elem: '#star'+id+''
-								, length: 5
-								, value: average
-								//, theme: '#009688'
-								, half: true
-								, text: true
-								, readonly: true
-							});
+							if (device.evalLevel1 != null && device.evalLevel2 != null) {
+								$('#assess').append('<div id="star'+ id +'" style="font-size: 13px; margin-top: -10px;"></div>')
+								// 加载评分
+								var average = avg(device.evalLevel1, device.evalLevel2)
+								rate.render({
+									elem: '#star'+id+''
+									, length: 5
+									, value: average
+									//, theme: '#009688'
+									, half: true
+									, text: true
+									, readonly: true
+								});
+							} else {
+								$('#signImgBox').text('暂无评分')
+							}
+							
 							if(device.reportTime) {
 								$('#upTime').text(formatTime(device.reportTime))
+							} else {
+								$('#upTime').text('无')
 							}
 							if(device.orderTakeTime) {
 								$('#orderTime').text(formatTime(device.orderTakeTime))
+							} else {
+								$('#orderTime').text('无')
 							}
 							if(device.signTime) {
 								$('#signTime').text(formatTime(device.signTime))
+							} else {
+								$('#signTime').text('无')
 							}
 							if(device.maintainTime) {
 								$('#repairTime').text(formatTime(device.maintainTime))
+							} else {
+								$('#repairTime').text('无')
 							}
 							if(device.submitTime) {
 								$('#postTime').text(formatTime(device.submitTime))
+							} else {
+								$('#postTime').text('无')
 							}
 							if(device.evalTime) {
 								$('#assessTime').text(formatTime(device.evalTime))
+							} else {
+								$('#assessTime').text('无')
 							}
 						}
 					},

@@ -109,20 +109,65 @@
 							var userList = res.data.userPerson,
 							maintainRocords = res.data.maintainRocords;
 							
-							$('#clientName').text(zoneDetailData.clientName);
-							$('#zoneName').text(zoneDetailData.zoneName);
-							$('#clientAddress').text(zoneDetailData.clientAddress);
-							$('#zoneType').text(zoneDetailData.zoneType);
-							$('#dutyName').text(zoneDetailData.dutyName);
-							$('#policeStation').text(zoneDetailData.policeStation);
-							$('#dutyTel').text(zoneDetailData.dutyTel);
+							if (zoneDetailData.clientName) {
+								$('#clientName').text(zoneDetailData.clientName);
+							} else {
+								$('#clientName').text('无');
+							}
+							
+							if (zoneDetailData.zoneName) {
+								$('#zoneName').text(zoneDetailData.zoneName);
+							} else {
+								$('#zoneName').text('无');
+							}
+							
+							if (zoneDetailData.clientAdress) {
+								$('#clientAdress').text(zoneDetailData.clientAdress);
+							} else {
+								$('#clientAdress').text('无');
+							}
+							
+							if (zoneDetailData.zoneType) {
+								$('#zoneType').text(zoneDetailData.zoneType);
+							} else {
+								$('#zoneType').text('无');
+							}
+							
+							if (zoneDetailData.dutyName) {
+								$('#dutyName').text(zoneDetailData.dutyName);
+							} else {
+								$('#dutyName').text('无');
+							}
+
+							if (zoneDetailData.policeStation) {
+								$('#policeStation').text(zoneDetailData.policeStation);
+							} else {
+								$('#policeStation').text('无');
+							}
+							
+							if (zoneDetailData.dutyTel) {
+								$('#dutyTel').text(zoneDetailData.dutyTel);
+							} else {
+								$('#dutyTel').text('无');
+							}
+							
 							if (zoneDetailData.setupTime) {
 								$('#setupTime').text(formatTime(zoneDetailData.setupTime))
-							};
-							$('#zonePosition').text(zoneDetailData.zonePosition);
+							} else {
+								$('#setupTime').text('无');
+							}
+							
+							if (zoneDetailData.zonePosition) {
+								$('#zonePosition').text(zoneDetailData.zonePosition);
+							} else {
+								$('#zonePosition').text('无');
+							}
+							
 							if (zoneDetailData.warrantyEndTime) {
 								$('#warrantyEndTime').text(formatTime(zoneDetailData.warrantyEndTime))
-							};
+							} else {
+								$('#warrantyEndTime').text('无');
+							}
 							// 加载使用人表格
 							if (userList.length > 0) {
 								userList.forEach(function (item, index) {
@@ -133,6 +178,8 @@
 										'</li>'
 									)
 								})
+							} else {
+								$('#userPersonTable .user-list').append('<span>暂无使用人员</span>')
 							}
 							// 动态修改样式
 							if (userList.length%2==0) {
@@ -149,17 +196,46 @@
 										'<div class="malfunction-list">' +
 											'<div class="layui-row alarm-row">' +
 												'<div class="layui-col-md2 alarm-col col-title">上报时间</div>' +
-												'<div class="layui-col-md4 alarm-col col-content">' + formatTime(item.reportTime) + '</div>' +
+												'<div class="layui-col-md4 alarm-col col-content col-conten-report">' + formatTime(item.reportTime) + '</div>' +
 												'<div class="layui-col-md2 alarm-col col-title">维修时间</div>' +
-												'<div class="layui-col-md4 alarm-col col-content">' + formatTime(item.maintainTime) + '</div>' +
+												'<div class="layui-col-md4 alarm-col col-content col-content-repair">' + formatTime(item.maintainTime) + '</div>' +
 											'</div>' +
 											'<div class="layui-row alarm-row">' +
 												'<div class="layui-col-md2 alarm-col col-title">故障原因</div>' +
-												'<div class="layui-col-md10 alarm-col col-content">' + item.damageInfo + '</div>' +
+												'<div class="layui-col-md10 alarm-col col-content col-content-damage">' + item.damageInfo + '</div>' +
 											'</div>' +
 										'</div>'
 									)
+									
+									// 动态判断修改内容值显示
+									var report = $('#malfunctionTable .malfunction-list').eq(index).find('.col-conten-report'),
+									repair = $('#malfunctionTable .malfunction-list').eq(index).find('.col-conten-repair'),
+									damage = $('#malfunctionTable .malfunction-list').eq(index).find('.col-conten-damage');
+									if (item.reportTime) {
+										report.text(formatTime(item.maintainTime))
+									} else {
+										report.text('无')
+									}
+									if (item.reportTime) {
+										repair.text(formatTime(item.maintainTime))
+									} else {
+										repair.text('无')
+									}
+									if (item.reportTime) {
+										damage.text(formatTime(item.maintainTime))
+									} else {
+										damage.text('无')
+									}
+									
 								})
+							} else {
+								$('#malfunctionTable').append(
+									'<div class="malfunction-list">' +
+										'<div class="layui-row alarm-row">' +
+											'<div class="layui-col-md12 alarm-col col-content">暂无相关信息</div>' +
+										'</div>' +
+									'</div>'
+								)
 							}
 							if (maintainRocords.length > 1) {
 								$('#malfunctionTable .malfunction-list').eq(-1).find('.alarm-row').eq(-1).css('border-bottom', 'none')

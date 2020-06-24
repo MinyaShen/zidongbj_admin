@@ -76,16 +76,53 @@
 						if (res.code == 200) {
 							console.log(res)
 							alarmInfoData = res.data
-							$('#clientName').text(alarmInfoData.cName)
-							$('#clientAddress').text(alarmInfoData.address)
-							$('#zoneName').text(alarmInfoData.zoneName)
-							$('#zoneType').text(alarmInfoData.zoneType)
-							$('#maintenance').text(alarmInfoData.maintenance)
-							$('#maintenanceTel').text(alarmInfoData.maintenanceTel)
+							if (alarmInfoData.cName) {
+								$('#clientName').text(alarmInfoData.cName)
+							} else {
+								$('#clientName').text('无')
+							}
+							if (alarmInfoData.address) {
+								$('#clientAddress').text(alarmInfoData.address)
+							} else {
+								$('#clientAddress').text('无')
+							}
+							
+							if (alarmInfoData.zoneName) {
+								$('#zoneName').text(alarmInfoData.zoneName)
+							} else {
+								$('#zoneName').text('无')
+							}
+							
+							if (alarmInfoData.zoneType) {
+								$('#zoneType').text(alarmInfoData.zoneType)
+							} else {
+								$('#zoneType').text('无')
+							}
+							
+							if (alarmInfoData.maintenance) {
+								$('#maintenance').text(alarmInfoData.maintenance)
+							} else {
+								$('#maintenance').text('无')
+							}
+							
+							if (alarmInfoData.maintenanceTel) {
+								$('#maintenanceTel').text(alarmInfoData.maintenanceTel)
+							} else {
+								$('#maintenanceTel').text('无')
+							}
+							
 							if(alarmInfoData.createTime) {
 								$('#alarmTime').text(formatTime(alarmInfoData.createTime))
+							} else {
+								$('#alarmTime').text('无')
 							}
-							$('#cTel').text(alarmInfoData.cTel)
+							
+							if (alarmInfoData.cTel) {
+								$('#cTel').text(alarmInfoData.cTel)
+							} else {
+								$('#cTel').text('无')
+							}
+							
 						}
 					},
 					function (res) {},

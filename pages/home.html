@@ -11,9 +11,12 @@
 	<meta name="format-detection" content="telephone=no">
 	<title>首页</title>
 	<!-- 引入css -->
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=DD279b2a90afdf0ae7a3796787a0742e">
+	</script>
 	<link rel="stylesheet" type="text/css" href="../static/layui/css/layui.css" />
 	<link rel="stylesheet" type="text/css" href="../static/css/public.css" />
 	<link rel="stylesheet" type="text/css" href="../static/css/home.css" />
+
 </head>
 
 <body>
@@ -84,7 +87,7 @@
 						<ul id="typeCount">
 						</ul>
 					</div>
-					<div class="alarm-module-theme stores-map" id="qqMap"></div>
+					<div class="alarm-module-theme stores-map" id="baiduMap"></div>
 				</div>
 			</div>
 
@@ -97,7 +100,7 @@
 						<div class="layui-form">
 							<div class="layui-form-item alarm-pie">
 								<label class="layui-form-label">统计时间：</label>
-								<div class="alarm-pie-time">2015-05-10</div>
+								<div class="alarm-pie-time"></div>
 							</div>
 						</div>
 						<div class="chart-wrapper" id="expirCount"></div>

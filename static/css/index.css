@@ -27,6 +27,21 @@
 	font-weight: bold;
 }
 
+#logout-btn {
+	border: none;
+	background-color: #36BBB5;
+	padding: 0 15px;
+	height: 30px;
+	line-height: 30px;
+	border-radius: 5px;
+	color: #fff;
+	font-size: 14px;
+}
+
+.layui-nav-bar {
+	display: none !important;
+}
+
 .layui-layout-admin .layui-side {
 	width: 300px;
 	top: 0;
@@ -160,4 +175,53 @@
 	border: none;
 	width: 100%;
 	height: 100%;
+}
+
+/* 登录页退出弹框样式 */
+.layui-layer-dialog {
+	border-radius: 10px !important;
+}
+.layui-layer-page {
+	border-radius: 10px !important;
+}
+
+.layui-layer-title {
+	background-color: #36BBB5 !important;
+	height: 44px;
+	line-height: 44px;
+	text-align: center;
+	color: #fff !important;
+	border-radius: 10px 10px 0 0 !important;
+}
+
+.layui-layer-dialog .layui-layer-title {
+	text-align: left;
+}
+
+.layui-layer-content {
+	padding: 20px 30px;
+	font-size: 16px;
+	color: #666;
+	line-height: 30px;
+}
+
+.layui-layer-page .layui-layer-btn {
+	padding-bottom: 40px;
+}
+
+.layui-layer-page .layui-layer-btn a {
+	width: 120px;
+	height: 38px;
+	line-height: 38px;
+	text-align: center;
+	border-radius: 5px;
+	font-size: 14px;
+	color: #fff;
+	background-color: #36BBB5;
+	border: none;
+}
+
+.layui-layer-dialog .layui-layer-btn .layui-layer-btn0 {
+	background-color: #36BBB5;
+	border: none;
 }

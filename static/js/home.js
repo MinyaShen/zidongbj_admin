@@ -1,20 +1,13 @@
-layui.use(['form', 'layer'], function () {
-    var form = layui.form;
-    // 选择点位
-    form.on('select(point)', function (data) { //对应lay-filter
-        //sex= data.value;                                   //获取value值
-        //text= data.elem[data.elem.selectedIndex].text;;    //获取显示的值
-        //console.log(data.value)
-        getLinecharData(data.value);
-    });
-    // 选择年份
-    form.on('select(time)', function (data) { //对应lay-filter
-        //sex= data.value;                                   //获取value值
-        //text= data.elem[data.elem.selectedIndex].text;;    //获取显示的值
-        console.log(data.value)
-        getPiecharData(data.value);
-    });
-})
+function currentTime() {
+    let date = new Date()
+    let Y = date.getFullYear() + '-';
+    let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+    let D = date.getDate() + ' ';
+    return Y + M + D
+}
+$('.alarm-pie-time').text(currentTime())
+
+
 getLinecharData() //初始化调用折线图数据
 getPiecharData() //初始化调用饼状图数据
 
@@ -73,6 +66,25 @@ $.ajax({
             frangment += temp;
         }
         $('#clientIdNameList').html(frangment)
+        layui.use(['form', 'layer'], function () {
+            var form = layui.form;
+            form.render('select')
+            // 选择点位
+            form.on('select(point)', function (data) { //对应lay-filter
+                //sex= data.value;                                   //获取value值
+                //text= data.elem[data.elem.selectedIndex].text;;    //获取显示的值
+                getLinecharData(data.value);
+            });
+            // 选择年份
+            form.on('select(time)', function (data) { //对应lay-filter
+                //sex= data.value;                                   //获取value值
+                //text= data.elem[data.elem.selectedIndex].text;;    //获取显示的值
+                console.log(data.value)
+                getPiecharData(data.value);
+            });
+        })
+
+
         console.log('此时进行了选项插入')
     }
 });
@@ -365,11 +377,16 @@ function renderPieChar2(data) {
 }
 
 
+
 //地图数据
-// function initMap() {
-//     var map = new qq.maps.Map(document.getElementById("qqMap"), {
-//         // 地图的中心地理坐标。
-//         center: new qq.maps.LatLng(39.916527, 116.397128)
-//     });
-// }
-// initMap();
+var map = new BMap.Map("baiduMap");
+
+var point = new BMap.Point(119.03018636, 33.60651274);
+//获取当前位置
+
+map.centerAndZoom(point, 15);
+map.enableScrollWheelZoom(true);
+map.addControl(new BMap.NavigationControl());
+map.addControl(new BMap.ScaleControl());
+map.addControl(new BMap.OverviewMapControl());
+map.addControl(new BMap.MapTypeControl());

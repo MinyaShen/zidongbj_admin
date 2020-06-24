@@ -23,7 +23,8 @@
 			<h3 class="layui-layout-left">自动报警监管维护平台</h3>
 			<ul class="layui-nav layui-layout-right">
 				<li class="layui-nav-item">
-					<a href="javascript:;" style="color: #BB3636;">退出</a>
+					<a href="javascript:void(0)" style="color: #BB3636; display: none;">退出</a>
+					<button id="logout-btn" type="button">安全退出</button>
 				</li>
 			</ul>
 		</div>
@@ -33,7 +34,9 @@
 				<div class="layui-logo">
 					<h2 class="admin-title">淮安市公安局洪泽分局</h2>
 					<div class="admin-info">
-						<div class="avatar-img-box"><img id="avatar" src="" /></div>
+						<div class="avatar-img-box">
+							<img id="avatar" src="static/images/avatar.png" />
+						</div>
 						<p class="nickname">管理员昵称</p>
 					</div>
 				</div>
@@ -61,9 +64,25 @@
 			var adminInfo = JSON.parse(localStorage.getItem('admin'))
 			// document.cookie="SSIDA="+adminInfo.SSIDA;
 			$('.nickname').text(adminInfo.name);
-			$("#avatar").attr("src", adminInfo.imgUrl);
+			// $("#avatar").attr("src", adminInfo.imgUrl);
+			
+			// 退出登录
+			function logout() {
+				ajaxfuntion($, baseUrl + '/user/logout', {}, 'get',
+					function(res) {
+						// 成功
+						if (res.code == 200) {
+							console.log('成功')
+							window.location.href="./login.html";
+						}
+					},
+					function(res) {},
+					function(res) {}
+				)
+			}
+				
 
-			$(function () {
+			//$(function () {
 				layui.use(['form', 'layer', 'element'], function () {
 					var form = layui.form,
 						layer = layui.layer,
@@ -72,8 +91,19 @@
 					showMenus(-1);
 					element.render('nav')
 					initRouter();
+					
+					// 是否退出登录
+					$('#logout-btn').click(function(){
+						layer.confirm(
+							'确定退出吗？',
+							{btn: ['确定退出', '取消'], title: "提示"},
+							function () {
+								logout()
+							}
+						)
+					})
 				})
-			})
+			//})
 		</script>
 </body>
 

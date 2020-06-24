@@ -186,7 +186,7 @@
 					if (obj.event === 'edit') {
 						handleEdit(obj.data.clientId)
 					} else if (obj.event === 'remind') {
-						openReminderDialog($, layer, data.fullName, formatTime(data.expireTime).split(' ')[0])
+						openReminderDialog($, layer, data.clientId, data.fullName, data.status, formatTime(data.expireTime).split(' ')[0])
 					}
 				})
 			  
@@ -218,16 +218,40 @@
 			}
 			
 			// 打开催缴弹框
-			function openReminderDialog($, layer, client, time) {
+			function openReminderDialog($, layer, clientId, client, status, time) {
+				var text = (status == 1) ? '已' : '将会'
 				layer.open({
 					type: 1,
 					title: '缴费提醒',
 					area: '700px',
-					content: '尊敬的 '+ client +' 用户，截止到 '+ time +'，您的设备因欠费已暂停使用，为了不影响您的正常使用，方便时请到洪泽县保安服务有限公司缴费！谢谢您的合作！',
-					btn: '知道了'
+					content: '尊敬的 '+ client +' 用户，截止到 '+ time +'，您的设备因欠费 '+ text +' 暂停使用，为了不影响您的正常使用，方便时请到洪泽县保安服务有限公司缴费！谢谢您的合作！',
+					btn: ['发送', '取消']
 					,btnAlign: 'c' //按钮居中
 					,shade: 0.75 //显示遮罩
 					,yes: function(){
+						ajaxfuntion($, baseUrl + '/client/remindPay',
+							{clientId: clientId}, 'get',
+							function(res) {
+								// 成功回调
+								if (res.code == 200) {
+									layer.msg('发送成功', {icon: 1})
+								} else {
+									layer.msg(res.message, {icon: 5})
+								}
+							},
+							function(res) {
+								// 失败回调
+								layer.msg(res.message, {icon: 5})
+							},
+							function(res) {
+								// 完成回调
+								setTimeout(function(){
+									layer.closeAll();
+								}, 2000)
+							}
+						)
+					}
+					,btn2: function () {
 						layer.closeAll();
 					}
 				})

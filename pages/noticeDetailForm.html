@@ -81,7 +81,7 @@
 						<div class="layui-form-item alarm-form-btns">
 							<div class="layui-input-block">
 								<button type="button" id="back-btn" class="layui-btn alarm-btn-size alarm-btn-warning">返回</button>
-								<button class="layui-btn alarm-btn-success alarm-btn-size alarm-btn-search" type="button" onclick="" id="submit-btn">发布</button>
+								<button class="layui-btn alarm-btn-success alarm-btn-size alarm-btn-search" type="button" id="submit-btn">发布</button>
 							</div>
 						</div>
 					</form>
@@ -95,6 +95,8 @@
 		<script src="../static/js/common.js"></script>
 		<script>
 			var pathId = getQueryString('id')
+			var del = getQueryString('del')
+			var deleteIndex = 0 // 获取指定元素的下标
 			var noticeFormData = {} //详情数据
 			var imgUrls = [] //图片数组
 			var selectedStoresList = [] // 已选收件人数组
@@ -123,22 +125,16 @@
 					elem: '#upload-file'
 					,url: baseUrl + '/file/upload'
 					,multiple: true
+					,member: 3
 					,done: function(res){
 						if (res.code == 200) {
-							// imgUrls.forEach(function (item, index) {
-							// 	if(imgUrls.indexOf(item) > -1) {
-							// 		layer.msg('请勿重复上传')
-							// 		return
-							// 	} else {
-									$('#show-img-list').append('<div class="show-img-box"><img src="'+ imgBaseUrl + res.data +'"><span class="del-img-btn">删除</span></div>')
-									imgUrls.push(res.data + '')
-									layer.msg('上传完毕')
-							// 	}
-							// })
-							console.log(imgUrls)
+							imgUrls.push(res.data + '')
+							layer.msg('上传完毕')
 						}
+						$('#show-img-list').append('<div class="show-img-box"><img src="'+ imgBaseUrl + res.data +'"><span class="del-img-btn" onclick="delPic(this)">删除</span></div>')
 					}
 				});
+				
 				
 				// 日期选择
 				laydate.render({
@@ -189,6 +185,7 @@
 						isCritical: ($('input[name="isCritical"]').val() == 'on') ? 1 : 0,
 						isTop: ($('input[name="isTop"]').val() == 'on') ? 1 : 0
 					}
+					console.log(formData)
 					postForm(formData, layer)
 				})
 				
@@ -298,10 +295,13 @@
 								formSelects.value('storeTypeSelect', list)
 								console.log(selectedStoresList)
 								// 加载图片
-								
-								if (data.imgUrl.length > 0) {
-									data.imgUrl.forEach(function (item, index) {
-										$('#show-img-list').append('<div class="show-img-box"><img src="'+ imgBaseUrl + item +'"><span class="del-img-btn">删除</span></div>')
+								if (imgUrls.length > 0) {
+									imgUrls.forEach(function (item, index) {
+										if (del == 2) {
+											$('#show-img-list').append('<div class="show-img-box"><img src="'+ imgBaseUrl + item +'"><span class="del-img-btn" onclick="delPic(this)">删除</span></div>')
+										} else {
+											$('#show-img-list').append('<div class="show-img-box"><img src="'+ imgBaseUrl + item +'"></div>')
+										}
 									})
 								}
 							}							
@@ -343,10 +343,10 @@
 							} else {
 								layer.msg('通告修改成功,3秒后自动返回', {icon:1})
 							}
-							// setTimeout(function(){
-							// 	window.history.go(-1)
-							// 	// window.parent.location.reload()
-							// }, 3000)
+							setTimeout(function(){
+								window.history.go(-1)
+								// window.parent.location.reload()
+							}, 3000)
 						}
 					},
 					error: function(){
@@ -362,18 +362,21 @@
 			function isShowElem () {
 				if (pathId) {
 					$('#isShowTitle').find('span').html('通知详情');
+				}
+				if (del == 0) {
 					$('#submit-btn').hide();
-				} else {
-					
 				}
 			};
 			
 			// 删除图片
-			function delPic (arr) {
-				for (var i = 0; i < arr.length; i++) {
-					arr.splice(i,1)
-					console.log(arr)
-				}
+			$('#show-img-list').delegate('.show-img-box','click',function(){
+				deleteIndex =$(this).index()
+			})
+			function delPic (obj) {
+				obj.parentNode.parentNode.removeChild(obj.parentNode)
+				imgUrls.splice(deleteIndex,1)
+				
+				console.log(imgUrls)
 			}
 		</script>
 	</body>
