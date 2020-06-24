@@ -69,13 +69,13 @@
 						<div class="layui-form-item">
 							<label class="layui-form-label">是否紧急</label>
 							<div class="layui-input-block">
-								<input type="checkbox" name="isCritical" lay-skin="switch" lay-filter="isUrgent">
+								<input type="checkbox" name="isCritical" checked lay-skin="switch" lay-filter="isCritical">
 							</div>
 						</div>
 						<div class="layui-form-item">
 							<label class="layui-form-label">是否置顶</label>
 							<div class="layui-input-block">
-								<input type="checkbox" name="isTop" lay-skin="switch" lay-filter="isTop">
+								<input type="checkbox" name="isTop" checked lay-skin="switch" lay-filter="isTop">
 							</div>
 						</div>
 						<div class="layui-form-item alarm-form-btns">
@@ -100,8 +100,6 @@
 			var noticeFormData = {} //详情数据
 			var imgUrls = [] //图片数组
 			var selectedStoresList = [] // 已选收件人数组
-			var isUrgent = 0;
-			var isTop = 0;
 			$(function(){
 				// console.log(window.location.href);
 				// console.log(window.location.search);
@@ -116,6 +114,15 @@
 				laydate = layui.laydate,
 				formSelects = layui.formSelects,
 				layer = layui.layer
+				
+				// 先加载通知类型select
+				getNoticeTypeList(form)
+				// 先加载接收通知的单位列表
+				getStoresList(formSelects)
+				
+				// 监听switch
+				getSwitchVal(form, 'isCritical')
+				getSwitchVal(form, 'isTop')
 				
 				// 预加载表单
 				getNoticeDetail(pathId, layer, form, formSelects)
@@ -135,7 +142,6 @@
 					}
 				});
 				
-				
 				// 日期选择
 				laydate.render({
 					elem: '#dateSelect'
@@ -145,16 +151,6 @@
 					,min: '0'
 				});
 				
-				// 监听switch
-				getSwitchVal(form, 'isUrgent')
-				getSwitchVal(form, 'isTop')
-				
-				
-				// 加载通知类型select
-				getNoticeTypeList(form)
-				
-				// 加载接收通知的单位列表
-				getStoresList(formSelects)
 				
 				formSelects.on('storeTypeSelect', function(id, vals, val, isAdd, isDisabled){
 					var valueList = []
@@ -180,10 +176,10 @@
 						body: $('textarea[name="body"]').val(),
 						startTime: $('#dateSelect').val().split(' - ')[0],
 						endTime:  $('#dateSelect').val().split(' - ')[1],
-						typeDic: $('select[name="noticeType"]').val(),
+						typeDic: $('select[name="noticeType"]').val() + '',
 						clients: selectedStoresList,
-						isCritical: ($('input[name="isCritical"]').val() == 'on') ? 1 : 0,
-						isTop: ($('input[name="isTop"]').val() == 'on') ? 1 : 0
+						isCritical: ($('input[name="isCritical"]').val() == 'on') ? 0 : 1,
+						isTop: ($('input[name="isTop"]').val() == 'on') ? 0 : 1
 					}
 					console.log(formData)
 					postForm(formData, layer)
@@ -198,21 +194,16 @@
 			function getSwitchVal (form, elem) {
 				form.on('switch('+ elem +')', function (data) {
 					var checked = data.elem.checked;
-					var serverStatus = 1;
-					if(serverStatus){
-						data.elem.checked = checked;
-					}else {
-						data.elem.checked = !checked;
+					data.elem.value = 'off'
+					form.render();
+					if (checked) {
+						data.elem.value = 'on'
+					} else {
+						data.elem.value = 'off'
 					}
 					// form.render();
-					if (checked) {
-						data.elem.value = 'off'
-					} else {
-						data.elem.value = 'on'
-					}
-					form.render();
-					console.log(data.value)
 					console.log(checked);
+					console.log(data.elem.value);
 				})
 			};
 			
@@ -280,6 +271,16 @@
 									,"isCritical": data.isCritical == 1 ? 'off' : 'on'
 									,"isTop": data.isTop == 1 ? 'off' : 'on'
 								})
+								// if (data.isTop == 1) {
+								// 	$('input[name="isCritical"]').val('off')
+								// } else {
+								// 	$('input[name="isCritical"]').val('on')
+								// }
+								// if (data.isTop == 1) {
+								// 	$('input[name="isTop"]').val('off')
+								// } else {
+								// 	$('input[name="isTop"]').val('on')
+								// }
 								// 加载时间
 								if (data.startTime !== null && data.endTime !== null) {
 									$('#dateSelect').val(formatTime(data.startTime) + ' - ' + formatTime(data.endTime))

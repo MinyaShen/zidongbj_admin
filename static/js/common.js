@@ -1,10 +1,10 @@
 // 公用方法封装
 
 // 域名地址配置
-// var baseUrl = 'https://jszzkj.cn/alarm'
-// var imgBaseUrl = 'https://jszzkj.cn'
-var baseUrl = 'http://192.168.0.27/alarm'
-var imgBaseUrl = 'http://192.168.0.27'
+var baseUrl = 'https://jszzkj.cn/alarm'
+var imgBaseUrl = 'https://jszzkj.cn'
+// var baseUrl = 'http://192.168.0.27/alarm'
+// var imgBaseUrl = 'http://192.168.0.27'
 
 // 时间按戳转换成具体时间格式
 function formatTime (Timestamp) {

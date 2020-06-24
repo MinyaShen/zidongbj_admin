@@ -135,12 +135,10 @@
 				laydate = layui.laydate,
 				layer = layui.layer;
 				
-				
-				// 预加载表单详情
-				getStoreFormDetail($, pathId, layer, form)
-				
 				// 加载点位类型选项列表
 				getStoreTypeList($, form)
+				// 预加载表单详情
+				getStoreFormDetail($, pathId, layer, form)
 				
 				// 日期选择
 				laydate.render({
@@ -234,7 +232,7 @@
 								"name": res.data.name[0],
 								"storeName": res.data.clientName,
 								"dutyName": res.data.dutyName,
-								"storeType": res.data.type,
+								"storeType": res.data.type + '',
 								"dutyTel": res.data.dutyTel,
 								"landline": res.data.tel,
 								"payTime": (res.data.payTime !== null) ? formatTime(res.data.payTime).split(' ')[0] : '',
