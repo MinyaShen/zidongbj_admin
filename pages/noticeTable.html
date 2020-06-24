@@ -39,12 +39,17 @@
 					</div>
 					<div class="t-head-toolbar-btn">
 						<button id="publicNoticeBtn" onclick="handleAdd()" type="button" class="layui-btn alarm-btn-size alarm-btn-success">发布</button>
+						<button id="delAllBtn" type="button" data-type="getid" class="layui-btn alarm-btn-size alarm-btn-danger">批量删除</button>
 					</div>
 				</div>
 				<table id="noticeData" lay-filter="noticeData"></table>
 				<script type="text/html" id="tableBar">
+					{{#  if(d.del == 2){ }}
 					<a href="javascript:;" class="alarm-text-success" lay-event="edit">编辑</a>
+					{{# }if(d.del == 0) { }}
+					<a href="javascript:;" class="alarm-text-success" lay-event="view">查看</a>
 					<a href="javascript:;" class="alarm-text-warning" lay-event="remove">下架公告</a>
+					{{#  } }}
 					<a href="javascript:;" class="alarm-text-danger" lay-event="del">删除</a>
 				</script>
 			</div>
@@ -98,8 +103,8 @@
 			    ,cols: [[ //表头
 						{type: 'checkbox', fixed: 'left'},
 			      {field: 'id', title: 'ID', width: '8%', sort: true}
-			      ,{field: 'title', title: '通知标题', width:'18%'}
-			      ,{field: 'body', title: '内容描述', width:'15%'}
+			      ,{field: 'title', title: '通知标题', width:'12%'}
+			      ,{field: 'body', title: '内容描述', width:'12%'}
 			      ,{field: 'typeDicName', title: '公告类型', width:'8%'} 
 			      ,{field: 'createTime', title: '发布时间', width: '12%'
 							,templet: function (row) {
@@ -109,6 +114,15 @@
 			      ,{field: 'readedCount', title: '签收状态', width: '8%',
 							templet: function (row) {
 								return row.readedCount + ' / ' + row.totalCount
+							}
+						}
+						,{field: 'del', title: '状态', width: '8%',
+							templet: function (row) {
+								if (row.del == 0) {
+									return '<span class="alarm-text-success">正常</span>'
+								} else if (row.del == 2) {
+									return '<span class="alarm-text-info">已下架</span>'
+								}
 							}
 						}
 			      ,{fixed: 'right', title: '操作', width: '15%', toolbar: '#tableBar'}
@@ -135,22 +149,41 @@
 						url: baseUrl + '/announcement/list'
 					})
 				})
+								
+				// 批量删除
+				$('#delAllBtn').click(function () {
+					var arr = [];
+					var checkStatus = table.checkStatus('noticeData')
+					 , data = checkStatus.data;
+					for (var i = 0; i < data.length; i++) { //循环筛选出id
+					 arr.push(data[i].id);
+					}
+					var selectedIds = arr.join(',')
+					if (arr.length > 0) {
+						layer.confirm('确定删除已选中的通知通告吗？', function(index) {
+							handleRemove(selectedIds, 1, layer, '删除成功', table)
+							// window.parent.location.reload();
+						})
+					} else {
+						layer.msg('请选择要删除的数据', {icon: 5})
+					}
+				})
 				
 				//监听工具条
 				table.on('tool(noticeData)', function(obj){
 					var data = obj.data;
-					if(obj.event === 'edit'){
-						handleEdit(obj.data.id)
+					if(obj.event === 'edit' || obj.event === 'view'){
+						handleEdit(data.id, data.del)
 					} else if(obj.event === 'remove'){
-						layer.confirm('确定下架该通知公告吗？', function(index){
+						layer.confirm('确定下架该通知通告吗？', function(index){
 							// console.log(obj.data.id)
-							handleRemove(obj.data.id, 2, '下架成功')
-							window.parent.location.reload();
+							handleRemove(obj.data.id, 2, layer, '下架成功', table)
+							// window.parent.location.reload();
 						});
 					} else if(obj.event === 'del'){
-						layer.confirm('确定删除该通知公告吗？', function(index){
-							handleRemove(obj.data.id, 1, '删除成功')
-							window.parent.location.reload();
+						layer.confirm('确定删除该通知通告吗？', function(index){
+							handleRemove(obj.data.id, 1, layer, '删除成功', table)
+							// window.parent.location.reload();
 							// obj.del();
 						});
 					}
@@ -163,14 +196,20 @@
 				window.location.href = './noticeDetailForm.html'
 			}
 			// 编辑
-			function handleEdit (id) {
-				window.location.href = './noticeDetailForm.html?id=' + id
+			function handleEdit (id, del) {
+				window.location.href = './noticeDetailForm.html?id=' + id + '&del=' + del
 			}
 			// 下架（2）/删除（1）
-			function handleRemove (id, param, msg) {
-				ajaxfuntion($, baseUrl + '/announcement/delAnnouncement/' + id + '/' + param, {}, 'get', function (res) {
-					if (res.code === 200) {
-						layer.msg(msg)
+			function handleRemove (ids, param, layer, msg, table) {
+				ajaxfuntion($, baseUrl + '/announcement/delAnnouncement/' + ids + '/' + param, {}, 'get', function (res) {
+					if (res.code == 200) {
+						table.reload('noticeData', {
+							page: {
+								curr: 1 //从第一页开始
+							},
+							url: baseUrl + '/announcement/list'
+						})
+						layer.msg(msg, {icon: 1})
 					} else {
 						layer.msg(res.message)
 					}

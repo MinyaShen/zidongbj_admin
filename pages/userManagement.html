@@ -14,6 +14,13 @@
 	<link rel="stylesheet" type="text/css" href="../static/layui/css/layui.css" />
 	<link rel="stylesheet" type="text/css" href="../static/css/public.css" />
 	<link rel="stylesheet" type="text/css" href="../static/css/table.css" />
+
+	<style>
+		.layui-layer-iframe {
+			border-radius: 10px !important;
+			overflow: hidden;
+		}
+	</style>
 </head>
 
 <body>
@@ -25,7 +32,7 @@
 					<div class="layui-form-item">
 						<label class="layui-form-label">关键字：</label>
 						<div class="layui-input-block">
-							<input id="keyword" type="text" required lay-verify="required" placeholder="请输入关键字"
+							<input id="keyword" type="text" required lay-verify="required" placeholder="责任人姓名、电话"
 								autocomplete="off" class="layui-input">
 						</div>
 					</div>
@@ -41,14 +48,27 @@
 				<div class="t-head-toolbar-btn">
 					<button id="openAddUser" type="button"
 						class="layui-btn alarm-btn-size alarm-btn-success">添加</button>
-					<button type="button" class="layui-btn alarm-btn-size alarm-btn-danger">删除</button>
+					<button id="deleteUser" type="button" class="layui-btn alarm-btn-size alarm-btn-danger">删除</button>
 				</div>
 			</div>
 			<table id="noticeData" lay-filter="noticeData"></table>
+			<!-- <script type="text/html" id="titleTpl">
+				{{#  if(d.id < 100){ }}
+				  <a href="/detail/{{d.id}}" class="layui-table-link">{{d.title}}</a>
+				{{#  } else { }}
+				  {{d.title}}(普通用户)
+				{{#  } }}
+			  </script> -->
+
 			<script type="text/html" id="tableBar">
 				<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+				{{#  if(d.roleType == 1 || d.roleType == 2){ }}
 				<a class="layui-btn layui-btn-xs" lay-event="bindpoint">点位操作</a>
+				{{#  } }}
+
+				{{#  if(d.roleType == 1){ }}
 				<a class="layui-btn layui-btn-xs" lay-event="bindsub">设置子用户</a>
+				{{#  } }}
 			</script>
 		</div>
 	</div>
@@ -88,20 +108,53 @@
 					layer.open({
 						type: 2,
 						title: "绑定点位",
-						area: ['600px', '300px'],
+						area: ['500px', '420px'],
 						content: "../alerts/bindpoint.html?userId=" + data.userId
 					});
 				} else if (layEvent === 'bindsub') { //绑定子网点
 					layer.open({
 						type: 2,
 						title: "设置子网点",
-						area: ['600px', '300px'],
+						area: ['600px', '400px'],
 						content: "../alerts/bindsub.html?userId=" + data.userId
 					});
 				}
 			});
 
 
+			// 删除用户
+			$('#deleteUser').on('click', function () {
+				var tempdata = [];
+				var checkStatus = table.checkStatus('noticeData'); //idTest 即为基础参数 id 对应的值
+				console.log(checkStatus.data)
+				console.log(checkStatus.data.length) //获取选中行数量，可作为是否有选中行的条件
+				var temp = checkStatus.data; //获取选中行的数据
+				for (var i = 0; i < temp.length; i++) {
+					tempdata.push(temp[i].userId)
+				}
+				var data = tempdata.join(',')
+
+				$.ajax({
+					url: baseUrl + "/user/delUser",
+					data: {
+						ids: data
+					},
+					method: 'GET',
+					contentType: 'application/json',
+					success: function (result) {
+						table.reload('noticeData', {
+							page: {
+								curr: 1 //从第一页开始
+							},
+							url: baseUrl + '/user/queryUsers'
+						});
+						layer.msg("删除成功", {
+							icon: 1
+						})
+					}
+				});
+
+			})
 
 			//表格渲染
 			table.render({
@@ -134,7 +187,7 @@
 							fixed: 'left',
 						},
 						{
-							field: 'userId',
+							field: 'userName',
 							title: '账号',
 						}, {
 							field: 'name',

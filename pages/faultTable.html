@@ -109,14 +109,18 @@
 			    }
 					,cols: [[ //表头
 						{type: 'checkbox', fixed: 'left'}
-			      ,{field: 'clientId', title: '点位ID', width:'10%', sort: true}
+			      ,{field: 'clientId', title: '点位ID', width:'8%', sort: true}
 			      ,{field: 'fullName', title: '故障点位', width:'15%'}
 			      ,{field: 'dutyName', title: '负责人姓名', width:'8%'} 
 			      ,{field: 'dutyTel', title: '负责人电话', width: '10%'}
-			      ,{field: 'createTime', title: '上报时间', width: '10%'}
+			      ,{field: 'createTime', title: '上报时间', width: '12%',
+							templet: function (row) {
+								return formatTime(row.createTime)
+							}
+						}
 			      ,{field: 'name', title: '维保人员', width: '8%'}
 			      ,{field: 'rocordStatus', title: '维护进度', width: '10%'}
-			      ,{fixed: 'right', title: '操作', width: '10%', toolbar: '#tableBar'}
+			      ,{fixed: 'right', title: '操作', width: '9%', toolbar: '#tableBar'}
 			    ]]
 					,done: function (res) {}
 			  });
@@ -143,7 +147,7 @@
 				table.on('tool(faultData)', function(obj) {
 					var data = obj.data;
 					if (obj.event === 'view') {
-						handleView(obj.data.id)
+						handleView(data.id)
 					}
 				})
 			});

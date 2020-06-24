@@ -1,171 +1,136 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<meta name="apple-mobile-web-app-capable" content="yes">	
-		<meta name="format-detection" content="telephone=no">	
-		<title>首页</title>
-		<!-- 引入css -->
-		<link rel="stylesheet" type="text/css" href="../static/layui/css/layui.css" />
-		<link rel="stylesheet" type="text/css" href="../static/css/public.css" />
-		<link rel="stylesheet" type="text/css" href="../static/css/home.css" />
-	</head>
-	<body>
-		<div class="alarm-wrapper">
-			<h3 class="alarm-page-title">总览</h3>
-			<div class="alarm-content alarm-statistics">
-				<div class="alarm-module-wrapper data-overview">
-					<h5 class="module-title">
-						<span class="alarm-module-title-left">数据总览</span>
-					</h5>
-					<ul class="data-overview-list">
-						<li>
-							<p>网点数量</p><p>1111</p>
-						</li>
-						<li><p>待维修网点</p><p>22</p></li>
-						<li><p>设备总数</p><p>3333</p></li>
-						<li><p>本月维保数</p><p>450</p></li>
-					</ul>
-				</div>
-				<div class="alarm-module-wrapper alarm-data">
-					<div class="alarm-module-theme">
-						<h5 class="module-title">
-							<span class="alarm-module-title-left">报警数据分析统计</span>
-							<div class="select-form">
-								<form class="layui-form" action="">
-									<div class="layui-form-item">
-										<label class="layui-form-label">选择点位：</label>
-										<div class="layui-input-block">
-											<select name="city" lay-verify="required">
-												<option value="0">老庙金店</option>
-												<option value="1">珠宝行</option>
-												<option value="2">银行</option>
-												<option value="3">二手奢侈品店</option>
-											</select>
-										</div>
-									</div>
-								</form>
-							</div>
-							<em>故障类型数：</em>
-						</h5>
-						<div class="alarm-data-content">
-							<div class="chart-wrapper"></div>
-							<ul class="error-count">
-								<li><p>一般故障</p><p>22</p></li>
-								<li><p>人为故障</p><p>22</p></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				
-				<div class="alarm-module-wrapper">
-					<h5 class="module-title">
-						<span class="alarm-module-title-left">使用点位类别统计分析</span>
-					</h5>
-					<div class="store-type">
-						<div class="alarm-module-theme stores-list">
-							<ul>
-								<li>
-									<span class="icon"><i class="iconfont">&#xe6a4;</i></span>
-									<p class="text">珠宝店/金店</p>
-									<p class="count">23</p>
-								</li>
-								<li>
-									<span class="icon"><i class="iconfont">&#xe6a4;</i></span>
-									<p class="text">银行</p>
-									<p class="count">12</p>
-								</li>
-								<li>
-									<span class="icon"><i class="iconfont">&#xe6a4;</i></span>
-									<p class="text">二手奢侈品店</p>
-									<p class="count">8</p>
-								</li>
-								<li>
-									<span class="icon"><i class="iconfont">&#xe6a4;</i></span>
-									<p class="text">烟酒行</p>
-									<p class="count">32</p>
-								</li>
-							</ul>
-						</div>
-						<div class="alarm-module-theme stores-map"></div>
-					</div>
-				</div>
-				
-				<div class="alarm-module-wrapper payment-score">
-					<div class="payment">
-						<h5 class="module-title">
-							<span class="alarm-module-title-left">缴费比例统计分析</span>
-						</h5>
-						<div class="alarm-module-theme">
-							<form class="layui-form" action="">
-								<div class="layui-form-item">
-									<label class="layui-form-label">统计周期：</label>
-									<div class="layui-input-block">
-										<select name="city" lay-verify="required">
-											<option value="0">2019</option>
-											<option value="1">2020</option>
-										</select>
-									</div>
-								</div>
-								<div class="layui-form-item">
-									<label class="layui-form-label">展现形式：</label>
-									<div class="layui-input-block">
-										<select name="city" lay-verify="required">
-											<option value="0">饼状图</option>
-											<option value="1">柱状图</option>
-										</select>
-									</div>
-								</div>
-							</form>
-							<div class="chart-wrapper"></div>
-						</div>
-					</div>
-					<div class="score">
-						<h5 class="module-title">
-							<span class="alarm-module-title-left">点评星级统计分析</span>
-						</h5>
-						<div class="alarm-module-theme">
-							<form class="layui-form" action="">
-								<div class="layui-form-item">
-									<label class="layui-form-label">统计周期：</label>
-									<div class="layui-input-block">
-										<select name="city" lay-verify="required">
-											<option value="0">2019</option>
-											<option value="1">2020</option>
-										</select>
-									</div>
-								</div>
-								<div class="layui-form-item">
-									<label class="layui-form-label">展现形式：</label>
-									<div class="layui-input-block">
-										<select name="city" lay-verify="required">
-											<option value="0">饼状图</option>
-											<option value="1">柱状图</option>
-										</select>
-									</div>
-								</div>
-							</form>
-							<div class="chart-wrapper"></div>
-						</div>
-					</div>
-				</div>
-				
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport"
+		content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
+	<title>首页</title>
+	<!-- 引入css -->
+	<link rel="stylesheet" type="text/css" href="../static/layui/css/layui.css" />
+	<link rel="stylesheet" type="text/css" href="../static/css/public.css" />
+	<link rel="stylesheet" type="text/css" href="../static/css/home.css" />
+</head>
+
+<body>
+	<div class="alarm-wrapper">
+		<h3 class="alarm-page-title">总览</h3>
+		<div class="alarm-content alarm-statistics">
+			<div class="alarm-module-wrapper data-overview">
+				<h5 class="module-title">
+					<span class="alarm-module-title-left">数据总览</span>
+				</h5>
+				<ul class="data-overview-list">
+					<li>
+						<p>网点数量</p>
+						<p id="clientCount">0</p>
+					</li>
+					<li>
+						<p>待维修网点</p>
+						<p id="maintainCount">0</p>
+					</li>
+					<li>
+						<p>设备总数</p>
+						<p id="zoneCount">0</p>
+					</li>
+					<li>
+						<p>本月维保数</p>
+						<p id="rocordCount">0</p>
+					</li>
+				</ul>
 			</div>
+			<div class="alarm-module-wrapper alarm-data">
+				<div class="alarm-module-theme">
+					<h5 class="module-title">
+						<span class="alarm-module-title-left">报警数据分析统计</span>
+						<div class="select-form">
+							<div class="layui-form">
+								<div class="layui-form-item">
+									<label class="layui-form-label">选择点位：</label>
+									<div class="layui-input-block">
+										<select id="clientIdNameList" name="point" lay-filter="point"></select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<em>故障类型数：</em>
+					</h5>
+					<div class="alarm-data-content">
+						<div class="chart-wrapper" id="alarmLineChart"></div>
+						<ul class="error-count">
+							<li>
+								<p>一般故障</p>
+								<p id="normalRocordCount">0</p>
+							</li>
+							<li>
+								<p>人为故障</p>
+								<p id="humanRocordCount">22</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="alarm-module-wrapper">
+				<h5 class="module-title">
+					<span class="alarm-module-title-left">使用点位类别统计分析</span>
+				</h5>
+				<div class="store-type">
+					<div class="alarm-module-theme stores-list">
+						<ul id="typeCount">
+						</ul>
+					</div>
+					<div class="alarm-module-theme stores-map" id="qqMap"></div>
+				</div>
+			</div>
+
+			<div class="alarm-module-wrapper payment-score">
+				<div class="payment">
+					<h5 class="module-title">
+						<span class="alarm-module-title-left">缴费比例统计分析</span>
+					</h5>
+					<div class="alarm-module-theme">
+						<div class="layui-form">
+							<div class="layui-form-item alarm-pie">
+								<label class="layui-form-label">统计时间：</label>
+								<div class="alarm-pie-time">2015-05-10</div>
+							</div>
+						</div>
+						<div class="chart-wrapper" id="expirCount"></div>
+					</div>
+				</div>
+				<div class="score">
+					<h5 class="module-title">
+						<span class="alarm-module-title-left">点评星级统计分析</span>
+					</h5>
+					<div class="alarm-module-theme">
+						<div class="layui-form">
+							<div class="layui-form-item">
+								<label class="layui-form-label">统计周期：</label>
+								<div class="layui-input-block">
+									<select id="reportPcLevelPins" name="time" lay-filter="time">
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="chart-wrapper" id="levelPins"></div>
+					</div>
+				</div>
+			</div>
+
 		</div>
-		<script src="../static/layui/layui.js"></script>
-		<script>
-			layui.use('form', function(){
-				var form = layui.form;
-				
-				//监听提交
-				form.on('submit(formDemo)', function(data){
-					layer.msg(JSON.stringify(data.field));
-					return false;
-				});
-			});
-		</script>
-	</body>
+	</div>
+	<script src="../static/js/jquery.min.js"></script>
+	<script src="../static/js/common.js"></script>
+	<script src="../static/layui/layui.js"></script>
+	<script src="../static/js/echarts.min.js"></script>
+	<script src="../static/js/home.js"></script>
+	<!-- <script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=VEHBZ-KA2KS-O2AOI-6M3YZ-BPMA5-AOBNS"></script> -->
+
+</body>
+
 </html>

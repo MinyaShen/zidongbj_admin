@@ -63,7 +63,7 @@
     <script src="../static/layui/layui.js"></script>
     <script src="../static/layui/lay/modules/formSelects-v4.js" type="text/javascript" charset="utf-8"></script>
     <script src="../static/js/jquery.min.js"></script>
-		<script src="../static/js/common.js"></script>
+    <script src="../static/js/common.js"></script>
     </script>
     <script>
         function getQueryVariable(variable) {
@@ -79,28 +79,45 @@
         }
 
 
-        layui.use('laydate', function () {
+        layui.use(['laydate', 'layer'], function () {
 
             //获取一级用户信息
             var id = getQueryVariable("userId");
-            var tempArr = [];
+            var tempArr = []; //最终渲染的数组
+            var bindedArr = []; //已绑定的数组
 
             $.ajax({
                 url: baseUrl + "/user/unBindSubUser",
+                data: {
+                    superUserId: id
+                },
                 method: 'GET',
                 success: function (res) {
-                    var temp = res.data.userList;
+                    console.log(res.data)
+                    var userList = res.data.userList;
+                    var bindedList = res.data.bindedList;
 
-                    for (let i = 0; i < temp.length; i++) {
+                    for (let i = 0; i < userList.length; i++) {
                         var tempobj = {}
-                        tempobj.name = temp[i].name;
-                        tempobj.value = temp[i].userId;
+                        tempobj.name = userList[i].name;
+                        tempobj.value = userList[i].userId;
                         tempArr.push(tempobj)
                     }
+
+                    for (let i = 0; i < bindedList.length; i++) {
+                        var tempobj = {}
+                        tempobj.name = bindedList[i].name;
+                        tempobj.value = bindedList[i].userId;
+                        tempArr.push(tempobj)
+                        bindedArr.push(bindedList[i].userId)
+                    }
+
+                    console.log(tempArr)
                     var formSelects = layui.formSelects;
                     formSelects.data('bindsub', 'local', {
                         arr: tempArr
                     });
+                    formSelects.value('bindsub', bindedArr);
                 }
             })
 
@@ -116,8 +133,11 @@
                     },
                     method: 'GET',
                     success: function (res) {
-                        console.log(111111)
-                        console.log(res)
+                        parent.layer.close();
+                        window.parent.location.reload();
+                        layer.msg("设置成功", {
+                            icon: 1
+                        })
                     }
                 })
 

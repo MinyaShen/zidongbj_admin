@@ -60,11 +60,9 @@
 	box-sizing: border-box;
 }
 
-.alarm-table .col-title-over2 {
-	border-left: 1px solid #ADADAD;
-}
-
-.alarm-table .alarm-col-line {
+.alarm-table .col-title-full {
+	border-left: none;
+	border-right: none;
 	border-bottom: 1px solid #ADADAD;
 }
 
@@ -107,4 +105,63 @@
 .alarm-table .col-content-over {
 	line-height: 80px;
 	padding: 0 15px;
+	box-sizing: border-box;
+	height: 80px;
+}
+
+.module-title {
+	margin-top: 40px;
+}
+
+/* 设备管理详情页面使用者表格样式 */
+#userPersonTable {
+	padding: 0;
+}
+
+#userPersonTable .user-list {
+	width: 100%;
+	display: -webkit-flex;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+#userPersonTable .user-list-item {
+	width: 50%;
+	flex: none;
+	border-bottom: 1px solid #ADADAD;
+	border-right: 1px solid #ADADAD;
+	font-size: 14px;
+	color: #333;
+	display: -webkit-flex;
+	display: flex;
+	box-sizing: border-box;
+}
+
+#userPersonTable .user-list-item:nth-child(2n) {
+	border-right: none;
+}
+
+#userPersonTable .list-item-username {
+	width: 40%;
+	flex: none;
+	box-sizing: border-box;
+	padding: 13px 15px;
+	min-height: 48px;
+	line-height: 1.5;
+	text-align: center;
+	border-right: 1px solid #ADADAD;
+}
+
+#userPersonTable .list-item-tel {
+	width: 60%;
+	flex: none;
+	box-sizing: border-box;
+	padding: 13px 15px;
+	min-height: 48px;
+	line-height: 1.5;
+}
+
+/* 故障维修状态表格样式 */
+#malfunctionTable .malfunction-list .alarm-row {
+	border-bottom: 1px solid #ADADAD;
 }

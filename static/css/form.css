@@ -90,10 +90,25 @@ textarea::-webkit-input-placeholder { /* Internet Explorer 10+ */
 	overflow: hidden;
 	margin-right: 10px;
 	margin-bottom: 10px;
+	position: relative;
 }
 
 .show-img-box img {
 	width: auto;
 	height: 100%;
 	object-fit: cover;
+}
+
+.show-img-box .del-img-btn {
+	display: block;
+	position: absolute;
+	top: 0;
+	right: 0;
+	height: 24px;
+	line-height: 24px;
+	font-size: 12px;
+	padding: 0 10px;
+	color: #fff;
+	background-color: #BB3636;
+	cursor: pointer;
 }

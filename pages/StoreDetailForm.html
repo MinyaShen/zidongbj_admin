@@ -75,26 +75,42 @@
 							</div>
 						</div>
 						<div class="layui-form-item">
+							<label class="layui-form-label">缴费时长</label>
+							<div class="layui-input-block">
+								<select name="storeType" lay-filter="storeType" id="duration">
+									<option value="">请选择缴费时长</option>
+									<option value="1">一年</option>
+									<option value="2">两年</option>
+									<option value="3">三年</option>
+									<option value="4">四年</option>
+									<option value="5">五年</option>
+									<option value="6">十年</option>
+								</select>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">到期日期</label>
+							<div class="layui-input-block alarm-disabled">
+								<input type="text" name="expireTime" id="expireTime" value="" disabled lay-filter="expireTime" autocomplete="off" placeholder="请选择缴费日期和时长" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
 							<label class="layui-form-label">缴费状态</label>
 							<div class="layui-input-block alarm-disabled">
-								<select name="payStatus" id="payStatus">
-									<option value="0">已缴费</option>
-									<option value="1">未缴费</option>
-									<option value="2">停用</option>
-								</select>
+								<input type="text" name="payStatus" id="payStatus" value="" disabled lay-filter="payStatus" autocomplete="off" placeholder="" class="layui-input">
 							</div>
 						</div>
 						<div class="layui-form-item">
 							<label class="layui-form-label">维修状态</label>
 							<div class="layui-input-block">
-								<input type="text" name="repairStatus" class="layui-input">
+								<input type="text" name="repairStatus" placeholder="暂无状态" class="layui-input">
 							</div>
 						</div>
 						<div class="layui-form-item alarm-form-btns">
 							<div class="layui-input-block">
-								<button id="submit-btn" type="button" class="layui-btn alarm-btn-success alarm-btn-size">确认</button>
-								<button id="disable-btn" type="button" class="layui-btn alarm-btn-ban alarm-btn-size">禁用</button>
 								<button type="button" id="back-btn" class="layui-btn alarm-btn-size alarm-btn-warning">返回</button>
+								<!-- <button id="disable-btn" type="button" class="layui-btn alarm-btn-ban alarm-btn-size">停用</button> -->
+								<button id="submit-btn" type="button" class="layui-btn alarm-btn-success alarm-btn-size">确认</button>
 							</div>
 						</div>
 					</form>
@@ -104,11 +120,13 @@
 		
 		<!-- <script src="../static/js/jquery.min.js"></script> -->
 		<script src="../static/layui/layui.js"></script>
+		<script src="../static/js/moment.min.js"></script>
 		<script src="../static/js/common.js"></script>
 		<script>
 			//全局变量
 			var pathId = getQueryString('clientId') //路径id参数
 			var clientFormData = {} //详情数据
+			var expireTime = ''
 			
 			// 加载layui模块
 			layui.use(['jquery', 'layer', 'form', 'laydate'], function(){
@@ -117,9 +135,8 @@
 				laydate = layui.laydate,
 				layer = layui.layer;
 				
+				
 				// 预加载表单详情
-				console.log(pathId)
-				console.log(window.location)
 				getStoreFormDetail($, pathId, layer, form)
 				
 				// 加载点位类型选项列表
@@ -129,12 +146,49 @@
 				laydate.render({
 					elem: '#dateSelete',
 					trigger: 'click',
-					type: 'datetime',
-					min: '0'
+					type: 'date',
+					min: 0
 				});
 				
 				// 表单提交
 				$('#submit-btn').click(function() {
+					var payD = moment($('input[name="payTime"]').val(), 'YYYY-MM-DD').valueOf()
+					var expireD = moment($('input[name="expireTime"]').val(), 'YYYY-MM-DD').valueOf()
+					var payDate = $('input[name="payTime"]').val().split('-') // 缴费日期截成的数组
+					var expireDate = $('input[name="expireTime"]').val().split('-')// 到期日期截成的数组
+					var newY = new Number
+					var oldY = parseInt(payDate[0]) // 缴费时间的年份
+					var oldE = parseInt(expireDate[0]) //到期时间的年份
+					var duration = $('#duration').val()
+					//console.log(payD, expireD)
+					if (payD < expireD) {
+						oldY = oldE
+					}
+					if ($('input[name="payTime"]').val() && $('#duration').val()){
+						if (duration == 1) {
+							newY = Number(oldY) + Number(1)
+						} else if (duration == 2) {
+							newY = Number(oldY) + Number(2)
+						} else if (duration == 3) {
+							newY = Number(oldY) + Number(3)
+						} else if (duration == 4) {
+							newY = Number(oldY) + Number(4)
+						} else if (duration == 5) {
+							newY = Number(oldY) + Number(5)
+						} else if (duration == 6) {
+							newY = Number(oldY) + Number(10)
+						}
+					}
+					if (payD < expireD) {
+						expireDate[0] = newY + ''
+						expireTime = expireDate.join('-')
+					} else {
+						payDate[0] = newY + ''
+						expireTime = payDate.join('-')
+					}
+					
+					$('#expireTime').val(expireTime)
+					
 					var formData = {
 						clientId: pathId,
 						clientName: $('input[name="storeName"]').val(),
@@ -142,17 +196,18 @@
 						type: $('input[name="storeType"]').val(),
 						dutyTel: $('input[name="dutyTel"]').val(),
 						tel: $('input[name="landline"]').val(),
-						expireTime: $('input[name="payTime"]').val(),
-						status: $('input[name="payStatus"]').val(),
+						payTime: $('input[name="payTime"]').val(),
+						expireTime: expireTime,
+						status: $('input[name="payStatus"]').val() == 1 ? '未缴费' : '已缴费',
 						repairStatus: $('input[name="repairStatus"]').val()
 					};
 					postForm($, formData, layer)
 				});
 				
 				// 禁用
-				$('#disable-btn').click(function() {
-					handleUsingStatus($, pathId, 2, layer)
-				});
+				// $('#disable-btn').click(function() {
+				// 	handleUsingStatus($, pathId, 2, layer)
+				// });
 				
 				// 返回
 				goBack($, '#back-btn')
@@ -182,8 +237,9 @@
 								"storeType": res.data.type,
 								"dutyTel": res.data.dutyTel,
 								"landline": res.data.tel,
-								"payTime": formatTime(res.data.expireTime),
-								"payStatus": res.data.status + '',
+								"payTime": (res.data.payTime !== null) ? formatTime(res.data.payTime).split(' ')[0] : '',
+								"expireTime": formatTime(res.data.expireTime).split(' ')[0],
+								"payStatus": res.data.status == 1 ? '未缴费' : '已缴费',
 								"repairStatus": res.data.repairStatus
 							})
 							$('#userName').val(res.data.name[0]);
@@ -252,6 +308,11 @@
 					function (e_res) {},
 					function (c_res) {}
 				)
+			};
+			
+			// 求和
+			function sum(a, b) {
+				return Number(4) + Number(b)
 			}
 		</script>
 	</body>

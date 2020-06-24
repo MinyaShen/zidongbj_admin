@@ -1,8 +1,8 @@
 // 公用方法封装
 
 // 域名地址配置
-// var baseUrl = 'http://jszzkj.cn/alarm'
-// var imgBaseUrl = 'http://jszzkj.cn'
+// var baseUrl = 'https://jszzkj.cn/alarm'
+// var imgBaseUrl = 'https://jszzkj.cn'
 var baseUrl = 'http://192.168.0.27/alarm'
 var imgBaseUrl = 'http://192.168.0.27'
 
@@ -137,4 +137,10 @@ function createTable(table, dataurl, wheres, colsarray, pageflags, id, layer) {
 			layer.msg(res.msg);
 		}
 	});
+}
+
+
+// 取平均数
+function avg(x,y){
+	return (parseFloat(x)+parseFloat(y))/2 ;
 }

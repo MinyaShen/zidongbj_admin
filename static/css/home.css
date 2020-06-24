@@ -1,4 +1,5 @@
 @charset "utf-8";
+
 /* 统计首页样式 */
 .alarm-module-wrapper {
 	padding-right: 60px;
@@ -37,22 +38,22 @@
 
 .data-overview-list li:nth-child(1) {
 	background-color: #36BBB5;
-	box-shadow: 0 2px 15px rgba(54,187,181,0.5);
+	box-shadow: 0 2px 15px rgba(54, 187, 181, 0.5);
 }
 
 .data-overview-list li:nth-child(2) {
 	background-color: #FE787A;
-	box-shadow: 0 2px 15px rgba(255,124,127,0.5);
+	box-shadow: 0 2px 15px rgba(255, 124, 127, 0.5);
 }
 
 .data-overview-list li:nth-child(3) {
 	background-color: #EC92E0;
-	box-shadow: 0 2px 15px rgba(236,146,224,0.5);
+	box-shadow: 0 2px 15px rgba(236, 146, 224, 0.5);
 }
 
 .data-overview-list li:nth-child(4) {
 	background-color: #FBBB6E;
-	box-shadow: 0 2px 15px rgba(251,187,110,0.5);
+	box-shadow: 0 2px 15px rgba(251, 187, 110, 0.5);
 }
 
 .data-overview-list li p {
@@ -131,6 +132,7 @@
 	text-align: center;
 	margin-bottom: 20px;
 }
+
 .alarm-data-content .error-count li p {
 	color: #333;
 	font-size: 16px;
@@ -153,7 +155,6 @@
 	margin-right: 20px;
 	height: 378px;
 	flex: none;
-	overflow-y: auto;
 	padding-bottom: 0;
 	box-sizing: border-box;
 }
@@ -163,7 +164,10 @@
 	display: -webkit-flex;
 	display: flex;
 	flex-wrap: wrap;
-	padding: 30px 18px 0;
+	padding-top: 20px;
+	width: 412px;
+	height: 378px;
+	overflow: auto;
 }
 
 .stores-list ul li {
@@ -238,14 +242,14 @@
 	flex: auto;
 }
 
-.payment-score{
+.payment-score {
 	display: -webkit-flex;
 	display: flex;
 	flex-wrap: wrap;
 }
 
 .payment-score .payment,
-.payment-score .score{
+.payment-score .score {
 	width: 40%;
 	min-width: 740px;
 	flex: auto;
@@ -277,4 +281,14 @@
 	width: 100%;
 	box-sizing: border-box;
 	padding: 0 14px;
+}
+
+.alarm-pie {
+	display: flex;
+	align-items: center;
+}
+
+.alarm-pie-time {
+	font-size: 15px;
+	color: #666;
 }

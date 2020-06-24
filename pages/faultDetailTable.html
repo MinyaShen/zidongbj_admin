@@ -31,7 +31,7 @@
 						<div class="layui-col-md2 alarm-col col-title">质保时间</div>
 						<div class="layui-col-md4 alarm-col col-content" id="expirationDate"></div>
 						<div class="layui-col-md2 alarm-col col-title">故障类型</div>
-						<div class="layui-col-md4 alarm-col col-content" id="damageType"></div>
+						<div class="layui-col-md4 alarm-col col-content" id="damageTypeName"></div>
 					</div>
 					<div class="layui-row alarm-row">
 						<div class="layui-col-md2 alarm-col col-title col-title-over">故障描述</div>
@@ -55,9 +55,9 @@
 					</div>
 					<div class="layui-row alarm-row">
 						<div class="layui-col-md2 alarm-col col-title col-title-over">责任人签字</div>
-						<div class="layui-col-md4 alarm-col col-content" id="signImgBox"></div>
-						<div class="layui-col-md2 alarm-col col-title col-title-over col-title-over2">评价星级</div>
-						<div class="layui-col-md4 alarm-col col-content col-content-over" id="assess">人为故障</div>
+						<div class="layui-col-md4 alarm-col col-content col-content-over" id="signImgBox"></div>
+						<div class="layui-col-md2 alarm-col col-title col-title-over">评价星级</div>
+						<div class="layui-col-md4 alarm-col col-content col-content-over" id="assess"></div>
 					</div>
 					<div class="layui-row alarm-row">
 						<div class="layui-col-md2 alarm-col col-title">上报时间</div>
@@ -87,12 +87,14 @@
 			var faultData = {};
 			
 			// 加载layui模块
-			layui.use(['jquery', 'layer'], function(){
+			layui.use(['jquery', 'layer', 'rate'], function(){
 				var $ = layui.jquery,
-				layer = layui.layer
+				layer = layui.layer,
+				rate = layui.rate
 				
 				// 加载数据
-				getfaultDataDetail($, pathId)
+				getfaultDataDetail($, pathId, rate)
+				
 				
 				// 返回
 				goBack($, '#back-btn')
@@ -100,7 +102,7 @@
 			});
 			
 			// 获取故障维护详情
-			function getfaultDataDetail($, id) {
+			function getfaultDataDetail($, id, rate) {
 				console.log(pathId)
 				ajaxfuntion($, baseUrl + '/maintain/maintainInfo',
 					{
@@ -114,16 +116,20 @@
 							var device= res.data.maintainRocord
 							$('#clientName').text(faultData.fullName)
 							$('#clientAddress').text(faultData.address)
-							$('#expirationDate').text(formatTime(faultData.warrantyEndTime))
-							$('#damageType').text(device.damageType)
+							if(faultData.warrantyEndTime) {
+								$('#expirationDate').text(formatTime(faultData.warrantyEndTime))
+							}
+							$('#damageTypeName').text(device.damageTypeName)
 							$('#damageDesc').text(device.damageInfo)
-							JSON.parse(device.damageImg).forEach(function(item, index) {
-								console.log(item)
-								$('#damageImgList').append('<li class="img-box"><img src="' + imgBaseUrl + item +'"></li>')
-							})
+							if (JSON.parse(device.damageImg).length > 0) {
+								JSON.parse(device.damageImg).forEach(function(item, index) {
+									console.log(item)
+									$('#damageImgList').append('<li class="img-box"><img src="' + imgBaseUrl + item +'"></li>')
+								})
+							}
 							$('#repairDesc').text(device.repairInfo)
-							if(device.repairImg != null) {
-								device.repairImg.forEach(function(item, index) {
+							if(JSON.parse(device.repairImg).length > 0) {
+								JSON.parse(device.repairImg).forEach(function(item, index) {
 									console.log(item)
 									$('#repairImgList').append('<li class="img-box"><img src="' + imgBaseUrl + item +'"></li>')
 								})
@@ -131,11 +137,30 @@
 							if(device.signature != null) {
 								$('#signImgBox').append('<li class="sign-img-box"><img src="' + imgBaseUrl + device.signature +'"></li>')
 							}
-							$('#assess').text(device.evalLevel1)
-							$('#upTime').text(formatTime(device.reportTime))
-							$('#orderTime').text(formatTime(device.orderTakeTime))
-							$('#signTime').text(formatTime(device.signTime))
-							$('#repairTime').text(formatTime(device.maintainTime))
+							$('#assess').append('<div id="star'+ id +'" style="font-size: 13px; margin-top: -10px;"></div>')
+							// 加载评分
+							var average = avg(device.evalLevel1, device.evalLevel2)
+							rate.render({
+								elem: '#star'+id+''
+								, length: 5
+								, value: average
+								//, theme: '#009688'
+								, half: true
+								, text: true
+								, readonly: true
+							});
+							if(device.reportTime) {
+								$('#upTime').text(formatTime(device.reportTime))
+							}
+							if(device.orderTakeTime) {
+								$('#orderTime').text(formatTime(device.orderTakeTime))
+							}
+							if(device.signTime) {
+								$('#signTime').text(formatTime(device.signTime))
+							}
+							if(device.maintainTime) {
+								$('#repairTime').text(formatTime(device.maintainTime))
+							}
 							if(device.submitTime) {
 								$('#postTime').text(formatTime(device.submitTime))
 							}

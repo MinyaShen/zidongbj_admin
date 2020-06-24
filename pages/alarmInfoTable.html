@@ -139,10 +139,17 @@
 				table.on('tool(alarmInfoData)', function(obj) {
 					var data = obj.data;
 					if (obj.event === 'view') {
-						console.log('查看详情')
+						if (obj.event === 'view') {
+							handleView(data.id)
+						}
 					}
 				})
 			});
+			
+			// 查看跳转
+			function handleView (id) {
+				window.location.href = './alarmInfoDetailTable.html?id=' + id
+			} 
 		</script>
 	</body>
 </html>

@@ -149,10 +149,15 @@
 				table.on('tool(faultData)', function(obj) {
 					var data = obj.data;
 					if (obj.event === 'view') {
-						console.log('查看详情')
+						handleView(data.clientId, data.zoneId)
 					}
 				})
 			});
+			
+			// 查看跳转
+			function handleView (clientId, zoneId) {
+				window.location.href = './deviceDetailTable.html?clientId=' + clientId + '&zoneId=' + zoneId
+			}
 		</script>
 	</body>
 </html>

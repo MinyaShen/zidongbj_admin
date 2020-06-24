@@ -35,7 +35,7 @@
 							</div>
 						</div>
 						<div class="layui-form-item">
-							<label class="layui-form-label">有效期至：</label>
+							<label class="layui-form-label">到期日期：</label>
 							<div class="layui-input-block alarm-date-select">
 								<input type="text" class="layui-input" id="dateSelect" placeholder="请选择时间范围">
 							</div>
@@ -59,12 +59,13 @@
 		<script src="../static/layui/layui.js"></script>
 		<script src="../static/js/common.js"></script>
 		<script>
-			layui.use(['jquery', 'table', 'form', 'laydate', 'layer'], function(){
+			layui.use(['jquery', 'table', 'form', 'laydate', 'layer', 'rate'], function(){
 			  var $ = layui.jquery,
 				table = layui.table,
 				form = layui.form,
 				laydate = layui.laydate,
-				layer = layui.layer
+				layer = layui.layer,
+				rate = layui.rate
 				
 				// 加载点位类型选项列表
 				getStoreTypeList($, form)
@@ -73,8 +74,7 @@
 				laydate.render({
 					elem: '#dateSelect'
 					,trigger: 'click'
-					,type: 'datetime'
-					,range: true
+					,type: 'date'
 				});
 			  
 			  //表格
@@ -91,8 +91,7 @@
 					,where: {
 						keyword: $('#keyword').val(),
 						type: $('#storeTypeSelect').val(),
-						startTime: $('#dateSelect').val().split(' - ')[0],
-						endTime:  $('#dateSelect').val().split(' - ')[1]
+						expireTime: $('#dateSelect').val()
 					}
 					,request: {
 						pageName: 'pageNum', //页码的参数名称，默认：page
@@ -107,14 +106,19 @@
 						}
 					}
 			    ,cols: [[ //表头
-						{type: 'checkbox', fixed: 'left'}
+						// {type: 'checkbox', fixed: 'left'}
 			      // ,{field: 'id', title: 'ID', width:80, sort: true}
-			      ,{field: 'clientId', title: '点位ID', width:'10%', sort: true}
-			      ,{field: 'fullName', title: '点位名称', width:'12%'}
+			      // ,{field: 'clientId', title: '点位ID', width:'10%', sort: true}
+			      {fixed: 'left', field: 'fullName', title: '点位名称', width:'12%'}
 			      ,{field: 'type', title: '点位类型', width:'8%'}
 			      ,{field: 'dutyName', title: '负责人姓名', width:'8%'} 
 			      ,{field: 'dutyTel', title: '负责人电话', width: '10%'}
 			      ,{field: 'tel', title: '座机号码', width: '10%'}
+			      ,{field: 'expireTime', title: '到期日期', width: '8%', sort: true,
+							templet: function (row) {
+								return row.expireTime ? formatTime(row.expireTime).split(' ')[0] : ''
+							}
+						}
 			      ,{field: 'status', title: '缴费状态', width: '8%', sort: true,
 							templet: function (row) {
 								if (row.status == 0) {
@@ -126,17 +130,36 @@
 								}
 							}
 						}
-			      ,{field: 'eval', title: '评价星级', width: '10%', sort: true}
+			      ,{field: 'eval', title: '评价星级', width: '12%', sort: true,
+							templet: function (row) {
+								return '<div id="star'+row.id+'" style="font-size: 13px; margin-top: -10px;"></div>'
+							}
+						}
 			      ,{fixed: 'right', title: '操作', width: '12%', toolbar: '#tableBar'}
 			    ]]
 					,done: function (res) {
-						res.data.forEach(function(item, index) {
+						var data = res.data
+						data.forEach(function(item, index) {
 							if (item.status == 1) {
 								$(".layui-table-fixed-r .layui-table-body tbody tr[data-index='"+index+"'] .remind-btn").css({'color': "#BB3636" });
 							} else if (item.status == 2) {
 								$(".layui-table-fixed-r .layui-table-body tbody tr[data-index='"+index+"'] .remind-btn").text('')
 							}
-						})
+						});
+						// 加载评分
+						for (var item in data) {
+							//星级
+							rate.render({//循环设置评分
+								elem: '#star'+data[item].id+''//给不同的id的rate绑定不同的值
+								, length: 5            //星星个数
+								, value: data[item].eval  //初始化值
+								//, theme: '#009688'     //颜色
+								, half: true           //支持半颗星
+								, text: false         //显示文本，默认显示 '3.5星'
+								, readonly: true      //只读
+							});
+
+						};
 					}
 			  });
 				
@@ -145,8 +168,7 @@
 					var data = {
 						keyword: $('#keyword').val(),
 						type: $('#storeTypeSelect').val(),
-						startTime: $('#dateSelect').val().split(' - ')[0],
-						endTime: $('#dateSelect').val().split(' - ')[1]
+						expireTime: $('#dateSelect').val()
 					};
 					// 重载数据表格
 					table.reload('storesData', {
@@ -164,7 +186,7 @@
 					if (obj.event === 'edit') {
 						handleEdit(obj.data.clientId)
 					} else if (obj.event === 'remind') {
-						openReminderDialog($, layer)
+						openReminderDialog($, layer, data.fullName, formatTime(data.expireTime).split(' ')[0])
 					}
 				})
 			  
@@ -196,12 +218,12 @@
 			}
 			
 			// 打开催缴弹框
-			function openReminderDialog($, layer) {
+			function openReminderDialog($, layer, client, time) {
 				layer.open({
 					type: 1,
 					title: '缴费提醒',
 					area: '700px',
-					content: '尊敬的Apple授权经销商(东威通讯淮安洪泽店)用户，截止到2019年6月21日12点30分，您的设备（一键式报警器）因欠费已暂停使用，为了不影响您的正常使用，方便时请到xxxx网点交费或在APP上自助缴费！谢谢您的合作！',
+					content: '尊敬的 '+ client +' 用户，截止到 '+ time +'，您的设备因欠费已暂停使用，为了不影响您的正常使用，方便时请到洪泽县保安服务有限公司缴费！谢谢您的合作！',
 					btn: '知道了'
 					,btnAlign: 'c' //按钮居中
 					,shade: 0.75 //显示遮罩

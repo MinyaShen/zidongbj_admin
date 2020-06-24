@@ -22,12 +22,6 @@
 					<span class="alarm-module-title-left">发布新通知</span>
 				</h5>
 				<div class="form-wrapper">
-					<div class="alarm-form-toolbar" id="isShowTool">
-						<div class="btns-list">
-							<button type="button" id="back-btn" class="layui-btn alarm-btn-size alarm-btn-success">返回</button>
-							<button type="button" id="m-submit-btn" class="layui-btn alarm-btn-size alarm-btn-success">修改</button>
-						</div>
-					</div>
 					<form class="layui-form" lay-filter="noticeForm" onsubmit="false" action="" method="post">
 						<div class="layui-form-item">
 							<label class="layui-form-label">通知标题</label>
@@ -67,9 +61,6 @@
 							<label class="layui-form-label">照片附件</label>
 							<div class="layui-input-block alarm-upload-block">
 								<div class="show-img-list" id="show-img-list"></div>
-								<!-- <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
-									<div class="layui-upload-list show-img-list" id="show-img-list"></div>
-								</blockquote> -->
 								<button type="button" class="layui-btn alarm-upload-btn" id="upload-file">
 								  <i class="layui-icon">&#xe624;</i>
 								</button>
@@ -78,17 +69,18 @@
 						<div class="layui-form-item">
 							<label class="layui-form-label">是否紧急</label>
 							<div class="layui-input-block">
-								<input type="checkbox" checked name="isCritical" lay-skin="switch" lay-filter="isUrgent">
+								<input type="checkbox" name="isCritical" lay-skin="switch" lay-filter="isUrgent">
 							</div>
 						</div>
 						<div class="layui-form-item">
 							<label class="layui-form-label">是否置顶</label>
 							<div class="layui-input-block">
-								<input type="checkbox" checked name="isTop" lay-skin="switch" lay-filter="isTop">
+								<input type="checkbox" name="isTop" lay-skin="switch" lay-filter="isTop">
 							</div>
 						</div>
-						<div class="layui-form-item alarm-form-btns" id="form-bottom-btn">
+						<div class="layui-form-item alarm-form-btns">
 							<div class="layui-input-block">
+								<button type="button" id="back-btn" class="layui-btn alarm-btn-size alarm-btn-warning">返回</button>
 								<button class="layui-btn alarm-btn-success alarm-btn-size alarm-btn-search" type="button" onclick="" id="submit-btn">发布</button>
 							</div>
 						</div>
@@ -106,6 +98,8 @@
 			var noticeFormData = {} //详情数据
 			var imgUrls = [] //图片数组
 			var selectedStoresList = [] // 已选收件人数组
+			var isUrgent = 0;
+			var isTop = 0;
 			$(function(){
 				// console.log(window.location.href);
 				// console.log(window.location.search);
@@ -136,7 +130,7 @@
 							// 		layer.msg('请勿重复上传')
 							// 		return
 							// 	} else {
-									$('#show-img-list').append('<div class="show-img-box"><img src="'+ imgBaseUrl + res.data +'"></div>')
+									$('#show-img-list').append('<div class="show-img-box"><img src="'+ imgBaseUrl + res.data +'"><span class="del-img-btn">删除</span></div>')
 									imgUrls.push(res.data + '')
 									layer.msg('上传完毕')
 							// 	}
@@ -154,6 +148,10 @@
 					,range: true
 					,min: '0'
 				});
+				
+				// 监听switch
+				getSwitchVal(form, 'isUrgent')
+				getSwitchVal(form, 'isTop')
 				
 				
 				// 加载通知类型select
@@ -176,20 +174,20 @@
 				}, true);
 				
 				// 提交表单
-				$(document).on('click','#submit-btn, #m-submit-btn', function () {
+				$('#submit-btn').click(function () {
 					// 需要提交的数据
 					console.log(noticeFormData)
 					var formData = {
 						imgUrl: JSON.stringify(imgUrls),
-						announcementId: (getQueryString('id') !== null) ? getQueryString('id') : '',
+						// announcementId: (getQueryString('id') !== null) ? getQueryString('id') : '',
 						title: $('input[name="title"]').val(),
 						body: $('textarea[name="body"]').val(),
 						startTime: $('#dateSelect').val().split(' - ')[0],
 						endTime:  $('#dateSelect').val().split(' - ')[1],
 						typeDic: $('select[name="noticeType"]').val(),
 						clients: selectedStoresList,
-						isCritical: ($('input[name="isCritical"]').val() == 'on') ? '0' : '1',
-						isTop: ($('input[name="isTop"]').val() == 'on') ? '0' : '1'
+						isCritical: ($('input[name="isCritical"]').val() == 'on') ? 1 : 0,
+						isTop: ($('input[name="isTop"]').val() == 'on') ? 1 : 0
 					}
 					postForm(formData, layer)
 				})
@@ -198,6 +196,28 @@
 				goBack($, '#back-btn')
 			  
 			});
+			
+			// 监听switch的方法
+			function getSwitchVal (form, elem) {
+				form.on('switch('+ elem +')', function (data) {
+					var checked = data.elem.checked;
+					var serverStatus = 1;
+					if(serverStatus){
+						data.elem.checked = checked;
+					}else {
+						data.elem.checked = !checked;
+					}
+					// form.render();
+					if (checked) {
+						data.elem.value = 'off'
+					} else {
+						data.elem.value = 'on'
+					}
+					form.render();
+					console.log(data.value)
+					console.log(checked);
+				})
+			};
 			
 			// 获取通知类型列表
 			function getNoticeTypeList(form) {
@@ -260,8 +280,8 @@
 									"title": data.title // "name": "value"
 									,"body": data.body
 									,"noticeType": data.typeDic + ''
-									,"isCritical": data.isCritical + ''
-									,"isTop": data.isTop + ''
+									,"isCritical": data.isCritical == 1 ? 'off' : 'on'
+									,"isTop": data.isTop == 1 ? 'off' : 'on'
 								})
 								// 加载时间
 								if (data.startTime !== null && data.endTime !== null) {
@@ -278,9 +298,10 @@
 								formSelects.value('storeTypeSelect', list)
 								console.log(selectedStoresList)
 								// 加载图片
+								
 								if (data.imgUrl.length > 0) {
 									data.imgUrl.forEach(function (item, index) {
-										$('#show-img-list').append('<div class="show-img-box"><img src="'+ imgBaseUrl + item +'"></div>')
+										$('#show-img-list').append('<div class="show-img-box"><img src="'+ imgBaseUrl + item +'"><span class="del-img-btn">删除</span></div>')
 									})
 								}
 							}							
@@ -305,6 +326,10 @@
 					layer.msg('请选择通知类型', {icon:5})
 					return
 				}
+				if (formData.clients.length < 1) {
+					layer.msg('请选择通告单位', {icon:5})
+					return
+				}
 				$.ajax({
 					url: baseUrl + '/announcement/addAnnouncementNew',
 					type: 'post',
@@ -318,10 +343,10 @@
 							} else {
 								layer.msg('通告修改成功,3秒后自动返回', {icon:1})
 							}
-							setTimeout(function(){
-								window.history.go(-1)
-								// window.parent.location.reload()
-							}, 3000)
+							// setTimeout(function(){
+							// 	window.history.go(-1)
+							// 	// window.parent.location.reload()
+							// }, 3000)
 						}
 					},
 					error: function(){
@@ -336,12 +361,20 @@
 			// 页面结构判断显示
 			function isShowElem () {
 				if (pathId) {
-					$('#isShowTitle').hide();
-					$('#form-bottom-btn').hide();
+					$('#isShowTitle').find('span').html('通知详情');
+					$('#submit-btn').hide();
 				} else {
-					$('#isShowTool').hide();
+					
 				}
 			};
+			
+			// 删除图片
+			function delPic (arr) {
+				for (var i = 0; i < arr.length; i++) {
+					arr.splice(i,1)
+					console.log(arr)
+				}
+			}
 		</script>
 	</body>
 </html>

@@ -204,3 +204,6 @@ span.alarm-module-title-left::before {
 .alarm-text-ban {
 	color: #BB3636;
 }
+.alarm-text-info {
+	color: #666;
+}

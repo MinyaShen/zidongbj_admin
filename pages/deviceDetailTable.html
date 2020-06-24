@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">	
+		<meta name="format-detection" content="telephone=no">	
+		<title>设备管理详情</title>
+		<!-- 引入css -->
+		<link rel="stylesheet" type="text/css" href="../static/layui/css/layui.css" />
+		<link rel="stylesheet" type="text/css" href="../static/css/public.css" />
+		<link rel="stylesheet" type="text/css" href="../static/css/detail_table.css" />
+	</head>
+	<body>
+		<div class="alarm-wrapper">
+			<h3 class="alarm-page-title">设备管理详情</h3>
+			<div class="alarm-content">
+				<div class="alarm-table-toolbar">
+					<button type="button" id="back-btn" class="layui-btn alarm-btn-size alarm-btn-danger">返回</button>
+				</div>
+				<div class="alarm-table">
+					<div class="layui-row alarm-row">
+						<div class="layui-col-md2 alarm-col col-title">所属点位</div>
+						<div class="layui-col-md4 alarm-col col-content" id="clientName"></div>
+						<div class="layui-col-md2 alarm-col col-title">设备名称</div>
+						<div class="layui-col-md4 alarm-col col-content" id="zoneName"></div>
+					</div>
+					<div class="layui-row alarm-row">
+						<div class="layui-col-md2 alarm-col col-title">点位地址</div>
+						<div class="layui-col-md4 alarm-col col-content" id="clientAddress"></div>
+						<div class="layui-col-md2 alarm-col col-title">设备型号</div>
+						<div class="layui-col-md4 alarm-col col-content" id="zoneType"></div>
+					</div>
+					<div class="layui-row alarm-row">
+						<div class="layui-col-md2 alarm-col col-title">负责人</div>
+						<div class="layui-col-md4 alarm-col col-content" id="dutyName"></div>
+						<div class="layui-col-md2 alarm-col col-title">辖区派出所</div>
+						<div class="layui-col-md4 alarm-col col-content" id="policeStation"></div>
+					</div>
+					<div class="layui-row alarm-row">
+						<div class="layui-col-md2 alarm-col col-title">联系电话</div>
+						<div class="layui-col-md4 alarm-col col-content" id="dutyTel"></div>
+						<div class="layui-col-md2 alarm-col col-title">安装时间</div>
+						<div class="layui-col-md4 alarm-col col-content" id="setupTime"></div>
+					</div>
+					<div class="layui-row alarm-row">
+						<div class="layui-col-md2 alarm-col col-title">安装部位</div>
+						<div class="layui-col-md4 alarm-col col-content" id="zonePosition"></div>
+						<div class="layui-col-md2 alarm-col col-title">质保时间</div>
+						<div class="layui-col-md4 alarm-col col-content" id="warrantyEndTime"></div>
+					</div>
+					<div class="layui-row alarm-row">
+						<div class="layui-col-md12 alarm-col col-title col-title-full">使用人员</div>
+						<div class="layui-col-md12 alarm-col col-content" id="userPersonTable">
+							<ul class="user-list"></ul>
+						</div>
+					</div>
+					<!-- <div class="layui-row alarm-row">
+						<div class="layui-col-md2 alarm-col col-title col-title-img">设备照片</div>
+						<div class="layui-col-md10 alarm-col col-content">
+							<ul class="show-img-list" id="zoneImgList"></ul>
+						</div>
+					</div> -->
+				</div>
+				
+				<h5 class="module-title">
+					<span class="alarm-module-title-left">数据总览</span>
+				</h5>
+				<div class="alarm-table" id="malfunctionTable"></div>
+			</div>
+		</div>
+		
+		<script src="../static/layui/layui.js"></script>
+		<script src="../static/js/common.js"></script>
+		<script>
+			// 定义全局变量参数
+			var pathCId = getQueryString('clientId');
+			var pathZId = getQueryString('zoneId');
+			console.log(window.location)
+			var zoneDetailData = {};
+			
+			// 加载layui模块
+			layui.use(['jquery', 'layer'], function(){
+				var $ = layui.jquery,
+				layer = layui.layer
+				
+				// 加载数据
+				getZoneDataDetail($, pathCId, pathZId)
+				
+				// 返回
+				goBack($, '#back-btn')
+				
+			});
+			
+			// 获取故障维护详情
+			function getZoneDataDetail($, CId, ZId) {
+				ajaxfuntion($, baseUrl + '/zone/zoneInfo',
+					{
+						clientId: CId,
+						zoneId: ZId
+					},
+					'get',
+					function (res) {
+						if (res.code == 200) {
+							console.log(res)
+							zoneDetailData = res.data
+							var userList = res.data.userPerson,
+							maintainRocords = res.data.maintainRocords;
+							
+							$('#clientName').text(zoneDetailData.clientName);
+							$('#zoneName').text(zoneDetailData.zoneName);
+							$('#clientAddress').text(zoneDetailData.clientAddress);
+							$('#zoneType').text(zoneDetailData.zoneType);
+							$('#dutyName').text(zoneDetailData.dutyName);
+							$('#policeStation').text(zoneDetailData.policeStation);
+							$('#dutyTel').text(zoneDetailData.dutyTel);
+							if (zoneDetailData.setupTime) {
+								$('#setupTime').text(formatTime(zoneDetailData.setupTime))
+							};
+							$('#zonePosition').text(zoneDetailData.zonePosition);
+							if (zoneDetailData.warrantyEndTime) {
+								$('#warrantyEndTime').text(formatTime(zoneDetailData.warrantyEndTime))
+							};
+							// 加载使用人表格
+							if (userList.length > 0) {
+								userList.forEach(function (item, index) {
+									$('#userPersonTable .user-list').append(
+										'<li class="user-list-item">' +
+										'<span class="list-item-username">'+ item.contact +'</span>' +
+										'<span class="list-item-tel">'+ item.tel +'</span>' +
+										'</li>'
+									)
+								})
+							}
+							// 动态修改样式
+							if (userList.length%2==0) {
+								$('#userPersonTable .user-list .user-list-item').eq(-2).css('border-bottom', 'none')
+							} else {
+								$('#userPersonTable .user-list .user-list-item').eq(-1).css('border-bottom', 'none')
+							}
+							
+							// 加载故障维修状态表格
+							if (maintainRocords.length > 0) {
+								maintainRocords.forEach(function (item, index) {
+									console.log(item)
+									$('#malfunctionTable').append(
+										'<div class="malfunction-list">' +
+											'<div class="layui-row alarm-row">' +
+												'<div class="layui-col-md2 alarm-col col-title">上报时间</div>' +
+												'<div class="layui-col-md4 alarm-col col-content">' + formatTime(item.reportTime) + '</div>' +
+												'<div class="layui-col-md2 alarm-col col-title">维修时间</div>' +
+												'<div class="layui-col-md4 alarm-col col-content">' + formatTime(item.maintainTime) + '</div>' +
+											'</div>' +
+											'<div class="layui-row alarm-row">' +
+												'<div class="layui-col-md2 alarm-col col-title">故障原因</div>' +
+												'<div class="layui-col-md10 alarm-col col-content">' + item.damageInfo + '</div>' +
+											'</div>' +
+										'</div>'
+									)
+								})
+							}
+							if (maintainRocords.length > 1) {
+								$('#malfunctionTable .malfunction-list').eq(-1).find('.alarm-row').eq(-1).css('border-bottom', 'none')
+							}
+						}
+					},
+					function (res) {},
+					function (res) {}
+				)
+			};
+		</script>
+	</body>
+</html>
