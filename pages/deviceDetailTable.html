@@ -21,45 +21,45 @@
 					<button type="button" id="back-btn" class="layui-btn alarm-btn-size alarm-btn-danger">返回</button>
 				</div>
 				<div class="alarm-table">
-					<div class="layui-row alarm-row">
-						<div class="layui-col-md2 alarm-col col-title">所属点位</div>
-						<div class="layui-col-md4 alarm-col col-content" id="clientName"></div>
-						<div class="layui-col-md2 alarm-col col-title">设备名称</div>
-						<div class="layui-col-md4 alarm-col col-content" id="zoneName"></div>
+					<div class="alarm-row">
+						<div class="alarm-col col-title">所属点位</div>
+						<div class="alarm-col col-content" id="clientName"></div>
+						<div class="alarm-col col-title">设备名称</div>
+						<div class="alarm-col col-content" id="zoneName"></div>
 					</div>
-					<div class="layui-row alarm-row">
-						<div class="layui-col-md2 alarm-col col-title">点位地址</div>
-						<div class="layui-col-md4 alarm-col col-content" id="clientAddress"></div>
-						<div class="layui-col-md2 alarm-col col-title">设备型号</div>
-						<div class="layui-col-md4 alarm-col col-content" id="zoneType"></div>
+					<div class="alarm-row">
+						<div class="alarm-col col-title">点位地址</div>
+						<div class="alarm-col col-content" id="clientAddress"></div>
+						<div class="alarm-col col-title">设备型号</div>
+						<div class="alarm-col col-content" id="zoneType"></div>
 					</div>
-					<div class="layui-row alarm-row">
-						<div class="layui-col-md2 alarm-col col-title">负责人</div>
-						<div class="layui-col-md4 alarm-col col-content" id="dutyName"></div>
-						<div class="layui-col-md2 alarm-col col-title">辖区派出所</div>
-						<div class="layui-col-md4 alarm-col col-content" id="policeStation"></div>
+					<div class="alarm-row">
+						<div class="alarm-col col-title">负责人</div>
+						<div class="alarm-col col-content" id="dutyName"></div>
+						<div class="alarm-col col-title">辖区派出所</div>
+						<div class="alarm-col col-content" id="policeStation"></div>
 					</div>
-					<div class="layui-row alarm-row">
-						<div class="layui-col-md2 alarm-col col-title">联系电话</div>
-						<div class="layui-col-md4 alarm-col col-content" id="dutyTel"></div>
-						<div class="layui-col-md2 alarm-col col-title">安装时间</div>
-						<div class="layui-col-md4 alarm-col col-content" id="setupTime"></div>
+					<div class="alarm-row">
+						<div class="alarm-col col-title">联系电话</div>
+						<div class="alarm-col col-content" id="dutyTel"></div>
+						<div class="alarm-col col-title">安装时间</div>
+						<div class="alarm-col col-content" id="setupTime"></div>
 					</div>
-					<div class="layui-row alarm-row">
-						<div class="layui-col-md2 alarm-col col-title">安装部位</div>
-						<div class="layui-col-md4 alarm-col col-content" id="zonePosition"></div>
-						<div class="layui-col-md2 alarm-col col-title">质保时间</div>
-						<div class="layui-col-md4 alarm-col col-content" id="warrantyEndTime"></div>
+					<div class="alarm-row">
+						<div class="alarm-col col-title">安装部位</div>
+						<div class="alarm-col col-content" id="zonePosition"></div>
+						<div class="alarm-col col-title">质保时间</div>
+						<div class="alarm-col col-content" id="warrantyEndTime"></div>
 					</div>
-					<div class="layui-row alarm-row">
-						<div class="layui-col-md12 alarm-col col-title col-title-full">使用人员</div>
-						<div class="layui-col-md12 alarm-col col-content" id="userPersonTable">
+					<div class="alarm-row alarm-row-wrap">
+						<div class="alarm-col col-title alarm-col-full">使用人员</div>
+						<div class="alarm-col col-content alarm-col-full" id="userPersonTable">
 							<ul class="user-list"></ul>
 						</div>
 					</div>
-					<!-- <div class="layui-row alarm-row">
-						<div class="layui-col-md2 alarm-col col-title col-title-img">设备照片</div>
-						<div class="layui-col-md10 alarm-col col-content">
+					<!-- <div class="alarm-row">
+						<div class="alarm-col col-title">设备照片</div>
+						<div class="alarm-col col-content col-content-over">
 							<ul class="show-img-list" id="zoneImgList"></ul>
 						</div>
 					</div> -->
@@ -179,7 +179,7 @@
 									)
 								})
 							} else {
-								$('#userPersonTable .user-list').append('<span>暂无使用人员</span>')
+								$('#userPersonTable .user-list').append('<span style="padding: 13px 15px;">暂无使用人员</span>')
 							}
 							// 动态修改样式
 							if (userList.length%2==0) {
@@ -194,35 +194,35 @@
 									console.log(item)
 									$('#malfunctionTable').append(
 										'<div class="malfunction-list">' +
-											'<div class="layui-row alarm-row">' +
-												'<div class="layui-col-md2 alarm-col col-title">上报时间</div>' +
-												'<div class="layui-col-md4 alarm-col col-content col-conten-report">' + formatTime(item.reportTime) + '</div>' +
-												'<div class="layui-col-md2 alarm-col col-title">维修时间</div>' +
-												'<div class="layui-col-md4 alarm-col col-content col-content-repair">' + formatTime(item.maintainTime) + '</div>' +
+											'<div class="alarm-row">' +
+												'<div class="alarm-col col-title">上报时间</div>' +
+												'<div class="alarm-col col-content col-content-report">' + formatTime(item.reportTime) + '</div>' +
+												'<div class="alarm-col col-title">维修时间</div>' +
+												'<div class="alarm-col col-content col-content-repair">' + formatTime(item.maintainTime) + '</div>' +
 											'</div>' +
-											'<div class="layui-row alarm-row">' +
-												'<div class="layui-col-md2 alarm-col col-title">故障原因</div>' +
-												'<div class="layui-col-md10 alarm-col col-content col-content-damage">' + item.damageInfo + '</div>' +
+											'<div class="alarm-row">' +
+												'<div class="alarm-col col-title">故障原因</div>' +
+												'<div class="alarm-col col-content col-content-damage col-content-over">' + item.damageInfo + '</div>' +
 											'</div>' +
 										'</div>'
 									)
 									
 									// 动态判断修改内容值显示
-									var report = $('#malfunctionTable .malfunction-list').eq(index).find('.col-conten-report'),
-									repair = $('#malfunctionTable .malfunction-list').eq(index).find('.col-conten-repair'),
-									damage = $('#malfunctionTable .malfunction-list').eq(index).find('.col-conten-damage');
+									var report = $('#malfunctionTable .malfunction-list').eq(index).find('.col-content-report'),
+									repair = $('#malfunctionTable .malfunction-list').eq(index).find('.col-content-repair'),
+									damage = $('#malfunctionTable .malfunction-list').eq(index).find('.col-content-damage');
 									if (item.reportTime) {
-										report.text(formatTime(item.maintainTime))
+										report.text(formatTime(item.reportTime))
 									} else {
 										report.text('无')
 									}
-									if (item.reportTime) {
+									if (item.maintainTime) {
 										repair.text(formatTime(item.maintainTime))
 									} else {
 										repair.text('无')
 									}
-									if (item.reportTime) {
-										damage.text(formatTime(item.maintainTime))
+									if (item.damageInfo) {
+										damage.text(item.damageInfo)
 									} else {
 										damage.text('无')
 									}

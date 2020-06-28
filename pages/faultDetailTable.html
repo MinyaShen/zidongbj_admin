@@ -21,59 +21,81 @@
 					<button type="button" id="back-btn" class="layui-btn alarm-btn-size alarm-btn-danger">返回</button>
 				</div>
 				<div class="alarm-table">
-					<div class="layui-row alarm-row">
-						<div class="layui-col-md2 alarm-col col-title">点位名称</div>
-						<div class="layui-col-md4 alarm-col col-content" id="clientName"></div>
-						<div class="layui-col-md2 alarm-col col-title">地址</div>
-						<div class="layui-col-md4 alarm-col col-content" id="clientAddress"></div>
+					<div class="alarm-row">
+						<div class="alarm-col col-title">点位名称</div>
+						<div class="alarm-col col-content" id="clientName"></div>
+						<div class="alarm-col col-title">地址</div>
+						<div class="alarm-col col-content" id="clientAddress"></div>
 					</div>
-					<div class="layui-row alarm-row">
-						<div class="layui-col-md2 alarm-col col-title">质保时间</div>
-						<div class="layui-col-md4 alarm-col col-content" id="expirationDate"></div>
-						<div class="layui-col-md2 alarm-col col-title">故障类型</div>
-						<div class="layui-col-md4 alarm-col col-content" id="damageTypeName"></div>
+					<div class="alarm-row">
+						<div class="alarm-col col-title">质保时间</div>
+						<div class="alarm-col col-content" id="expirationDate"></div>
+						<div class="alarm-col col-title">故障类型</div>
+						<div class="alarm-col col-content" id="damageTypeName"></div>
 					</div>
-					<div class="layui-row alarm-row">
-						<div class="layui-col-md2 alarm-col col-title col-title-over">故障描述</div>
-						<div class="layui-col-md10 alarm-col col-content" id="damageDesc"></div>
+					<div class="alarm-row">
+						<div class="alarm-col col-title">故障描述</div>
+						<div class="alarm-col col-content col-content-over" id="damageDesc"></div>
 					</div>
-					<div class="layui-row alarm-row">
-						<div class="layui-col-md2 alarm-col col-title col-title-img">故障照片</div>
-						<div class="layui-col-md10 alarm-col col-content">
+					<div class="alarm-row">
+						<div class="alarm-col col-title">故障照片</div>
+						<div class="alarm-col col-content col-content-over">
 							<ul class="show-img-list" id="damageImgList"></ul>
 						</div>
 					</div>
-					<div class="layui-row alarm-row">
-						<div class="layui-col-md2 alarm-col col-title col-title-over">维修描述</div>
-						<div class="layui-col-md10 alarm-col col-content" id="repairDesc"></div>
+					<div class="alarm-row">
+						<div class="alarm-col col-title">维修描述</div>
+						<div class="alarm-col col-content col-content-over" id="repairDesc"></div>
 					</div>
-					<div class="layui-row alarm-row">
-						<div class="layui-col-md2 alarm-col col-title col-title-img">维修照片</div>
-						<div class="layui-col-md10 alarm-col col-content">
+					<div class="alarm-row">
+						<div class="alarm-col col-title">维修照片</div>
+						<div class="alarm-col col-content col-content-over">
 							<ul class="show-img-list" id="repairImgList"></ul>
 						</div>
 					</div>
-					<div class="layui-row alarm-row">
-						<div class="layui-col-md2 alarm-col col-title col-title-over">责任人签字</div>
-						<div class="layui-col-md4 alarm-col col-content col-content-over" id="signImgBox"></div>
-						<div class="layui-col-md2 alarm-col col-title col-title-over">评价星级</div>
-						<div class="layui-col-md4 alarm-col col-content col-content-over" id="assess"></div>
+					<div class="alarm-row">
+						<div class="alarm-col col-title">责任人签字</div>
+						<div class="alarm-col col-content" id="signImgBox"></div>
+						<div class="alarm-col col-title">评价星级</div>
+						<div class="alarm-col col-content" id="assess"></div>
 					</div>
-					<div class="layui-row alarm-row">
-						<div class="layui-col-md2 alarm-col col-title">上报时间</div>
-						<div class="layui-col-md2 alarm-col col-title">接单时间</div>
-						<div class="layui-col-md2 alarm-col col-title">签到时间</div>
-						<div class="layui-col-md2 alarm-col col-title">维修时间</div>
-						<div class="layui-col-md2 alarm-col col-title">提交时间</div>
-						<div class="layui-col-md2 alarm-col col-title">评价时间</div>
-					</div>
-					<div class="layui-row alarm-row">
-						<div class="layui-col-md2 alarm-col col-content" id="upTime"></div>
-						<div class="layui-col-md2 alarm-col col-content" id="orderTime"></div>
-						<div class="layui-col-md2 alarm-col col-content" id="signTime"></div>
-						<div class="layui-col-md2 alarm-col col-content" id="repairTime"></div>
-						<div class="layui-col-md2 alarm-col col-content" id="postTime"></div>
-						<div class="layui-col-md2 alarm-col col-content" id="assessTime"></div>
+					<div class="alarm-row">
+						<div class="alarm-col-md2">
+							<div class="alarm-row alarm-row-wrap">
+								<div class="alarm-col col-title alarm-col-full">上报时间</div>
+								<div class="alarm-col col-content alarm-col-full" id="upTime"></div>
+							</div>
+						</div>
+						<div class="alarm-col-md2">
+							<div class="alarm-row alarm-row-wrap">
+								<div class="alarm-col col-title alarm-col-full">接单时间</div>
+								<div class="alarm-col col-content alarm-col-full" id="orderTime"></div>
+							</div>
+						</div>
+						<div class="alarm-col-md2">
+							<div class="alarm-row alarm-row-wrap">
+								<div class="alarm-col col-title alarm-col-full">签到时间</div>
+								<div class="alarm-col col-content alarm-col-full" id="signTime"></div>
+							</div>
+						</div>
+						<div class="alarm-col-md2">
+							<div class="alarm-row alarm-row-wrap">
+								<div class="alarm-col col-title alarm-col-full">维修时间</div>
+								<div class="alarm-col col-content alarm-col-full" id="repairTime"></div>
+							</div>
+						</div>
+						<div class="alarm-col-md2">
+							<div class="alarm-row alarm-row-wrap">
+								<div class="alarm-col col-title alarm-col-full">提交时间</div>
+								<div class="alarm-col col-content alarm-col-full" id="postTime"></div>
+							</div>
+						</div>
+						<div class="alarm-col-md2">
+							<div class="alarm-row alarm-row-wrap">
+								<div class="alarm-col col-title alarm-col-full">评价时间</div>
+								<div class="alarm-col col-content alarm-col-full" id="assessTime"></div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -173,6 +195,8 @@
 							
 							if(device.signature != null) {
 								$('#signImgBox').append('<li class="sign-img-box"><img src="' + imgBaseUrl + device.signature +'"></li>')
+							} else {
+								$('#signImgBox').text('暂无签名')
 							}
 							if (device.evalLevel1 != null && device.evalLevel2 != null) {
 								$('#assess').append('<div id="star'+ id +'" style="font-size: 13px; margin-top: -10px;"></div>')
@@ -188,7 +212,7 @@
 									, readonly: true
 								});
 							} else {
-								$('#signImgBox').text('暂无评分')
+								$('#assess').text('暂无评分')
 							}
 							
 							if(device.reportTime) {
