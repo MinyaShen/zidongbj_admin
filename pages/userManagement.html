@@ -61,13 +61,13 @@
 			  </script> -->
 
 			<script type="text/html" id="tableBar">
-				<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+				<a href="javascript:;" class="alarm-text-success" lay-event="edit">编辑</a>
 				{{#  if(d.roleType == 1 || d.roleType == 2){ }}
-				<a class="layui-btn layui-btn-xs" lay-event="bindpoint">点位操作</a>
+				<a href="javascript:;" class="alarm-text-success" lay-event="bindpoint">点位操作</a>
 				{{#  } }}
 
 				{{#  if(d.roleType == 1){ }}
-				<a class="layui-btn layui-btn-xs" lay-event="bindsub">设置子用户</a>
+				<a href="javascript:;" class="alarm-text-success" lay-event="bindsub">设置子用户</a>
 				{{#  } }}
 			</script>
 		</div>
@@ -77,9 +77,10 @@
 	<script src="../static/js/jquery.min.js"></script>
 	<script src="../static/js/common.js"></script>
 	<script>
-		layui.use(['laypage', 'jquery', 'table', 'form', 'layer'], function () {
+		layui.use(['laypage', 'jquery', 'table', 'form', 'layer', 'rate'], function () {
 			var table = layui.table;
 			var layer = layui.layer; // 弹出层组件引入
+			var rate = layui.rate;
 
 			//添加用户
 			layui.$("#openAddUser").on('click', function () {
@@ -134,26 +135,29 @@
 				}
 				var data = tempdata.join(',')
 
-				$.ajax({
-					url: baseUrl + "/user/delUser",
-					data: {
-						ids: data
-					},
-					method: 'GET',
-					contentType: 'application/json',
-					success: function (result) {
-						table.reload('noticeData', {
-							page: {
-								curr: 1 //从第一页开始
-							},
-							url: baseUrl + '/user/queryUsers'
-						});
-						layer.msg("删除成功", {
-							icon: 1
-						})
-					}
-				});
-
+				if (tempdata.length > 0) {
+					$.ajax({
+						url: baseUrl + "/user/delUser",
+						data: {
+							ids: data
+						},
+						method: 'GET',
+						contentType: 'application/json',
+						success: function (result) {
+							table.reload('noticeData', {
+								page: {
+									curr: 1 //从第一页开始
+								},
+								url: baseUrl + '/user/queryUsers'
+							});
+							layer.msg("删除成功", {
+								icon: 1
+							})
+						}
+					});
+				} else {
+					layer.msg('请选择要删除的数据', {icon: 5})
+				}
 			})
 
 			//表格渲染
@@ -172,12 +176,20 @@
 					limitName: 'pageSize' //每页数据量的参数名，默认：limit
 				},
 				parseData: function (res) {
-					console.log(res);
-					return {
-						"code": 0,
-						"msg": '',
-						"count": res.data.total,
-						"data": res.data.list,
+					if (res.data) {
+						return {
+							"code": 0,
+							"msg": '',
+							"count": res.data.total,
+							"data": res.data.list,
+						}
+					} else {
+						return {
+							"code": 0,
+							"msg": '',
+							"count": '',
+							"data": [],
+						}
 					}
 				},
 				cols: [
@@ -185,32 +197,58 @@
 						{
 							type: 'checkbox',
 							fixed: 'left',
+							width: '5%'
 						},
 						{
 							field: 'userName',
 							title: '账号',
+							width: '15%'
 						}, {
 							field: 'name',
 							title: '姓名',
+							width: '13%'
 						}, {
 							field: 'roleName',
 							title: '身份',
+							width: '10%'
 						}, {
 							field: 'tel',
 							title: '电话',
+							width: '12%'
 						}, {
 							field: 'eval',
 							title: '星级',
-							sort: true
+							sort: true,
+							width: '15%',
+							templet: function (row) {
+								return '<div id="star'+row.userId+'" style="font-size: 13px; margin-top: -10px;"></div>'
+							}
 						}, {
 							fixed: 'right',
 							title: '操作',
-							width: 260,
+							width: '20%',
 							toolbar: '#tableBar'
 						}
 					]
-				]
+				],
+				done: function (res) {
+					var data = res.data
+					
+					// 渲染评分
+					for(var i in data) {
+						rate.render({
+							elem: '#star' + data[i].userId + '',
+							length: 5,
+							value: data[i].eval,
+							half: true,
+							text: false,
+							readonly: true
+						})
+					}
+				}
 			});
+			
+			
 			//搜索按钮监听
 			layui.$('#search').on('click', function () {
 				var keyword = $("#keyword").val();

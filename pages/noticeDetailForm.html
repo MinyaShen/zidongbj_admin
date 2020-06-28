@@ -68,14 +68,14 @@
 						</div>
 						<div class="layui-form-item">
 							<label class="layui-form-label">是否紧急</label>
-							<div class="layui-input-block">
-								<input type="checkbox" name="isCritical" checked lay-skin="switch" lay-filter="isCritical">
+							<div class="layui-input-block" id="isCriticalBox">
+								<input type="checkbox" name="isCritical" value="on" checked lay-skin="switch" lay-filter="isCritical" id="isCritical">
 							</div>
 						</div>
 						<div class="layui-form-item">
 							<label class="layui-form-label">是否置顶</label>
-							<div class="layui-input-block">
-								<input type="checkbox" name="isTop" checked lay-skin="switch" lay-filter="isTop">
+							<div class="layui-input-block" id="isTopBox">
+								<input type="checkbox" name="isTop" value="on" checked lay-skin="switch" lay-filter="isTop" id="isTop">
 							</div>
 						</div>
 						<div class="layui-form-item alarm-form-btns">
@@ -120,13 +120,13 @@
 				// 先加载接收通知的单位列表
 				getStoresList(formSelects)
 				
+				// 预加载表单
+				getNoticeDetail(pathId, layer, form, formSelects)
+				
 				// 监听switch
 				getSwitchVal(form, 'isCritical')
 				getSwitchVal(form, 'isTop')
 				
-				// 预加载表单
-				getNoticeDetail(pathId, layer, form, formSelects)
-			  
 				// 上传图片
 				upload.render({
 					elem: '#upload-file'
@@ -262,31 +262,34 @@
 								var list = [];
 								data.imgUrl = JSON.parse(data.imgUrl);
 								imgUrls = data.imgUrl
-								console.log(imgUrls)
 								
-								form.val('noticeForm', {
-									"title": data.title // "name": "value"
-									,"body": data.body
-									,"noticeType": data.typeDic + ''
-									,"isCritical": data.isCritical == 1 ? 'off' : 'on'
-									,"isTop": data.isTop == 1 ? 'off' : 'on'
-								})
-								// if (data.isTop == 1) {
-								// 	$('input[name="isCritical"]').val('off')
-								// } else {
-								// 	$('input[name="isCritical"]').val('on')
-								// }
-								// if (data.isTop == 1) {
-								// 	$('input[name="isTop"]').val('off')
-								// } else {
-								// 	$('input[name="isTop"]').val('on')
-								// }
+								// 回显switch
+								if (data.isCritical == 0) {
+									$("#isCritical").attr("checked", "checked");
+									$("#isCritical").attr("value",'on');
+									var x = document.getElementsByClassName("layui-unselect layui-form-switch");
+									x[0].setAttribute("class", "layui-unselect layui-form-switch layui-form-onswitch");
+								} else {
+									$("#isCritical").removeAttr("checked");
+									// var x = document.getElementsByClassName("layui-unselect layui-form-switch layui-form-onswitch");
+									// x[0].setAttribute("class", "layui-unselect layui-form-switch");
+								}
+								if (data.isTop == 0) {
+									$("#isTop").attr("checked", "checked");
+									$("#isTop").attr("value",'on');
+									var x = document.getElementsByClassName("layui-unselect layui-form-switch");
+									x[0].setAttribute("class", "layui-unselect layui-form-switch layui-form-onswitch");
+								} else {
+									$("#isTop").removeAttr("checked");
+								}
+								
 								// 加载时间
 								if (data.startTime !== null && data.endTime !== null) {
 									$('#dateSelect').val(formatTime(data.startTime) + ' - ' + formatTime(data.endTime))
 								} else {
 									$('#dateSelect').val('')
 								}
+								
 								// 加载接收人
 								storeTypeList.forEach(function (item, index) {
 									list.push(item.clientId + '-' + item.toRepair)
@@ -295,6 +298,7 @@
 								})
 								formSelects.value('storeTypeSelect', list)
 								console.log(selectedStoresList)
+								
 								// 加载图片
 								if (imgUrls.length > 0) {
 									imgUrls.forEach(function (item, index) {
@@ -305,6 +309,13 @@
 										}
 									})
 								}
+								
+								//回显表单标题、内容、类型
+								form.val('noticeForm', {
+									"title": data.title // "name": "value"
+									,"body": data.body
+									,"noticeType": data.typeDic + ''
+								})
 							}							
 						},
 						function (res) {},

@@ -80,11 +80,20 @@
 			    ,height: 560
 			    ,url: baseUrl + '/announcement/list' //数据接口
 					,parseData: function (res) {
-						return {
-							"code": 0,
-							"msg": res.message,
-							"count": res.data.total,
-							"data": res.data.list
+						if (res.data) {
+							return {
+								"code": 0,
+								"msg": res.message,
+								"count": res.data.total,
+								"data": res.data.list
+							}
+						} else {
+							return {
+								"code": 0,
+								"msg": res.message,
+								"count": '',
+								"data": []
+							}
 						}
 					}
 			    ,page: true //开启分页

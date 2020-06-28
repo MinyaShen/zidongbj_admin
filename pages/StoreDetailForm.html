@@ -77,7 +77,7 @@
 						<div class="layui-form-item">
 							<label class="layui-form-label">缴费时长</label>
 							<div class="layui-input-block">
-								<select name="storeType" lay-filter="storeType" id="duration">
+								<select name="duration" lay-filter="duration" id="duration">
 									<option value="">请选择缴费时长</option>
 									<option value="1">一年</option>
 									<option value="2">两年</option>
@@ -162,7 +162,7 @@
 					if (payD < expireD) {
 						oldY = oldE
 					}
-					if ($('input[name="payTime"]').val() && $('#duration').val()){
+					if ($('input[name="payTime"]').val() != '' && $('#duration').val() != ''){
 						if (duration == 1) {
 							newY = Number(oldY) + Number(1)
 						} else if (duration == 2) {
@@ -176,16 +176,16 @@
 						} else if (duration == 6) {
 							newY = Number(oldY) + Number(10)
 						}
+						if (payD < expireD) {
+							expireDate[0] = newY + ''
+							expireTime = expireDate.join('-')
+						} else {
+							payDate[0] = newY + ''
+							expireTime = payDate.join('-')
+						}
+						
+						$('#expireTime').val(expireTime)
 					}
-					if (payD < expireD) {
-						expireDate[0] = newY + ''
-						expireTime = expireDate.join('-')
-					} else {
-						payDate[0] = newY + ''
-						expireTime = payDate.join('-')
-					}
-					
-					$('#expireTime').val(expireTime)
 					
 					var formData = {
 						clientId: pathId,
@@ -241,7 +241,7 @@
 								"repairStatus": res.data.repairStatus
 							})
 							$('#userName').val(res.data.name[0]);
-							$('#storeTypeSelect').val(res.data.type);
+							// $('#storeTypeSelect').val(res.data.type);
 						}
 					},
 					function (res) {},

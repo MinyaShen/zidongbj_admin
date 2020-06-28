@@ -84,36 +84,44 @@
 			    	limitName: 'pageSize' //每页数据量的参数名，默认：limit
 			    }
 					,parseData: function (res) {
-			    	return {
-			    		"code": 0,
-			    		"msg": '',
-			    		"count": res.data.total,
-			    		"data": res.data.list
+			    	if (res.data) {
+			    		return {
+			    			"code": 0,
+			    			"msg": '',
+			    			"count": res.data.total,
+			    			"data": res.data.list
+			    		}
+			    	} else {
+			    		return {
+			    			"code": 0,
+			    			"msg": '',
+			    			"count": '',
+			    			"data": []
+			    		}
 			    	}
 			    }
 					,cols: [[ //表头
-						{type: 'checkbox', fixed: 'left', width:'5%'}
-			      ,{field: 'cName', title: '报警点位', width:'13%'}
-			      ,{field: 'maintenance', title: '负责人姓名', width:'8%'} 
+						// {type: 'checkbox', fixed: 'left', width:'5%'}
+						{field: 'isTreated', width:'5%', 
+							templet: function (row) {
+								if (row.isTreated == 0) {
+									return '<span class="alarm-icon-display"></span>'
+								} else {
+									return '<span></span>'
+								}
+							}
+						}
+			      ,{field: 'cName', title: '报警点位', width:'15%'}
+			      ,{field: 'maintenance', title: '负责人姓名', width:'10%'} 
 			      ,{field: 'maintenanceTel', title: '负责人电话', width: '10%'}
 			      ,{field: 'cTel', title: '座机电话', width: '10%'}
-			      ,{field: 'createTime', title: '报警时间', width: '12%',
+			      ,{field: 'createTime', title: '报警时间', width: '15%',
 							templet: function (row) {
 								return formatTime(row.createTime + '')
 							}
 						}
-			      ,{field: 'address', title: '报警地址', width: '12%'}
-			      ,{field: 'isTreated', title: '是否处理', width: '8%',
-							templet: function (row) {
-								// return row.isTreated == 0 ? '未处理' : '已处理'
-								if (row.isTreated == 0) {
-									return '<span class="alarm-text-ban">未处理</span>'
-								} else {
-									return '<span>已处理</span>'
-								}
-							}
-						}
-			      ,{fixed: 'right', title: '操作', width: '8%', toolbar: '#tableBar'}
+			      ,{field: 'address', title: '报警地址', width: '15%'}
+			      ,{fixed: 'right', title: '操作', width: '10%', toolbar: '#tableBar'}
 			    ]]
 					,done: function (res) {}
 			  });

@@ -140,3 +140,11 @@
 	background-color: #36BBB5;
 	border: none;
 }
+
+/* 警情信息列表显示报警icon */
+.alarm-icon-display {
+	display: block;
+	width: 32px;
+	height: 32px;
+	background: url(../images/icon_alarm.png) no-repeat center/32px;
+}

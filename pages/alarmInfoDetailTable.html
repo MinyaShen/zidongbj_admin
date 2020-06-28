@@ -74,7 +74,6 @@
 				ajaxfuntion($, baseUrl + '/alarmInfo/alarmById/' + id, {}, 'get',
 					function (res) {
 						if (res.code == 200) {
-							console.log(res)
 							alarmInfoData = res.data
 							if (alarmInfoData.cName) {
 								$('#clientName').text(alarmInfoData.cName)
