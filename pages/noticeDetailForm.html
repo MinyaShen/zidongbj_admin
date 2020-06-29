@@ -159,7 +159,7 @@
 					}
 					var s = []
 					for (var m = 0; m < valueList.length; m++) {
-						var item = {'clientId': valueList[m].split('-')[0], 'userType': valueList[m].split('-')[1]}
+						var item = {'clientId': valueList[m].split('_')[0], 'userType': valueList[m].split('_')[1]}
 						s.push(item)
 					}
 					selectedStoresList = s
@@ -237,7 +237,7 @@
 						if (res.data.length > 0) {
 							for (var i = 0; i < res.data.length; i++) {
 								var item = res.data[i];
-								arr.push({name: item.name, value: item.id + '-' + item.userType});
+								arr.push({name: item.name, value: item.id + '_' + item.userType});
 							}
 							formSelects.data('storeTypeSelect', 'local', {
 								arr: arr 
@@ -292,10 +292,11 @@
 								
 								// 加载接收人
 								storeTypeList.forEach(function (item, index) {
-									list.push(item.clientId + '-' + item.toRepair)
+									list.push(item.clientId + '_' + item.toRepair)
 									var item = {'clientId': item.clientId, 'userType': item.toRepair}
 									selectedStoresList.push(item)
 								})
+								console.log(list)
 								formSelects.value('storeTypeSelect', list)
 								console.log(selectedStoresList)
 								
@@ -316,6 +317,7 @@
 									,"body": data.body
 									,"noticeType": data.typeDic + ''
 								})
+								form.render()
 							}							
 						},
 						function (res) {},

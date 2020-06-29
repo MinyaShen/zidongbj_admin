@@ -149,3 +149,10 @@
 	height: 32px;
 	background: url(../images/icon_alarm.png) no-repeat center/32px;
 }
+
+.layui-layer-dialog {
+	border-radius: 10px !important;
+}
+.layui-layer-dialog .layui-layer-title {
+	text-align: left !important;
+}

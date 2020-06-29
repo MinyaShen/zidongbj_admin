@@ -1,3 +1,5 @@
+var clientMap = []
+
 function currentTime() {
     let date = new Date()
     let Y = date.getFullYear() + '-';
@@ -19,6 +21,8 @@ $.ajax({
     contentType: 'application/json',
     success: function (res) {
         console.log(res.data)
+        clientMap = res.data.clientMap;
+        initMap()
         $('#clientCount').text(res.data.clientCount); //网点数量
         $('#maintainCount').text(res.data.maintainCount); //待维修网点
         $('#zoneCount').text(res.data.zoneCount); //设备总数
@@ -379,14 +383,38 @@ function renderPieChar2(data) {
 
 
 //地图数据
-var map = new BMap.Map("baiduMap");
 
-var point = new BMap.Point(119.03018636, 33.60651274);
-//获取当前位置
+//地图初始化函数，本例取名为init，开发者可根据实际情况定义
+function initMap() {
 
-map.centerAndZoom(point, 15);
-map.enableScrollWheelZoom(true);
-map.addControl(new BMap.NavigationControl());
-map.addControl(new BMap.ScaleControl());
-map.addControl(new BMap.OverviewMapControl());
-map.addControl(new BMap.MapTypeControl());
+    //创建map对象，初始化地图
+    var map = new TMap.Map('qqMap', {
+        center: new TMap.LatLng(33.293481, 118.873100), //设置地图中心点坐标
+        zoom: 11, //设置地图缩放级别
+        viewMode: '2D'
+    });
+
+
+    // 此处进行点位的循环遍历
+    var geometries = []
+    for (let i = 0; i < clientMap.length; i++) {
+        let tempObj = {
+            position: new TMap.LatLng(clientMap[i].localY, clientMap[i].localX)
+        }
+        geometries.push(tempObj);
+    }
+
+
+    //创建点聚合对象
+    var markerCluster = new TMap.MarkerCluster({
+        id: 'cluster', //图层id
+        map: map, //设置点聚合显示在哪个map对象中（创建map的段落省略）
+        enableDefaultStyle: true, //使用默认样式
+        minimumClusterSize: 2, //最小聚合点数：2个
+        geometries: geometries,
+        zoomOnClick: true, //点击聚合数字放大展开
+        gridSize: 60, //聚合算法的可聚合距离，即距离小于该值的点会聚合至一起，默认为60，以像素为单位
+        averageCenter: false, //每个聚和簇的中心是否应该是聚类中所有标记的平均值
+        maxZoom: 16 //采用聚合策略的最大缩放级别，若地图缩放级别大于该值，则不进行聚合，标点将全部被展开
+    });
+}

@@ -122,9 +122,9 @@
 							}
 							
 							if (zoneDetailData.clientAdress) {
-								$('#clientAdress').text(zoneDetailData.clientAdress);
+								$('#clientAddress').text(zoneDetailData.clientAdress);
 							} else {
-								$('#clientAdress').text('无');
+								$('#clientAddress').text('无');
 							}
 							
 							if (zoneDetailData.zoneType) {
@@ -231,8 +231,8 @@
 							} else {
 								$('#malfunctionTable').append(
 									'<div class="malfunction-list">' +
-										'<div class="layui-row alarm-row">' +
-											'<div class="layui-col-md12 alarm-col col-content">暂无相关信息</div>' +
+										'<div class="alarm-row" style="border-bottom: 1px solid #ADADAD; border-right: 1px solid #ADADAD; padding: 0 15px;">' +
+											'暂无相关信息' +
 										'</div>' +
 									'</div>'
 								)

@@ -239,6 +239,8 @@
 
 .stores-map {
 	width: 50%;
+	height: 378px;
+	padding: 0;
 	flex: auto;
 }
 
