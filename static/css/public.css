@@ -93,6 +93,7 @@ textarea::-webkit-input-placeholder { /* Internet Explorer 10+ */
 /* 页面公用样式 */
 .alarm-wrapper {
 	width: 100%;
+	height: 100%;
 }
 
 .alarm-content {

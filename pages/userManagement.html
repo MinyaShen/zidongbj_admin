@@ -25,8 +25,8 @@
 
 <body>
 	<div class="alarm-wrapper">
-		<h3 class="alarm-page-title">用户管理</h3>
-		<div class="alarm-content">
+		<div class="alarm-page-header">
+			<h3 class="alarm-page-title">用户管理</h3>
 			<div class="alarm-table-toolbar">
 				<div class="layui-form alarm-filter-form">
 					<div class="layui-form-item">
@@ -36,7 +36,7 @@
 								autocomplete="off" class="layui-input">
 						</div>
 					</div>
-
+			
 					<div class="layui-form-item alarm-form-btns">
 						<div class="layui-input-block">
 							<button id="search" data-type="search"
@@ -44,13 +44,16 @@
 						</div>
 					</div>
 				</div>
-
+			
 				<div class="t-head-toolbar-btn">
 					<button id="openAddUser" type="button"
 						class="layui-btn alarm-btn-size alarm-btn-success">添加</button>
 					<button id="deleteUser" type="button" class="layui-btn alarm-btn-size alarm-btn-danger">删除</button>
 				</div>
 			</div>
+		</div>
+		
+		<div class="alarm-content">
 			<table id="noticeData" lay-filter="noticeData"></table>
 			<!-- <script type="text/html" id="titleTpl">
 				{{#  if(d.id < 100){ }}
@@ -163,6 +166,7 @@
 			//表格渲染
 			table.render({
 				elem: '#noticeData',
+				height: 'full-140',
 				url: baseUrl + '/user/queryUsers',
 				page: true,
 				skin: 'line',

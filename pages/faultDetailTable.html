@@ -78,15 +78,15 @@
 								<div class="alarm-col col-content alarm-col-full" id="signTime"></div>
 							</div>
 						</div>
-						<div class="alarm-col-md2">
+						<!-- <div class="alarm-col-md2">
 							<div class="alarm-row alarm-row-wrap">
 								<div class="alarm-col col-title alarm-col-full">维修时间</div>
 								<div class="alarm-col col-content alarm-col-full" id="repairTime"></div>
 							</div>
-						</div>
+						</div> -->
 						<div class="alarm-col-md2">
 							<div class="alarm-row alarm-row-wrap">
-								<div class="alarm-col col-title alarm-col-full">提交时间</div>
+								<div class="alarm-col col-title alarm-col-full">完成时间</div>
 								<div class="alarm-col col-content alarm-col-full" id="postTime"></div>
 							</div>
 						</div>
@@ -193,7 +193,7 @@
 								$('#repairImgList').text('无')
 							}
 							
-							if(device.signature != null) {
+							if(device.signature) {
 								$('#signImgBox').append('<li class="sign-img-box"><img src="' + imgBaseUrl + device.signature +'"></li>')
 							} else {
 								$('#signImgBox').text('暂无签名')

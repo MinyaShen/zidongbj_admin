@@ -16,8 +16,8 @@
 	
 	<body>
 		<div class="alarm-wrapper">
-			<h3 class="alarm-page-title">点位信息</h3>
-			<div class="alarm-content">
+			<div class="alarm-page-header">
+				<h3 class="alarm-page-title">点位信息</h3>
 				<div class="alarm-table-toolbar" id="tableToolbar">
 					<form class="layui-form alarm-filter-form" onsubmit="false" action="">
 						<div class="layui-form-item">
@@ -47,6 +47,8 @@
 						</div>
 					</form>
 				</div>
+			</div>
+			<div class="alarm-content">
 				<table id="storesData" lay-filter="storesData"></table>
 				<script type="text/html" id="tableBar">
 					<a href="javascript:;" class="alarm-text-success view-btn" lay-event="edit">编辑</a>
@@ -81,7 +83,7 @@
 			  table.render({
 			    elem: '#storesData'
 					//,toolbar: '#tableToolbar'
-					,height: 560
+					,height: 'full-140'
 					,url: baseUrl + '/client/queryClients' //数据接口
 					,method: 'get'
 					,page: true

@@ -155,8 +155,11 @@ function showMenus (id) {
 			$('.leftMenu ul.layui-nav').append('<li id="layui-nav-item' + item.id + '" class="layui-nav-item"><a href="' + item.url + '" data-id="' + item.id +'" data-url="'+ item.url +'"><i class="iconfont">' + item.icon + '</i><span>' + item.name +'</span></a></li>')
 			// $('.leftMenu ul.layui-nav').find('li').eq(0).addClass('layui-this')
 		}
+		// console.log(window.location.href.split('#/')[1])
 		if (item.url.split('#/')[1] == window.location.href.split('#/')[1]) {
 			$('.leftMenu ul.layui-nav').find('li').eq(index).addClass('layui-this')
+		} else if (!window.location.href.split('#/')[1]) {
+			$('.leftMenu ul.layui-nav').find('li').eq(0).addClass('layui-this')
 		}
 	})
 };

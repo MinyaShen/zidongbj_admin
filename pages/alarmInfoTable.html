@@ -15,8 +15,8 @@
 	</head>
 	<body>
 		<div class="alarm-wrapper">
-			<h3 class="alarm-page-title">警情信息</h3>
-			<div class="alarm-content">
+			<div class="alarm-page-header">
+				<h3 class="alarm-page-title">警情信息</h3>
 				<div class="alarm-table-toolbar" id="tableToolbar">
 					<form class="layui-form alarm-filter-form" onsubmit="false" action="">
 						<div class="layui-form-item">
@@ -38,6 +38,9 @@
 						</div>
 					</form>
 				</div>
+			</div>
+			
+			<div class="alarm-content">
 				<table id="alarmInfoData" lay-filter="alarmInfoData"></table>
 				<script type="text/html" id="tableBar">
 					<a href="javascript:;" class="alarm-text-success" lay-event="view">详情</a>
@@ -67,7 +70,7 @@
 			  table.render({
 			    elem: '#alarmInfoData'
 					//,toolbar: '#tableToolbar'
-					,height: 560
+					,height: 'full-140'
 					,url: baseUrl + '/alarmInfo/list' //数据接口
 					,method: 'get'
 					,limit: 15
@@ -111,9 +114,9 @@
 								}
 							}
 						}
-			      ,{field: 'cName', title: '报警点位', width:'15%'}
-			      ,{field: 'maintenance', title: '负责人姓名', width:'10%'} 
-			      ,{field: 'maintenanceTel', title: '负责人电话', width: '10%'}
+			      ,{field: 'cName', title: '报警点位', width:'12%'}
+			      ,{field: 'maintenance', title: '负责人姓名', width:'8%'} 
+			      ,{field: 'maintenanceTel', title: '负责人电话', width: '12%'}
 			      ,{field: 'cTel', title: '座机电话', width: '10%'}
 			      ,{field: 'createTime', title: '报警时间', width: '15%',
 							templet: function (row) {

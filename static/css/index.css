@@ -59,7 +59,8 @@
 	left: 0;
 	width: 300px;
 	height: 302px;
-	background-color: #18273B !important;
+	/* background-color: #18273B !important; */
+	background: url(../images/side_bar_bg.png) no-repeat center/cover !important;
 	z-index: 1002;
 }
 

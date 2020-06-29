@@ -46,7 +46,7 @@
 }
 
 .alarm-table .alarm-col-md2 {
-	width: 16.6667%;
+	width: 20%;
 	flex: none;
 }
 
@@ -56,23 +56,25 @@
 	align-self: normal;
 	justify-content: center;
 	background-color: #DCDCDC;
-	width: 10%;
+	width: 15%;
 	flex: none;
 }
 .alarm-table .col-content {
 	display: flex;
 	align-items: center;
 	align-self: normal;
-	width: 40%;
+	width: 35%;
 	flex: none;
 }
 
 .alarm-table .col-content-over {
-	width: 90%;
+	width: 85%;
 }
 
 .alarm-table .alarm-col-full {
 	width: 100%;
+	display: flex;
+	justify-content: center;
 }
 
 .show-img-list {

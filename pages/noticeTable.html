@@ -15,8 +15,8 @@
 	</head>
 	<body>
 		<div class="alarm-wrapper">
-			<h3 class="alarm-page-title">通知通告</h3>
-			<div class="alarm-content">
+			<div class="alarm-page-header">
+				<h3 class="alarm-page-title">通知通告</h3>
 				<div class="alarm-table-toolbar" id="tableToolbar">
 					<div class="layui-form alarm-filter-form">
 						<div class="layui-form-item">
@@ -42,6 +42,8 @@
 						<button id="delAllBtn" type="button" data-type="getid" class="layui-btn alarm-btn-size alarm-btn-danger">批量删除</button>
 					</div>
 				</div>
+			</div>
+			<div class="alarm-content">
 				<table id="noticeData" lay-filter="noticeData"></table>
 				<script type="text/html" id="tableBar">
 					{{#  if(d.del == 2){ }}
@@ -77,7 +79,7 @@
 			  table.render({
 			    elem: '#noticeData'
 					//,toolbar: '#tableToolbar'
-			    ,height: 560
+			    ,height: 'full-140'
 			    ,url: baseUrl + '/announcement/list' //数据接口
 					,parseData: function (res) {
 						if (res.data) {
@@ -110,8 +112,8 @@
 						limitName: 'pageSize'
 					}
 			    ,cols: [[ //表头
-						{type: 'checkbox', fixed: 'left'},
-			      {field: 'id', title: 'ID', width: '8%', sort: true}
+						{type: 'checkbox', fixed: 'left', width: '4%'},
+			      {field: 'id', title: 'ID', width: '4%', sort: true}
 			      ,{field: 'title', title: '通知标题', width:'12%'}
 			      ,{field: 'body', title: '内容描述', width:'12%'}
 			      ,{field: 'typeDicName', title: '公告类型', width:'8%'} 
@@ -125,7 +127,7 @@
 								return row.readedCount + ' / ' + row.totalCount
 							}
 						}
-						,{field: 'del', title: '状态', width: '8%',
+						,{field: 'del', title: '状态', width: '10%',
 							templet: function (row) {
 								if (row.del == 0) {
 									return '<span class="alarm-text-success">正常</span>'

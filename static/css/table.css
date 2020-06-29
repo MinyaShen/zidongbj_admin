@@ -4,6 +4,7 @@
 	display: -webkit-flex;
 	display: flex;
 	flex-wrap: nowrap;
+	padding-right: 30px;
 }
 
 /* 顶部筛选表单样式 */
@@ -69,7 +70,7 @@
 /* 表格样式 */
 .alarm-content {
 	box-sizing: border-box;
-	padding-right: 40px;
+	padding-right: 30px;
 }
 
 .layui-table-view {

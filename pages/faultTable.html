@@ -15,8 +15,8 @@
 	</head>
 	<body>
 		<div class="alarm-wrapper">
-			<h3 class="alarm-page-title">故障维护</h3>
-			<div class="alarm-content">
+			<div class="alarm-page-header">
+				<h3 class="alarm-page-title">故障维护</h3>
 				<div class="alarm-table-toolbar" id="tableToolbar">
 					<form class="layui-form alarm-filter-form" onsubmit="false" action="">
 						<div class="layui-form-item">
@@ -53,6 +53,9 @@
 						</div>
 					</form>
 				</div>
+			</div>
+			
+			<div class="alarm-content">
 				<table id="faultData" lay-filter="faultData"></table>
 				<script type="text/html" id="tableBar">
 					<a href="javascript:;" class="alarm-text-success" lay-event="view">详情</a>
@@ -82,7 +85,7 @@
 			  table.render({
 			    elem: '#faultData'
 					//,toolbar: '#tableToolbar'
-					,height: 560
+					,height: 'full-140'
 					,url: baseUrl + '/maintain/maintainPcList' //数据接口
 					,method: 'get'
 					,limit: 15
@@ -117,7 +120,7 @@
 			    	}
 			    }
 					,cols: [[ //表头
-						{type: 'checkbox', fixed: 'left'}
+						{type: 'checkbox', fixed: 'left', width:'3%'}
 			      ,{field: 'clientId', title: '点位ID', width:'8%', sort: true}
 			      ,{field: 'fullName', title: '故障点位', width:'15%'}
 			      ,{field: 'dutyName', title: '负责人姓名', width:'8%'} 
@@ -127,7 +130,7 @@
 								return formatTime(row.createTime)
 							}
 						}
-			      ,{field: 'name', title: '维保人员', width: '8%'}
+			      ,{field: 'name', title: '维保人员', width: '10%'}
 			      ,{field: 'rocordStatus', title: '维护进度', width: '10%'}
 			      ,{fixed: 'right', title: '操作', width: '9%', toolbar: '#tableBar'}
 			    ]]
