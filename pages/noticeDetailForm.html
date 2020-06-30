@@ -120,8 +120,11 @@
 				// 先加载接收通知的单位列表
 				getStoresList(formSelects)
 				
-				// 预加载表单
-				getNoticeDetail(pathId, layer, form, formSelects)
+				setTimeout(function(){
+					// 预加载表单
+					getNoticeDetail(pathId, layer, form, formSelects)
+				},200)
+				
 				
 				// 监听switch
 				getSwitchVal(form, 'isCritical')
@@ -234,7 +237,7 @@
 				ajaxfuntion($, baseUrl + '/user/bindedList', {}, 'get',
 					function(res){
 						// console.log(res.data)
-						if (res.data.length > 0) {
+						if (res.data && res.data.length > 0) {
 							for (var i = 0; i < res.data.length; i++) {
 								var item = res.data[i];
 								arr.push({name: item.name, value: item.id + '_' + item.userType});
@@ -256,7 +259,7 @@
 						function (res) {
 							if (res.code == 200) {
 								noticeFormData = res.data
-								console.log(res.data.announcement)
+								// console.log(res.data.announcement)
 								var data = res.data.announcement;
 								var storeTypeList = res.data.clients;
 								var list = [];
@@ -296,12 +299,12 @@
 									var item = {'clientId': item.clientId, 'userType': item.toRepair}
 									selectedStoresList.push(item)
 								})
-								console.log(list)
+								// console.log(list)
 								formSelects.value('storeTypeSelect', list)
-								console.log(selectedStoresList)
+								// console.log(selectedStoresList)
 								
 								// 加载图片
-								if (imgUrls.length > 0) {
+								if (imgUrls && imgUrls.length > 0) {
 									imgUrls.forEach(function (item, index) {
 										if (del == 2) {
 											$('#show-img-list').append('<div class="show-img-box"><img src="'+ imgBaseUrl + item +'"><span class="del-img-btn" onclick="delPic(this)">删除</span></div>')
@@ -361,10 +364,12 @@
 								window.history.go(-1)
 								// window.parent.location.reload()
 							}, 3000)
+						} else {
+							layer.msg(res.message, {icon: 5})
 						}
 					},
 					error: function(){
-						layer.msg("网络繁忙，访问失败")
+						layer.msg("网络繁忙，访问失败", {icon: 5})
 					},
 					complete: function(){
 						layer.closeAll("loading")

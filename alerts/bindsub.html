@@ -114,6 +114,7 @@
 
                     console.log(tempArr)
                     var formSelects = layui.formSelects;
+										formSelects.btns('bindsub', ['select', 'reverse']);
                     formSelects.data('bindsub', 'local', {
                         arr: tempArr
                     });
@@ -133,11 +134,17 @@
                     },
                     method: 'GET',
                     success: function (res) {
-                        parent.layer.close();
+											if (res.code == 200) {
+												parent.layer.close();
                         window.parent.location.reload();
                         layer.msg("设置成功", {
                             icon: 1
                         })
+											} else {
+												layer.msg(res.message, {
+												    icon: 5
+												})
+											} 
                     }
                 })
 

@@ -191,7 +191,7 @@
 						clientId: pathId,
 						clientName: $('input[name="storeName"]').val(),
 						dutyName: $('input[name="dutyName"]').val(),
-						type: $('input[name="storeType"]').val(),
+						type: $('#storeTypeSelect').val(),
 						dutyTel: $('input[name="dutyTel"]').val(),
 						tel: $('input[name="landline"]').val(),
 						payTime: $('input[name="payTime"]').val(),
@@ -199,6 +199,7 @@
 						status: $('input[name="payStatus"]').val() == 1 ? '未缴费' : '已缴费',
 						repairStatus: $('input[name="repairStatus"]').val()
 					};
+					// console.log(formData)
 					postForm($, formData, layer)
 				});
 				
@@ -275,11 +276,13 @@
 					function (s_res) {
 						if (s_res.code == 200) {
 							layer.msg('用户单位信息修改成功,3秒后自动返回', {icon:1})
+							setTimeout(function(){
+								window.history.go(-1)
+								// window.parent.location.reload()
+							}, 3000)
+						} else {
+							layer.msg(s_res.message, {icon:5})
 						}
-						setTimeout(function(){
-							window.history.go(-1)
-							// window.parent.location.reload()
-						}, 3000)
 					},
 					function (e_res) {},
 					function (c_res) {}
@@ -297,11 +300,13 @@
 					function (s_res) {
 						if (s_res.code == 200) {
 							layer.msg('停用成功,3秒后自动返回', {icon:1})
+							setTimeout(function(){
+								window.history.go(-1)
+								// window.parent.location.reload()
+							}, 3000)
+						} else {
+							layer.msg(s_res.message, {icon:5})
 						}
-						setTimeout(function(){
-							window.history.go(-1)
-							// window.parent.location.reload()
-						}, 3000)
 					},
 					function (e_res) {},
 					function (c_res) {}
