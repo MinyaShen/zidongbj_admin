@@ -101,9 +101,7 @@
 			var imgUrls = [] //图片数组
 			var selectedStoresList = [] // 已选收件人数组
 			$(function(){
-				// console.log(window.location.href);
-				// console.log(window.location.search);
-				// console.log(getQueryString('id'));
+				// 页面结构判断显示
 				isShowElem()
 			});
 			
@@ -171,10 +169,8 @@
 				// 提交表单
 				$('#submit-btn').click(function () {
 					// 需要提交的数据
-					console.log(noticeFormData)
 					var formData = {
 						imgUrl: JSON.stringify(imgUrls),
-						// announcementId: (getQueryString('id') !== null) ? getQueryString('id') : '',
 						title: $('input[name="title"]').val(),
 						body: $('textarea[name="body"]').val(),
 						startTime: $('#dateSelect').val().split(' - ')[0],
@@ -184,7 +180,6 @@
 						isCritical: ($('input[name="isCritical"]').val() == 'on') ? 0 : 1,
 						isTop: ($('input[name="isTop"]').val() == 'on') ? 0 : 1
 					}
-					console.log(formData)
 					postForm(formData, layer)
 				})
 				
@@ -204,9 +199,6 @@
 					} else {
 						data.elem.value = 'off'
 					}
-					// form.render();
-					console.log(checked);
-					console.log(data.elem.value);
 				})
 			};
 			
@@ -236,7 +228,6 @@
 				var arr = new Array();
 				ajaxfuntion($, baseUrl + '/user/bindedList', {}, 'get',
 					function(res){
-						// console.log(res.data)
 						if (res.data && res.data.length > 0) {
 							for (var i = 0; i < res.data.length; i++) {
 								var item = res.data[i];
@@ -259,7 +250,6 @@
 						function (res) {
 							if (res.code == 200) {
 								noticeFormData = res.data
-								// console.log(res.data.announcement)
 								var data = res.data.announcement;
 								var storeTypeList = res.data.clients;
 								var list = [];
@@ -274,8 +264,6 @@
 									x[0].setAttribute("class", "layui-unselect layui-form-switch layui-form-onswitch");
 								} else {
 									$("#isCritical").removeAttr("checked");
-									// var x = document.getElementsByClassName("layui-unselect layui-form-switch layui-form-onswitch");
-									// x[0].setAttribute("class", "layui-unselect layui-form-switch");
 								}
 								if (data.isTop == 0) {
 									$("#isTop").attr("checked", "checked");
@@ -299,9 +287,7 @@
 									var item = {'clientId': item.clientId, 'userType': item.toRepair}
 									selectedStoresList.push(item)
 								})
-								// console.log(list)
 								formSelects.value('storeTypeSelect', list)
-								// console.log(selectedStoresList)
 								
 								// 加载图片
 								if (imgUrls && imgUrls.length > 0) {
@@ -362,7 +348,6 @@
 							}
 							setTimeout(function(){
 								window.history.go(-1)
-								// window.parent.location.reload()
 							}, 3000)
 						} else {
 							layer.msg(res.message, {icon: 5})
@@ -394,8 +379,6 @@
 			function delPic (obj) {
 				obj.parentNode.parentNode.removeChild(obj.parentNode)
 				imgUrls.splice(deleteIndex,1)
-				
-				console.log(imgUrls)
 			}
 		</script>
 	</body>

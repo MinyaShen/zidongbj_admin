@@ -74,15 +74,12 @@
 									shade:[0.5,"#333"]
 							});
 						},
-						// xhrFields:{withCredentials:true},
 						success:function(res){
-							console.log(res)
+							// console.log(res)
 							if(res.code == 200){
 								//获取用户输入的内容，存到本地存储    
 								localStorage.setItem('admin',JSON.stringify(res.data));
 								layer.msg("登录成功",{icon:1})
-								// getCookie('SSIDA')
-								// setCookie('SSIDA')
 								setTimeout(function(){
 									// 登录成功后跳转
 									window.location.href="./index.html";
@@ -105,9 +102,7 @@
 			// 获取cookie
 			function getCookie(cname) {
 			  var allcookies = document.cookie;
-				console.log(allcookies)
-				var cookie_pos = allcookies.indexOf(cname);   //索引bai的长度du
-				console.log(cookie_pos)
+				var cookie_pos = allcookies.indexOf(cname);   //索引
 				// 如果找到了索引，就代表cookie存在，
 				// 反之，就说明不存在。
 				if (cookie_pos != -1) {

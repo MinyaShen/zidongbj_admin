@@ -55,13 +55,6 @@
 		
 		<div class="alarm-content">
 			<table id="noticeData" lay-filter="noticeData"></table>
-			<!-- <script type="text/html" id="titleTpl">
-				{{#  if(d.id < 100){ }}
-				  <a href="/detail/{{d.id}}" class="layui-table-link">{{d.title}}</a>
-				{{#  } else { }}
-				  {{d.title}}(普通用户)
-				{{#  } }}
-			  </script> -->
 
 			<script type="text/html" id="tableBar">
 				<a href="javascript:;" class="alarm-text-success" lay-event="edit">编辑</a>
@@ -171,7 +164,7 @@
 				page: true,
 				skin: 'line',
 				limit: 10,
-				// limits: [10, 20, 30, 40, 50, 60, 70, 80, 90],
+				limits: [15, 20, 30, 50],
 				where: { //设定异步数据接口的额外参数，任意设
 					keyword: $('#keyword').val()
 				},

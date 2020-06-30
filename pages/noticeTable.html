@@ -78,7 +78,6 @@
 			  // 加载表格数据
 			  table.render({
 			    elem: '#noticeData'
-					//,toolbar: '#tableToolbar'
 			    ,height: 'full-140'
 			    ,url: baseUrl + '/announcement/list' //数据接口
 					,parseData: function (res) {
@@ -187,15 +186,11 @@
 						handleEdit(data.id, data.del)
 					} else if(obj.event === 'remove'){
 						layer.confirm('确定下架该通知通告吗？', function(index){
-							// console.log(obj.data.id)
 							handleRemove(obj.data.id, 2, layer, '下架成功', table)
-							// window.parent.location.reload();
 						});
 					} else if(obj.event === 'del'){
 						layer.confirm('确定删除该通知通告吗？', function(index){
 							handleRemove(obj.data.id, 1, layer, '删除成功', table)
-							// window.parent.location.reload();
-							// obj.del();
 						});
 					}
 				});

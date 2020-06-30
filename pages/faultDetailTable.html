@@ -78,12 +78,6 @@
 								<div class="alarm-col col-content alarm-col-full" id="signTime"></div>
 							</div>
 						</div>
-						<!-- <div class="alarm-col-md2">
-							<div class="alarm-row alarm-row-wrap">
-								<div class="alarm-col col-title alarm-col-full">维修时间</div>
-								<div class="alarm-col col-content alarm-col-full" id="repairTime"></div>
-							</div>
-						</div> -->
 						<div class="alarm-col-md2">
 							<div class="alarm-row alarm-row-wrap">
 								<div class="alarm-col col-title alarm-col-full">完成时间</div>
@@ -206,7 +200,6 @@
 									elem: '#star'+id+''
 									, length: 5
 									, value: average
-									//, theme: '#009688'
 									, half: true
 									, text: true
 									, readonly: true
@@ -229,11 +222,6 @@
 								$('#signTime').text(formatTime(device.signTime))
 							} else {
 								$('#signTime').text('无')
-							}
-							if(device.maintainTime) {
-								$('#repairTime').text(formatTime(device.maintainTime))
-							} else {
-								$('#repairTime').text('无')
 							}
 							if(device.submitTime) {
 								$('#postTime').text(formatTime(device.submitTime))

@@ -78,9 +78,8 @@
                 url: baseUrl + "/user/selectById/" + id,
                 method: 'GET',
                 success: function (res) {
-                    console.log(res)
-                    layui.$("#tel").val(res.data.tel);
-                    layui.$("#name").val(res.data.name);
+									layui.$("#tel").val(res.data.tel);
+									layui.$("#name").val(res.data.name);
                 }
             })
 

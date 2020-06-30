@@ -78,7 +78,6 @@
 			// 定义全局变量参数
 			var pathCId = getQueryString('clientId');
 			var pathZId = getQueryString('zoneId');
-			console.log(window.location)
 			var zoneDetailData = {};
 			
 			// 加载layui模块
@@ -104,7 +103,6 @@
 					'get',
 					function (res) {
 						if (res.code == 200) {
-							console.log(res)
 							zoneDetailData = res.data
 							var userList = res.data.userPerson,
 							maintainRocords = res.data.maintainRocords;
@@ -191,7 +189,6 @@
 							// 加载故障维修状态表格
 							if (maintainRocords.length > 0) {
 								maintainRocords.forEach(function (item, index) {
-									console.log(item)
 									$('#malfunctionTable').append(
 										'<div class="malfunction-list">' +
 											'<div class="alarm-row">' +

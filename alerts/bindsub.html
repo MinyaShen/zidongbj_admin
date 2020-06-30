@@ -93,7 +93,6 @@
                 },
                 method: 'GET',
                 success: function (res) {
-                    console.log(res.data)
                     var userList = res.data.userList;
                     var bindedList = res.data.bindedList;
 
@@ -112,7 +111,6 @@
                         bindedArr.push(bindedList[i].userId)
                     }
 
-                    console.log(tempArr)
                     var formSelects = layui.formSelects;
 										formSelects.btns('bindsub', ['select', 'reverse']);
                     formSelects.data('bindsub', 'local', {

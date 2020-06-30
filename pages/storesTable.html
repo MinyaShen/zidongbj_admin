@@ -82,7 +82,6 @@
 			  //表格
 			  table.render({
 			    elem: '#storesData'
-					//,toolbar: '#tableToolbar'
 					,height: 'full-140'
 					,url: baseUrl + '/client/queryClients' //数据接口
 					,method: 'get'
@@ -118,8 +117,6 @@
 					}
 			    ,cols: [[ //表头
 						// {type: 'checkbox', fixed: 'left'}
-			      // ,{field: 'id', title: 'ID', width:80, sort: true}
-			      // ,{field: 'clientId', title: '点位ID', width:'10%', sort: true}
 			      {fixed: 'left', field: 'fullName', title: '点位名称', width:'12%'}
 			      ,{field: 'type', title: '点位类型', width:'8%'}
 			      ,{field: 'dutyName', title: '负责人姓名', width:'8%'} 
@@ -164,7 +161,6 @@
 								elem: '#star'+data[item].id+''//给不同的id的rate绑定不同的值
 								, length: 5            //星星个数
 								, value: data[item].eval  //初始化值
-								//, theme: '#009688'     //颜色
 								, half: true           //支持半颗星
 								, text: false         //显示文本，默认显示 '3.5星'
 								, readonly: true      //只读
@@ -208,12 +204,11 @@
 				var list = []
 				ajaxfuntion($, baseUrl + '/client/queryIndustryType', {}, 'get',
 					function(res){
-						// console.log(res.data)
 						var option = ''
 						 list = res.data;
 						for(var n in list){
 							var its='<option value="' + list[n] + '">'+ list[n] + '</option>';
-							 option +=its;
+							 option += its;
 						}
 						$("#storeTypeSelect").append(option);
 						form.render();//菜单渲染 把内容加载进去

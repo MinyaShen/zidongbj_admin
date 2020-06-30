@@ -49,7 +49,6 @@
 
 		<!-- 内容主体区域 -->
 		<div class="layui-body" id="larry-body">
-			<!-- <h4 class="page-title">总览</h4> -->
 			<div class="layui-tab-content">
 				<iframe id="iframeParent" class="larry-iframe"></iframe>
 			</div>
@@ -62,9 +61,7 @@
 		<script>
 			// 获取用户信息进行数据绑定
 			var adminInfo = JSON.parse(localStorage.getItem('admin'))
-			// document.cookie="SSIDA="+adminInfo.SSIDA;
 			$('.nickname').text(adminInfo.name);
-			// $("#avatar").attr("src", adminInfo.imgUrl);
 			
 			// 退出登录
 			function logout() {
