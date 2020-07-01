@@ -73,6 +73,7 @@
 	<script src="../static/js/jquery.min.js"></script>
 	<script src="../static/js/common.js"></script>
 	<script>
+		var table_data;//设置全局变量
 		layui.use(['laypage', 'jquery', 'table', 'form', 'layer', 'rate'], function () {
 			var table = layui.table;
 			var layer = layui.layer; // 弹出层组件引入
@@ -240,7 +241,7 @@
 				],
 				done: function (res) {
 					var data = res.data
-					
+					table_data = data;
 					// 渲染评分
 					for(var i in data) {
 						rate.render({
@@ -254,6 +255,31 @@
 					}
 				}
 			});
+			
+			// 监听排序
+			table.on('sort(noticeData)', function (obj) {
+				table.reload('noticeData', {
+					initSort: obj,
+					where: {
+						key: obj.field, //排序字段
+						order: obj.type //排序方式
+					},
+					page: {
+						curr: 1 //从第一页开始
+					}
+				})
+				// 渲染评分
+				for(var i in table_data) {
+					rate.render({
+						elem: '#star' + table_data[i].userId + '',
+						length: 5,
+						value: table_data[i].eval,
+						half: true,
+						text: false,
+						readonly: true
+					})
+				}
+			})
 			
 			
 			//搜索按钮监听
