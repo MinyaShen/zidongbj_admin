@@ -81,20 +81,31 @@
 			    ,height: 'full-140'
 			    ,url: baseUrl + '/announcement/list' //数据接口
 					,parseData: function (res) {
-						if (res.data) {
-							return {
-								"code": 0,
-								"msg": res.message,
-								"count": res.data.total,
-								"data": res.data.list
+						console.log(res.code)
+						if (res.code == 10001) {
+							var path = window.location.href;//当前页面的跳转
+							var topPath = top.window.location.href;//最外层页面的跳转
+							if (path != topPath) {
+								top.window.location.href = "../login.html";
+							}
+						} else if (res.code == 200) {
+							if (res.data) {
+								return {
+									"code": 0,
+									"msg": res.message,
+									"count": res.data.total,
+									"data": res.data.list
+								}
+							} else {
+								return {
+									"code": 0,
+									"msg": res.message,
+									"count": '',
+									"data": []
+								}
 							}
 						} else {
-							return {
-								"code": 0,
-								"msg": res.message,
-								"count": '',
-								"data": []
-							}
+							layer.msg(res.message, {icon:5})
 						}
 					}
 			    ,page: true //开启分页

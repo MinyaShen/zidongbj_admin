@@ -59,10 +59,6 @@
 		<script src="static/js/common.js"></script>
 		<script src="static/js/router.js"></script>
 		<script>
-			// 获取用户信息进行数据绑定
-			var adminInfo = JSON.parse(localStorage.getItem('admin'))
-			$('.nickname').text(adminInfo.name);
-			
 			// 退出登录
 			function logout() {
 				ajaxfuntion($, baseUrl + '/user/logout', {}, 'get',
@@ -77,30 +73,32 @@
 					function(res) {}
 				)
 			}
+
+			// 获取用户信息进行数据绑定
+			var adminInfo = JSON.parse(localStorage.getItem('admin'))
+			$('.nickname').text(adminInfo.name);
+
+			layui.use(['form', 'layer', 'element'], function () {
+				var form = layui.form,
+					layer = layui.layer,
+					element = layui.element
+
+				showMenus(-1);
+				element.render('nav')
+				initRouter();
 				
-
-			//$(function () {
-				layui.use(['form', 'layer', 'element'], function () {
-					var form = layui.form,
-						layer = layui.layer,
-						element = layui.element
-
-					showMenus(-1);
-					element.render('nav')
-					initRouter();
-					
-					// 是否退出登录
-					$('#logout-btn').click(function(){
-						layer.confirm(
-							'确定退出吗？',
-							{btn: ['确定退出', '取消'], title: "提示"},
-							function () {
-								logout()
-							}
-						)
-					})
+				// 是否退出登录
+				$('#logout-btn').click(function(){
+					layer.confirm(
+						'确定退出吗？',
+						{btn: ['确定退出', '取消'], title: "提示"},
+						function () {
+							console.log('111')
+							logout()
+						}
+					)
 				})
-			//})
+			})
 		</script>
 </body>
 

@@ -20,8 +20,17 @@ $.ajax({
     method: 'GET',
     contentType: 'application/json',
     success: function (res) {
-        console.log(res.data)
-        clientMap = res.data.clientMap;
+			console.log(res)
+			if (res.code == 10001) {
+				var path = window.location.href;//当前页面的跳转
+				var topPath = top.window.location.href;//最外层页面的跳转
+				console.log(topPath)
+				if (path != topPath) {
+					top.window.location.href = "../login.html";
+				}
+				// window.location.href="./login.html";
+			} else if (res.code == 200) {
+				clientMap = res.data.clientMap;
         initMap()
         $('#clientCount').text(res.data.clientCount); //网点数量
         $('#maintainCount').text(res.data.maintainCount); //待维修网点
@@ -52,6 +61,10 @@ $.ajax({
             data.push(tempobj)
         }
         renderPieChar1(data)
+			} else {
+				
+			}
+        
     }
 });
 

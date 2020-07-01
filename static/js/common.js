@@ -75,7 +75,17 @@ function ajaxfuntion($, url, todata, type, s_fun, e_fun, c_fun) {
 	type: type,
 	contentType: 'application/json; charset=utf-8',
 	dataType: 'json',
-	success: s_fun,
+	success: function (res) {
+		if(res.code == 10001) {
+			var path = window.location.href;//当前页面的跳转
+			var topPath = top.window.location.href;//最外层页面的跳转
+			if (path != topPath) {
+				top.window.location.href = "../login.html";
+			}
+		} else {
+			s_fun(res)
+		}
+	},
 	error: e_fun,
 	complete: c_fun
 	});
